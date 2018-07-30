@@ -1,0 +1,13 @@
+C:\C#\ProcessManager\ProcessManager\bin\Debug\MetroFramework.dll
+C:\C#\ProcessManager\ProcessManager\bin\Debug\MetroFramework.Fonts.dll
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csprojAssemblyReference.cache
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.Form1.resources
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.Properties.Resources.resources
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csproj.GenerateResource.cache
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csproj.CoreCompileInputs.cache
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csproj.CopyComplete
+C:\C#\ProcessManager\ProcessManager\bin\Debug\Process Manager.exe.config
+C:\C#\ProcessManager\ProcessManager\bin\Debug\Process Manager.exe
+C:\C#\ProcessManager\ProcessManager\bin\Debug\Process Manager.pdb
+C:\C#\ProcessManager\ProcessManager\obj\Debug\Process Manager.exe
+C:\C#\ProcessManager\ProcessManager\obj\Debug\Process Manager.pdb

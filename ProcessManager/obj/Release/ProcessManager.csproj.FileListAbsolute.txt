@@ -1,0 +1,11 @@
+C:\C#\ProcessManager\ProcessManager\bin\Release\Process Manager.exe.config
+C:\C#\ProcessManager\ProcessManager\bin\Release\Process Manager.exe
+C:\C#\ProcessManager\ProcessManager\bin\Release\MetroFramework.dll
+C:\C#\ProcessManager\ProcessManager\bin\Release\MetroFramework.Fonts.dll
+C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.Form1.resources
+C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.Properties.Resources.resources
+C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.csproj.GenerateResource.cache
+C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.csproj.CoreCompileInputs.cache
+C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.csproj.CopyComplete
+C:\C#\ProcessManager\ProcessManager\obj\Release\Process Manager.exe
+C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.csprojAssemblyReference.cache
