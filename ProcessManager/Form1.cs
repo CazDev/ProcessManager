@@ -421,6 +421,9 @@ namespace ProcessManager
 
             symbols_txtbx.BackColor = listBox1.BackColor;
             symbols_txtbx.ForeColor = listBox1.ForeColor;
+
+            processBlacklist_listbx.BackColor = history_listbx.BackColor;
+            processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
             //progressbar
             progressBar1.Maximum = numOfFiles;
             progressBar1.Value = numOfFilesChecked;
@@ -434,6 +437,30 @@ namespace ProcessManager
             {
                 cancel_btm.Enabled = false;
             }
+            //blacklist
+            if (blacklistIsSorted.Checked)
+                processBlacklist_listbx.Sorted = true;
+            else
+                processBlacklist_listbx.Sorted = false;
+            string[] processBlackList = new string[processBlacklist_listbx.Items.Count];
+            for (int i = 0; i < processBlackList.Length; i++)
+            {
+                processBlackList[i] = processBlacklist_listbx.Items[i].ToString();
+
+                Process[] p = Process.GetProcessesByName(processBlackList[i]);
+                foreach (var proc in p)
+                {
+                    try
+                    {
+                        proc.Kill();
+                        DateTime date = DateTime.Now;
+                        string temp = String.Format("[ {0} ]\tProcess {1} from blacklist killed", date.ToString(), processBlackList[i]);
+                        history_listbx.Items.Add(temp);
+                    }
+                    catch { }
+                }
+            }
+            
         }
         private void start_Click_1(object sender, EventArgs e)
         {
@@ -1209,6 +1236,22 @@ namespace ProcessManager
         private void cancel_btm_Click(object sender, EventArgs e)
         {
             stop = true;
+        }
+        //blacklist
+        private void addProcess_Click(object sender, EventArgs e)
+        {
+            if (process_txtbx.Text != "")
+            {
+                processBlacklist_listbx.Items.Add(process_txtbx.Text);
+                process_txtbx.Text = "";
+            }
+        }
+        private void removeProcess_Click(object sender, EventArgs e)
+        {
+            if(processBlacklist_listbx.SelectedIndex >= 0)
+            {
+                processBlacklist_listbx.Items.RemoveAt(this.processBlacklist_listbx.SelectedIndex);
+            }
         }
     }
 }

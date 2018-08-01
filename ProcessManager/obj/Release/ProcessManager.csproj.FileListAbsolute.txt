@@ -9,3 +9,14 @@ C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.csproj.CoreCompil
 C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.csproj.CopyComplete
 C:\C#\ProcessManager\ProcessManager\obj\Release\Process Manager.exe
 C:\C#\ProcessManager\ProcessManager\obj\Release\ProcessManager.csprojAssemblyReference.cache
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\bin\Release\Process Manager.exe.config
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\bin\Release\Process Manager.exe
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\bin\Release\MetroFramework.dll
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\bin\Release\MetroFramework.Fonts.dll
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\obj\Release\ProcessManager.csprojAssemblyReference.cache
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\obj\Release\ProcessManager.Form1.resources
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\obj\Release\ProcessManager.Properties.Resources.resources
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\obj\Release\ProcessManager.csproj.GenerateResource.cache
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\obj\Release\ProcessManager.csproj.CoreCompileInputs.cache
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\obj\Release\ProcessManager.csproj.CopyComplete
+C:\C#\ProcessManager\ProcesssManager.git\ProcessManager\obj\Release\Process Manager.exe
