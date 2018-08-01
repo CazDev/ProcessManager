@@ -563,7 +563,7 @@ namespace ProcessManager
                 processList.Sorted = true;
             }
             //settings
-            if (Directory.Exists(pathToCfg) && File.Exists(pathToCfg + @"\blacklist.txt"))
+            if (Directory.Exists(pathToCfg) && File.Exists(pathToCfg + @"\\blacklist.txt") && File.Exists(pathToCfg + @"\\other.txt"))
             {
                 string path = pathToCfg + @"\blacklist.txt";
                 string[] linesInBlackList = File.ReadAllLines(path);
@@ -571,6 +571,24 @@ namespace ProcessManager
                 {
                     processBlacklist_listbx.Items.Add(linesInBlackList[i]);
                 }
+                //other
+                string[] linesOther = File.ReadAllLines(pathToCfg + "\\other.txt");
+                //0)blacklist sorted 1 or 0
+                //1)watermarkspeed 
+                //2)helper on?
+                //3)color index
+                //4)theme index
+                if (linesOther[0] == "1")
+                    blacklistIsSorted.Checked = true;
+                else
+                    blacklistIsSorted.Checked = false;
+                watermarkspeed.Value = Convert.ToInt32(linesOther[1]);
+                if (linesOther[2] == "1")
+                    help_withId.Checked = true;
+                else
+                    help_withId.Checked = false;
+                colorSwitcher.SelectedIndex = Convert.ToInt32(linesOther[3]);
+                themeSwitcher.SelectedIndex = Convert.ToInt32(linesOther[4]);
             }
             else
                 Directory.CreateDirectory(pathToCfg);
@@ -1269,12 +1287,26 @@ namespace ProcessManager
         private void Form1_Deactivate(object sender, EventArgs e)
         {
             //save cfg
+            //save blacklist
             string[] linesInBlacklist = new string[processBlacklist_listbx.Items.Count];
             for (int i = 0; i < linesInBlacklist.Length; i++)
             {
                 linesInBlacklist[i] = processBlacklist_listbx.Items[i].ToString();
             }
             File.WriteAllLines(pathToCfg + "\\blacklist.txt", linesInBlacklist);
+            //save other
+            string[] linesOther = new string[5];
+            //0)blacklist sorted 1 or 0
+            //1)watermarkspeed 
+            //2)helper on?
+            //3)color index
+            //4)theme index
+            linesOther[0] = Convert.ToString(Convert.ToInt32(blacklistIsSorted.Checked));
+            linesOther[1] = Convert.ToString(watermarkspeed.Value);
+            linesOther[2] = Convert.ToString(Convert.ToInt32(help_withId.Checked));
+            linesOther[3] = Convert.ToString(colorSwitcher.SelectedIndex);
+            linesOther[4] = Convert.ToString(themeSwitcher.SelectedIndex);
+            File.WriteAllLines(pathToCfg + "\\other.txt", linesOther);
         }
     }
 }
