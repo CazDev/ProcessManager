@@ -836,6 +836,7 @@
             this.Name = "Form1";
             this.ShadowType = MetroFramework.Forms.MetroForm.MetroFormShadowType.None;
             this.Text = "Process Manager";
+            this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.metroTabControl1.ResumeLayout(false);

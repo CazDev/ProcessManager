@@ -563,6 +563,17 @@ namespace ProcessManager
                 processList.Sorted = true;
             }
             //settings
+            if (Directory.Exists(pathToCfg) && File.Exists(pathToCfg + @"\blacklist.txt"))
+            {
+                string path = pathToCfg + @"\blacklist.txt";
+                string[] linesInBlackList = File.ReadAllLines(path);
+                for (int i = 0; i < linesInBlackList.Length; i++)
+                {
+                    processBlacklist_listbx.Items.Add(linesInBlackList[i]);
+                }
+            }
+            else
+                Directory.CreateDirectory(pathToCfg);
         }
         static string[] lines = new string[2];
         private void colorSwitcher_SelectedIndexChanged(object sender, EventArgs e)
@@ -1252,6 +1263,18 @@ namespace ProcessManager
             {
                 processBlacklist_listbx.Items.RemoveAt(this.processBlacklist_listbx.SelectedIndex);
             }
+        }
+
+        string pathToCfg = @"C:\Users\" + Environment.UserName + @"\AppData\Roaming\Process Manager";
+        private void Form1_Deactivate(object sender, EventArgs e)
+        {
+            //save cfg
+            string[] linesInBlacklist = new string[processBlacklist_listbx.Items.Count];
+            for (int i = 0; i < linesInBlacklist.Length; i++)
+            {
+                linesInBlacklist[i] = processBlacklist_listbx.Items[i].ToString();
+            }
+            File.WriteAllLines(pathToCfg + "\\blacklist.txt", linesInBlacklist);
         }
     }
 }
