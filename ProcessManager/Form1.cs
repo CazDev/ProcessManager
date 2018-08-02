@@ -430,6 +430,7 @@ namespace ProcessManager
             //log
             if (log != "")
             {
+                
                 log_txtbx.Text = log + ProcessName;
                 cancel_btm.Enabled = true;
             }
@@ -1087,34 +1088,40 @@ namespace ProcessManager
         public void UnlockFile(string path, out string processName)
         {
             processName = "";
-            log = path;
-            Process[] procList = Process.GetProcesses();
-            int counter = 0;
-            foreach (Process p in procList)
+            try
             {
-                ProcessName = "\t|\t" + p.ProcessName;
-                if (stop)
+                log = path;
+                Process[] procList = Process.GetProcesses();
+                int counter = 0;
+                foreach (Process p in procList)
                 {
-                    log = "";
-                    break;
-                }
-                try
-                {
-                    ProcessModuleCollection modules = p.Modules;
-                    foreach (ProcessModule m in modules)
+                    ProcessName = "\t|\t" + p.ProcessName;
+                    if (stop)
                     {
-                        if (path.ToLower() == m.FileName.ToLower())
+                        log = "";
+                        break;
+                    }
+                    try
+                    {
+                        ProcessModuleCollection modules = p.Modules;
+                        foreach (ProcessModule m in modules)
                         {
-                            processName = p.ProcessName;
-                            p.Kill();
-                            File.Delete(path);
-                            break;
+                            if (path.ToLower() == m.FileName.ToLower())
+                            {
+                                processName = p.ProcessName;
+                                p.Kill();
+                                File.Delete(path);
+                                break;
+                            }
                         }
                     }
+                    catch { }
+                    counter++;
                 }
-                catch { }
-                counter++;
+                log_txtbx.Text = "";
             }
+            catch { }
+            log = "";
         }
         private void deleteFile_btm_Click(object sender, EventArgs e)
         {
@@ -1125,7 +1132,11 @@ namespace ProcessManager
                 string procName = "";
                 path = openFileDialog.FileName;
                 UnlockFile(path, out procName);
-                File.Delete(path);
+                try
+                {
+                    File.Delete(path);
+                }
+                catch { }
                 if (procName != "")
                 {
                     MessageBox.Show("File deleted");
@@ -1160,16 +1171,20 @@ namespace ProcessManager
         Thread thread;
         private void unlockDir_btm_Click(object sender, EventArgs e)
         {
-            thread = new Thread(UnlockDirMethod);
-            thread.IsBackground = true;
-            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            try
             {
-               // string path = folderBrowserDialog1.SelectedPath;
-                thread.Start();
-                delete = false;
+                thread = new Thread(UnlockDirMethod);
+                thread.IsBackground = true;
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    // string path = folderBrowserDialog1.SelectedPath;
+                    thread.Start();
+                    delete = false;
+                }
+                log = "";
+                numOfFilesChecked = 0;
             }
-            log = "";
-            numOfFilesChecked = 0;
+            catch { }
         }
         public static int numOfFiles = 0;
         public static int numOfFilesChecked = 0;
@@ -1177,75 +1192,90 @@ namespace ProcessManager
         public static string log = "";
         private void UnlockDirMethod()
         {
-            string path = folderBrowserDialog1.SelectedPath;
-            string[] files = Directory.GetFiles(path);
-            numOfFiles = files.Length;
-            string process = "";
-            string[] arrOfProcesses = new string[9999999];
-            int counterOfProcesses = 0;
-            int numOfProc = 0;
-            for (int i = 0; i < files.Length; i++)
+            try
             {
-                if (stop)
+                string path = folderBrowserDialog1.SelectedPath;
+                string[] files = Directory.GetFiles(path);
+                numOfFiles = files.Length;
+                string process = "";
+                string[] arrOfProcesses = new string[9999999];
+                int counterOfProcesses = 0;
+                int numOfProc = 0;
+                for (int i = 0; i < files.Length; i++)
                 {
-                    log = "";
-                    break;
+                    if (stop)
+                    {
+                        log = "";
+                        break;
+                    }
+                    if (delete)
+                    {
+                        try
+                        {
+                            File.Delete(files[i]);
+                            continue;
+                        }
+                        catch { }
+                    }
+                    UnlockFile(files[i], out process);
+                    arrOfProcesses[counterOfProcesses] = process;
+                    counterOfProcesses++;
+                    if (delete)
+                        try { File.Delete(files[i]); }
+                        catch { }
+                    if (process != "")
+                    {
+                        numOfProc += 1;
+                        process = "";
+                    }
+                    numOfFilesChecked = i + 1;
+                }
+
+                if (!delete)
+                    MessageBox.Show(numOfProc + " processes killed");
+                for (int j = 0; j < 50; j++)
+                {
+                    try
+                    {
+                        progressBar1.Value = 0;
+                        break;
+                    }
+                    catch { }
+                    Thread.Sleep(50);
                 }
                 if (delete)
                 {
                     try
                     {
-                        File.Delete(files[i]);
-                        continue;
+                        files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+                        for (int i = 0; i < files.Length; i++)
+                        {
+                            try
+                            {
+                                File.Delete(files[i]);
+                            }
+                            catch { }
+                        }
+                        files = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+                        for (int i = files.Length - 1; i >= 0; i--)
+                        {
+                            try
+                            {
+                                Directory.Delete(files[i]);
+                            }
+                            catch { }
+                        }
+                        Directory.Delete(path);
+                        MessageBox.Show(numOfProc + " processes killed. Dir deleted");
                     }
-                    catch { }
+                    catch { MessageBox.Show(numOfProc + " processes killed"); }
                 }
-                UnlockFile(files[i], out process);
-                arrOfProcesses[counterOfProcesses] = process;
-                counterOfProcesses++;
-                if(delete)
-                    File.Delete(files[i]);
-                if (process != "")
-                {
-                    numOfProc += 1;
-                    process = "";
-                }
-                numOfFilesChecked = i + 1;
+                numOfFilesChecked = 0;
+                log_txtbx.Text = "";
+                //arr of processes
             }
-
-            if(!delete)
-                MessageBox.Show(numOfProc + " processes killed");
-            for (int j = 0; j < 50; j++)
-            {
-                try
-                {
-                    progressBar1.Value = 0;
-                    break;
-                }
-                catch { }
-                Thread.Sleep(50);
-            }
-            if (delete)
-            {
-                try
-                {
-                    files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
-                    for (int i = 0; i < files.Length; i++)
-                    {
-                        File.Delete(files[i]);
-                    }
-                    files = Directory.GetDirectories(path,"*",SearchOption.AllDirectories);
-                    for (int i = files.Length - 1; i >= 0; i--)
-                    {
-                        Directory.Delete(files[i]);
-                    }
-                    Directory.Delete(path);
-                    MessageBox.Show(numOfProc + " processes killed. Dir deleted");
-                }
-                catch { MessageBox.Show(numOfProc + " processes killed"); }
-            }
-            numOfFilesChecked = 0;
-            //arr of processes
+            catch { }
+            log = "";
         }
         public static bool delete = false;
         private void unlockDirAndDel_btm_Click(object sender, EventArgs e)
