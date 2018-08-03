@@ -324,37 +324,27 @@ namespace ProcessManager
       //buttoms etc
         private void timer_Tick(object sender, EventArgs e)
         {
-            try
+            if (exists)
             {
-                if (exists)
-                    if (process.HasExited)
-                        exists = false;
-            }
-            catch (Exception ex)
-            {
-                string ex_ = ex.ToString();
-                exists = false;
-                paused = false;
-                processName_txtbx.Text = "";
-                pathToFile.Text = "";
-                listBox1.Items.Clear();
-                MessageBox.Show("System process");
-            }
-            if (paused)
-            {
-                pause.Text = "Resume Process";
-                status_txtbx.ForeColor = Color.Yellow;
-                status_txtbx.Text = "Paused";
-            }
-            else
-            {
-                pause.Text = "Pause Process";
-                status_txtbx.ForeColor = Color.Green;
-                status_txtbx.Text = "Working";
-            }
+                try
+                {
+                    if (exists)
+                        if (process.HasExited)
+                            exists = false;
+                }
+                catch (Exception ex)
+                {
+                    string ex_ = ex.ToString();
+                    exists = false;
+                    paused = false;
+                    processName_txtbx.Text = "";
+                    pathToFile.Text = "";
+                    listBox1.Items.Clear();
+                    MessageBox.Show("System process");
+                }
+            } //check if process here
             if (!exists)
             {
-                status_txtbx.ForeColor = Color.Gray;
                 status_txtbx.Text = "No process";
 
                 kill_btm.Enabled = false;
@@ -385,7 +375,8 @@ namespace ProcessManager
                 //process_txtbx
                 processName_txtbx.Text = process.ProcessName;
                 processPid_txtbx.Text = process.Id.ToString();
-            }
+            } //if exists get info
+
             if (help_withId.Checked)
             {
                 if (processList.SelectedIndex >= 0)
@@ -399,9 +390,9 @@ namespace ProcessManager
             //modules
             try
             {
-                ProcessModuleCollection pmc = process.Modules;
                 if (listBox1.SelectedIndex >= 0)
                 {
+                    ProcessModuleCollection pmc = process.Modules;
                     int index = listBox1.SelectedIndex;
                     pathToModule_lbl.Text = pmc[index].FileName.ToString();
                 }
@@ -410,23 +401,28 @@ namespace ProcessManager
             {
                 pathToModule_lbl.Text = "No info";
             }
-            //watermark
-            watermark_timer.Interval = watermarkspeed.Value;
-            //colors
-            history_listbx.BackColor = listBox1.BackColor;
-            history_listbx.ForeColor = listBox1.ForeColor;
+            //design
+            if (!optimization_checkbx.Checked)
+            {
+                //watermark
+                watermark_timer.Interval = watermarkspeed.Value;
+                //colors
+                history_listbx.BackColor = listBox1.BackColor;
+                history_listbx.ForeColor = listBox1.ForeColor;
 
-            processList.BackColor = listBox1.BackColor;
-            processList.ForeColor = listBox1.ForeColor;
+                processList.BackColor = listBox1.BackColor;
+                processList.ForeColor = listBox1.ForeColor;
 
-            symbols_txtbx.BackColor = listBox1.BackColor;
-            symbols_txtbx.ForeColor = listBox1.ForeColor;
+                symbols_txtbx.BackColor = listBox1.BackColor;
+                symbols_txtbx.ForeColor = listBox1.ForeColor;
 
-            processBlacklist_listbx.BackColor = history_listbx.BackColor;
-            processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
-            //progressbar
-            progressBar1.Maximum = numOfFiles;
-            progressBar1.Value = numOfFilesChecked;
+                processBlacklist_listbx.BackColor = history_listbx.BackColor;
+                processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
+                //progressbar
+                progressBar1.Maximum = numOfFiles;
+                progressBar1.Value = numOfFilesChecked;
+                //end disign
+            }
             //log
             if (log != "")
             {
@@ -438,30 +434,6 @@ namespace ProcessManager
             {
                 cancel_btm.Enabled = false;
             }
-            //blacklist
-            if (blacklistIsSorted.Checked)
-                processBlacklist_listbx.Sorted = true;
-            else
-                processBlacklist_listbx.Sorted = false;
-            string[] processBlackList = new string[processBlacklist_listbx.Items.Count];
-            for (int i = 0; i < processBlackList.Length; i++)
-            {
-                processBlackList[i] = processBlacklist_listbx.Items[i].ToString();
-
-                Process[] p = Process.GetProcessesByName(processBlackList[i]);
-                foreach (var proc in p)
-                {
-                    try
-                    {
-                        proc.Kill();
-                        DateTime date = DateTime.Now;
-                        string temp = String.Format("[ {0} ]\tProcess {1} from blacklist killed", date.ToString(), processBlackList[i]);
-                        history_listbx.Items.Add(temp);
-                    }
-                    catch { }
-                }
-            }
-            
         }
         private void start_Click_1(object sender, EventArgs e)
         {
@@ -566,7 +538,7 @@ namespace ProcessManager
             //settings
             if (Directory.Exists(pathToCfg) && File.Exists(pathToCfg + @"\\blacklist.txt") && File.Exists(pathToCfg + @"\\other.txt"))
             {
-                string path = pathToCfg + @"\blacklist.txt";
+                string path = pathToCfg + @"\\blacklist.txt";
                 string[] linesInBlackList = File.ReadAllLines(path);
                 for (int i = 0; i < linesInBlackList.Length; i++)
                 {
@@ -579,17 +551,28 @@ namespace ProcessManager
                 //2)helper on?
                 //3)color index
                 //4)theme index
-                if (linesOther[0] == "1")
-                    blacklistIsSorted.Checked = true;
-                else
-                    blacklistIsSorted.Checked = false;
-                watermarkspeed.Value = Convert.ToInt32(linesOther[1]);
-                if (linesOther[2] == "1")
-                    help_withId.Checked = true;
-                else
-                    help_withId.Checked = false;
-                colorSwitcher.SelectedIndex = Convert.ToInt32(linesOther[3]);
-                themeSwitcher.SelectedIndex = Convert.ToInt32(linesOther[4]);
+                try
+                {
+                    if (linesOther[0] == "1")
+                        blacklistIsSorted.Checked = true;
+                    else
+                        blacklistIsSorted.Checked = false;
+                    watermarkspeed.Value = Convert.ToInt32(linesOther[1]);
+                    if (linesOther[2] == "1")
+                        help_withId.Checked = true;
+                    else
+                        help_withId.Checked = false;
+                    colorSwitcher.SelectedIndex = Convert.ToInt32(linesOther[3]);
+                    themeSwitcher.SelectedIndex = Convert.ToInt32(linesOther[4]);
+                    if (linesOther[5] == "1")
+                        optimization_checkbx.Checked = true;
+                    else
+                        optimization_checkbx.Checked = false;
+                }
+                catch
+                {
+                    File.Delete(pathToCfg + "\\other.txt");
+                }
             }
             else
                 Directory.CreateDirectory(pathToCfg);
@@ -1314,9 +1297,9 @@ namespace ProcessManager
         }
 
         string pathToCfg = @"C:\Users\" + Environment.UserName + @"\AppData\Roaming\Process Manager";
+        //save cfg
         private void Form1_Deactivate(object sender, EventArgs e)
         {
-            //save cfg
             //save blacklist
             string[] linesInBlacklist = new string[processBlacklist_listbx.Items.Count];
             for (int i = 0; i < linesInBlacklist.Length; i++)
@@ -1325,18 +1308,101 @@ namespace ProcessManager
             }
             File.WriteAllLines(pathToCfg + "\\blacklist.txt", linesInBlacklist);
             //save other
-            string[] linesOther = new string[5];
+            string[] linesOther = new string[6];
             //0)blacklist sorted 1 or 0
             //1)watermarkspeed 
             //2)helper on?
             //3)color index
             //4)theme index
+            //5)optimization
             linesOther[0] = Convert.ToString(Convert.ToInt32(blacklistIsSorted.Checked));
             linesOther[1] = Convert.ToString(watermarkspeed.Value);
             linesOther[2] = Convert.ToString(Convert.ToInt32(help_withId.Checked));
             linesOther[3] = Convert.ToString(colorSwitcher.SelectedIndex);
             linesOther[4] = Convert.ToString(themeSwitcher.SelectedIndex);
+            linesOther[5] = Convert.ToString(Convert.ToInt32(optimization_checkbx.Checked)); 
             File.WriteAllLines(pathToCfg + "\\other.txt", linesOther);
+        }
+        private void blacklistChecker_Tick(object sender, EventArgs e)
+        {
+            //blacklist
+            if (blacklistIsSorted.Checked)
+                processBlacklist_listbx.Sorted = true;
+            else
+                processBlacklist_listbx.Sorted = false;
+            string[] processBlackList = new string[processBlacklist_listbx.Items.Count];
+            for (int i = 0; i < processBlackList.Length; i++)
+            {
+                processBlackList[i] = processBlacklist_listbx.Items[i].ToString();
+
+                Process[] p = Process.GetProcessesByName(processBlackList[i]);
+                foreach (var proc in p)
+                {
+                    try
+                    {
+                        proc.Kill();
+                        DateTime date = DateTime.Now;
+                        string temp = String.Format("[ {0} ]\tProcess {1} from blacklist killed", date.ToString(), processBlackList[i]);
+                        history_listbx.Items.Add(temp);
+                    }
+                    catch { }
+                }
+            }
+            //end blacklist
+            //status 
+            if (paused)
+            {
+                pause.Text = "Resume Process";
+                status_txtbx.Text = "Paused";
+            }
+            else
+            {
+                if (exists)
+                {
+                    pause.Text = "Pause Process";
+                    status_txtbx.Text = "Working";
+                }
+                else
+                {
+                    pause.Text = "Pause Process";
+                }
+            }
+            //design
+            if (optimization_checkbx.Checked)
+            {
+                //watermark
+                watermark_timer.Interval = watermarkspeed.Value;
+                //colors
+                history_listbx.BackColor = listBox1.BackColor;
+                history_listbx.ForeColor = listBox1.ForeColor;
+
+                processList.BackColor = listBox1.BackColor;
+                processList.ForeColor = listBox1.ForeColor;
+
+                symbols_txtbx.BackColor = listBox1.BackColor;
+                symbols_txtbx.ForeColor = listBox1.ForeColor;
+
+                processBlacklist_listbx.BackColor = history_listbx.BackColor;
+                processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
+                //progressbar
+                progressBar1.Maximum = numOfFiles;
+                progressBar1.Value = numOfFilesChecked;
+                //end disign
+                //timers intervals
+                timer.Interval = 280;
+                blacklistChecker.Interval = 1800;
+                historyRefreshing.Interval = 2000;
+
+                watermarkspeed.Value = 1500;
+                watermarkspeed.Enabled = false;
+            }
+            else
+            {
+                timer.Interval = 10;
+                blacklistChecker.Interval = 1000;
+                historyRefreshing.Interval = 1000;
+                watermarkspeed.Enabled = true;
+            }
         }
     }
 }

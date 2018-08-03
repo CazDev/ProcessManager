@@ -52,6 +52,12 @@
             this.pathToFile = new MetroFramework.Controls.MetroTextBox();
             this.start = new MetroFramework.Controls.MetroButton();
             this.pauseOnStart = new MetroFramework.Controls.MetroCheckBox();
+            this.metroTabPage5 = new MetroFramework.Controls.MetroTabPage();
+            this.removeProcess = new MetroFramework.Controls.MetroButton();
+            this.processBlacklist_listbx = new System.Windows.Forms.ListBox();
+            this.addProcess = new MetroFramework.Controls.MetroButton();
+            this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
+            this.process_txtbx = new MetroFramework.Controls.MetroTextBox();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.blacklistIsSorted = new MetroFramework.Controls.MetroToggle();
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
@@ -88,12 +94,6 @@
             this.name_lbl = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
             this.history_listbx = new System.Windows.Forms.ListBox();
-            this.metroTabPage5 = new MetroFramework.Controls.MetroTabPage();
-            this.removeProcess = new MetroFramework.Controls.MetroButton();
-            this.processBlacklist_listbx = new System.Windows.Forms.ListBox();
-            this.addProcess = new MetroFramework.Controls.MetroButton();
-            this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
-            this.process_txtbx = new MetroFramework.Controls.MetroTextBox();
             this.status_txtbx = new MetroFramework.Controls.MetroTextBox();
             this.status_lbl = new MetroFramework.Controls.MetroLabel();
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
@@ -102,14 +102,17 @@
             this.sticks = new MetroFramework.Controls.MetroLabel();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.watermark_top = new MetroFramework.Controls.MetroLabel();
+            this.blacklistChecker = new System.Windows.Forms.Timer(this.components);
+            this.optimization_checkbx = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroPanel1.SuspendLayout();
+            this.metroTabPage5.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage4.SuspendLayout();
-            this.metroTabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -130,13 +133,13 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
+            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage5);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
-            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(2, 23);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 3;
+            this.metroTabControl1.SelectedIndex = 2;
             this.metroTabControl1.Size = new System.Drawing.Size(706, 350);
             this.metroTabControl1.TabIndex = 13;
             // 
@@ -322,8 +325,69 @@
             this.pauseOnStart.Text = "Pause on start";
             this.pauseOnStart.UseVisualStyleBackColor = true;
             // 
+            // metroTabPage5
+            // 
+            this.metroTabPage5.Controls.Add(this.removeProcess);
+            this.metroTabPage5.Controls.Add(this.processBlacklist_listbx);
+            this.metroTabPage5.Controls.Add(this.addProcess);
+            this.metroTabPage5.Controls.Add(this.metroLabel6);
+            this.metroTabPage5.Controls.Add(this.process_txtbx);
+            this.metroTabPage5.HorizontalScrollbarBarColor = true;
+            this.metroTabPage5.Location = new System.Drawing.Point(4, 35);
+            this.metroTabPage5.Name = "metroTabPage5";
+            this.metroTabPage5.Size = new System.Drawing.Size(698, 311);
+            this.metroTabPage5.TabIndex = 4;
+            this.metroTabPage5.Text = " Blacklist";
+            this.metroTabPage5.VerticalScrollbarBarColor = true;
+            // 
+            // removeProcess
+            // 
+            this.removeProcess.Location = new System.Drawing.Point(390, 21);
+            this.removeProcess.Name = "removeProcess";
+            this.removeProcess.Size = new System.Drawing.Size(75, 23);
+            this.removeProcess.TabIndex = 6;
+            this.removeProcess.Text = "DEL";
+            this.removeProcess.Click += new System.EventHandler(this.removeProcess_Click);
+            // 
+            // processBlacklist_listbx
+            // 
+            this.processBlacklist_listbx.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.processBlacklist_listbx.FormattingEnabled = true;
+            this.processBlacklist_listbx.Location = new System.Drawing.Point(3, 50);
+            this.processBlacklist_listbx.Name = "processBlacklist_listbx";
+            this.processBlacklist_listbx.Size = new System.Drawing.Size(687, 260);
+            this.processBlacklist_listbx.Sorted = true;
+            this.processBlacklist_listbx.TabIndex = 5;
+            // 
+            // addProcess
+            // 
+            this.addProcess.Location = new System.Drawing.Point(309, 21);
+            this.addProcess.Name = "addProcess";
+            this.addProcess.Size = new System.Drawing.Size(75, 23);
+            this.addProcess.TabIndex = 4;
+            this.addProcess.Text = "ADD";
+            this.addProcess.Click += new System.EventHandler(this.addProcess_Click);
+            // 
+            // metroLabel6
+            // 
+            this.metroLabel6.AutoSize = true;
+            this.metroLabel6.Location = new System.Drawing.Point(0, 22);
+            this.metroLabel6.Name = "metroLabel6";
+            this.metroLabel6.Size = new System.Drawing.Size(93, 19);
+            this.metroLabel6.TabIndex = 3;
+            this.metroLabel6.Text = "Process Name";
+            // 
+            // process_txtbx
+            // 
+            this.process_txtbx.Location = new System.Drawing.Point(94, 21);
+            this.process_txtbx.Name = "process_txtbx";
+            this.process_txtbx.Size = new System.Drawing.Size(209, 23);
+            this.process_txtbx.TabIndex = 2;
+            // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.optimization_checkbx);
+            this.metroTabPage3.Controls.Add(this.metroLabel8);
             this.metroTabPage3.Controls.Add(this.blacklistIsSorted);
             this.metroTabPage3.Controls.Add(this.metroLabel7);
             this.metroTabPage3.Controls.Add(this.metroLabel5);
@@ -712,65 +776,6 @@
             this.history_listbx.Size = new System.Drawing.Size(694, 286);
             this.history_listbx.TabIndex = 2;
             // 
-            // metroTabPage5
-            // 
-            this.metroTabPage5.Controls.Add(this.removeProcess);
-            this.metroTabPage5.Controls.Add(this.processBlacklist_listbx);
-            this.metroTabPage5.Controls.Add(this.addProcess);
-            this.metroTabPage5.Controls.Add(this.metroLabel6);
-            this.metroTabPage5.Controls.Add(this.process_txtbx);
-            this.metroTabPage5.HorizontalScrollbarBarColor = true;
-            this.metroTabPage5.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage5.Name = "metroTabPage5";
-            this.metroTabPage5.Size = new System.Drawing.Size(698, 311);
-            this.metroTabPage5.TabIndex = 4;
-            this.metroTabPage5.Text = " Blacklist";
-            this.metroTabPage5.VerticalScrollbarBarColor = true;
-            // 
-            // removeProcess
-            // 
-            this.removeProcess.Location = new System.Drawing.Point(390, 21);
-            this.removeProcess.Name = "removeProcess";
-            this.removeProcess.Size = new System.Drawing.Size(75, 23);
-            this.removeProcess.TabIndex = 6;
-            this.removeProcess.Text = "DEL";
-            this.removeProcess.Click += new System.EventHandler(this.removeProcess_Click);
-            // 
-            // processBlacklist_listbx
-            // 
-            this.processBlacklist_listbx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.processBlacklist_listbx.FormattingEnabled = true;
-            this.processBlacklist_listbx.Location = new System.Drawing.Point(3, 50);
-            this.processBlacklist_listbx.Name = "processBlacklist_listbx";
-            this.processBlacklist_listbx.Size = new System.Drawing.Size(687, 260);
-            this.processBlacklist_listbx.Sorted = true;
-            this.processBlacklist_listbx.TabIndex = 5;
-            // 
-            // addProcess
-            // 
-            this.addProcess.Location = new System.Drawing.Point(309, 21);
-            this.addProcess.Name = "addProcess";
-            this.addProcess.Size = new System.Drawing.Size(75, 23);
-            this.addProcess.TabIndex = 4;
-            this.addProcess.Text = "ADD";
-            this.addProcess.Click += new System.EventHandler(this.addProcess_Click);
-            // 
-            // metroLabel6
-            // 
-            this.metroLabel6.AutoSize = true;
-            this.metroLabel6.Location = new System.Drawing.Point(0, 22);
-            this.metroLabel6.Name = "metroLabel6";
-            this.metroLabel6.Size = new System.Drawing.Size(93, 19);
-            this.metroLabel6.TabIndex = 3;
-            this.metroLabel6.Text = "Process Name";
-            // 
-            // process_txtbx
-            // 
-            this.process_txtbx.Location = new System.Drawing.Point(94, 21);
-            this.process_txtbx.Name = "process_txtbx";
-            this.process_txtbx.Size = new System.Drawing.Size(209, 23);
-            this.process_txtbx.TabIndex = 2;
-            // 
             // status_txtbx
             // 
             this.status_txtbx.Location = new System.Drawing.Point(59, 375);
@@ -823,6 +828,33 @@
             this.watermark_top.TabIndex = 38;
             this.watermark_top.Text = ".";
             // 
+            // blacklistChecker
+            // 
+            this.blacklistChecker.Enabled = true;
+            this.blacklistChecker.Interval = 1000;
+            this.blacklistChecker.Tick += new System.EventHandler(this.blacklistChecker_Tick);
+            // 
+            // optimization_checkbx
+            // 
+            this.optimization_checkbx.AutoSize = true;
+            this.optimization_checkbx.Checked = true;
+            this.optimization_checkbx.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.optimization_checkbx.Location = new System.Drawing.Point(154, 109);
+            this.optimization_checkbx.Name = "optimization_checkbx";
+            this.optimization_checkbx.Size = new System.Drawing.Size(80, 17);
+            this.optimization_checkbx.TabIndex = 42;
+            this.optimization_checkbx.Text = "On";
+            this.optimization_checkbx.UseVisualStyleBackColor = true;
+            // 
+            // metroLabel8
+            // 
+            this.metroLabel8.AutoSize = true;
+            this.metroLabel8.Location = new System.Drawing.Point(3, 107);
+            this.metroLabel8.Name = "metroLabel8";
+            this.metroLabel8.Size = new System.Drawing.Size(88, 19);
+            this.metroLabel8.TabIndex = 41;
+            this.metroLabel8.Text = "Optimization:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -835,6 +867,7 @@
             this.Controls.Add(this.status_txtbx);
             this.Controls.Add(this.status_lbl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.ShadowType = MetroFramework.Forms.MetroForm.MetroFormShadowType.None;
             this.Text = "Process Manager";
@@ -846,13 +879,13 @@
             this.metroTabPage1.PerformLayout();
             this.metroPanel1.ResumeLayout(false);
             this.metroPanel1.PerformLayout();
+            this.metroTabPage5.ResumeLayout(false);
+            this.metroTabPage5.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage2.PerformLayout();
             this.metroTabPage4.ResumeLayout(false);
-            this.metroTabPage5.ResumeLayout(false);
-            this.metroTabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -932,6 +965,9 @@
         private MetroFramework.Controls.MetroButton removeProcess;
         private MetroFramework.Controls.MetroToggle blacklistIsSorted;
         private MetroFramework.Controls.MetroLabel metroLabel7;
+        private System.Windows.Forms.Timer blacklistChecker;
+        private MetroFramework.Controls.MetroToggle optimization_checkbx;
+        private MetroFramework.Controls.MetroLabel metroLabel8;
     }
 }
 
