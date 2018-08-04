@@ -12,17 +12,12 @@ using MetroFramework.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-
+using System.Security.Cryptography;
 
 namespace ProcessManager
 {
     public partial class Form1 : MetroForm
     {
-        public Form1()
-        {
-            InitializeComponent();
-            this.StyleManager = metroStyleManager1;
-        }
         [Flags]
         public enum ThreadAccess : int
         {
@@ -44,53 +39,6 @@ namespace ProcessManager
         static extern int ResumeThread(IntPtr hThread);
         [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
         static extern bool CloseHandle(IntPtr handle);
-        private static void SuspendProcess(int pid)
-        {
-            var process = Process.GetProcessById(pid);
-
-            if (process.ProcessName == string.Empty)
-                return;
-
-            foreach (ProcessThread pT in process.Threads)
-            {
-                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
-
-                if (pOpenThread == IntPtr.Zero)
-                {
-                    continue;
-                }
-
-                SuspendThread(pOpenThread);
-
-                CloseHandle(pOpenThread);
-            }
-        }
-        public static void ResumeProcess(int pid)
-        {
-            var process = Process.GetProcessById(pid);
-
-            if (process.ProcessName == string.Empty)
-                return;
-
-            foreach (ProcessThread pT in process.Threads)
-            {
-                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
-
-                if (pOpenThread == IntPtr.Zero)
-                {
-                    continue;
-                }
-
-                var suspendCount = 0;
-                do
-                {
-                    suspendCount = ResumeThread(pOpenThread);
-                } while (suspendCount > 0);
-
-                CloseHandle(pOpenThread);
-            }
-        }
-
         public enum DllInjectionResult
         {
             DllNotFound,
@@ -216,20 +164,79 @@ namespace ProcessManager
                 return true;
             }
         }
-        DllInjector inj = null;
+        private static void SuspendProcess(int pid)
+        {
+            var process = Process.GetProcessById(pid);
 
-      //vars
+            if (process.ProcessName == string.Empty)
+                return;
+
+            foreach (ProcessThread pT in process.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                SuspendThread(pOpenThread);
+
+                CloseHandle(pOpenThread);
+            }
+        }
+        public static void ResumeProcess(int pid)
+        {
+            var process = Process.GetProcessById(pid);
+
+            if (process.ProcessName == string.Empty)
+                return;
+
+            foreach (ProcessThread pT in process.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                var suspendCount = 0;
+                do
+                {
+                    suspendCount = ResumeThread(pOpenThread);
+                } while (suspendCount > 0);
+
+                CloseHandle(pOpenThread);
+            }
+        }
+        public Form1()
+        {
+            InitializeComponent();
+            this.StyleManager = metroStyleManager1;
+        }
+        DllInjector inj = null;
+//end stf
+
+//vars
         Process process = new Process();
         public static bool paused = false;
         public static bool exists = false;
+        Random rnd = new Random();
 
-      //methods
+//methods
         private void OpenFileDialogMethod(object sender, EventArgs e)
         {
             openFileDialog.Filter = "exe files | *.exe";   
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 pathToFile.Text = openFileDialog.FileName;
+
+                FileInfo fn = new FileInfo(pathToFile.Text);
+                fileName_lbl.Text = "Name: " + fn.Name;
+                size_lbl.Text = "Size: " + fn.Length + " bytes";
+                creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
+                file_hash_lbl.Text = "MD5: " + Files.GetMD5Hash(pathToFile.Text);
             }
         }
         private void StartProcess(object sender, EventArgs e)
@@ -262,6 +269,7 @@ namespace ProcessManager
                     fileName_lbl.Text = "Name: " + fn.Name;
                     size_lbl.Text = "Size: " + fn.Length + " bytes";
                     creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
+                    file_hash_lbl.Text = "MD5: " + Files.GetMD5Hash(pathToFile.Text);
                 }
                 catch(Exception ex)
                 {
@@ -321,7 +329,7 @@ namespace ProcessManager
             }
         }
 
-      //buttoms etc
+//события
         private void timer_Tick(object sender, EventArgs e)
         {
             if (exists)
@@ -508,11 +516,14 @@ namespace ProcessManager
                 processList.Sorted = true;
             }
         }
+        private void copyMD5_btm_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Files.GetMD5Hash(pathToFile.Text));
+        }
         private void button1_Click_1(object sender, EventArgs e)
         {
             OpenFileDialogMethod(sender, e);
         }
-        Random rnd = new Random();
         private void Form1_Load(object sender, EventArgs e)
         {
             colorSwitcher.SelectedIndex = 11;
@@ -577,7 +588,6 @@ namespace ProcessManager
             else
                 Directory.CreateDirectory(pathToCfg);
         }
-        static string[] lines = new string[2];
         private void colorSwitcher_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (colorSwitcher.Text)
@@ -643,6 +653,7 @@ namespace ProcessManager
                     break;
             }
         }
+        static string[] lines = new string[2];
         private void themeSwitcher_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             switch (themeSwitcher.SelectedIndex)
@@ -673,7 +684,14 @@ namespace ProcessManager
                     break;
             }
         }
-        //process tab
+        private void watermark_timer_Tick(object sender, EventArgs e)
+        {
+            WaterMarkStep(step);
+            watermark.Refresh();
+            step += 1;
+            if (step >= 42)
+                step = 1;
+        }
         private void historyRefreshing_Tick(object sender, EventArgs e)
         {
             history_listbx.Refresh();
@@ -782,134 +800,14 @@ namespace ProcessManager
             pathToFile.Text = "";
             listBox1.Items.Clear();
         }
-        internal class Inject
-        {
-            // Token: 0x06000004 RID: 4 RVA: 0x0000209C File Offset: 0x0000029C
-            private static byte[] CalcBytes(string sToConvert)
-            {
-                return Encoding.ASCII.GetBytes(sToConvert);
-            }
-
-            // Token: 0x06000005 RID: 5 RVA: 0x00002140 File Offset: 0x00000340
-            private static bool CRT(Process pToBeInjected, string sDllPath, out string sError, out IntPtr hwnd)
-            {
-                sError = string.Empty;
-                IntPtr intPtr = Inject.WINAPI.OpenProcess(1082u, 1, (uint)pToBeInjected.Id);
-                hwnd = intPtr;
-                if (intPtr == IntPtr.Zero)
-                {
-                    return false;
-                }
-                IntPtr procAddress = Inject.WINAPI.GetProcAddress(Inject.WINAPI.GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-                if (procAddress == IntPtr.Zero)
-                {
-                    return false;
-                }
-                IntPtr intPtr2 = Inject.WINAPI.VirtualAllocEx(intPtr, IntPtr.Zero, (IntPtr)sDllPath.Length, 12288u, 4u);
-                if (intPtr2 == IntPtr.Zero && intPtr2 == IntPtr.Zero)
-                {
-                    return false;
-                }
-                byte[] array = Inject.CalcBytes(sDllPath);
-                IntPtr zero = IntPtr.Zero;
-                Inject.WINAPI.WriteProcessMemory(intPtr, intPtr2, array, (uint)array.Length, out zero);
-                return Marshal.GetLastWin32Error() == 0 && !(Inject.WINAPI.CreateRemoteThread(intPtr, IntPtr.Zero, IntPtr.Zero, procAddress, intPtr2, 0u, IntPtr.Zero) == IntPtr.Zero);
-            }
-
-            // Token: 0x06000006 RID: 6 RVA: 0x00002224 File Offset: 0x00000424
-            public static bool DoInject(Process pToBeInjected, string sDllPath, out string sError)
-            {
-                IntPtr zero = IntPtr.Zero;
-                if (!Inject.CRT(pToBeInjected, sDllPath, out sError, out zero))
-                {
-                    if (zero != IntPtr.Zero)
-                    {
-                        Inject.WINAPI.CloseHandle(zero);
-                    }
-                    return false;
-                }
-                Marshal.GetLastWin32Error();
-                return true;
-            }
-
-            // Token: 0x02000007 RID: 7
-            private static class WINAPI
-            {
-                // Token: 0x06000014 RID: 20
-                [DllImport("kernel32.dll", SetLastError = true)]
-                public static extern int CloseHandle(IntPtr hObject);
-
-                // Token: 0x06000015 RID: 21
-                [DllImport("kernel32.dll", SetLastError = true)]
-                public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttribute, IntPtr dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
-
-                // Token: 0x06000016 RID: 22
-                [DllImport("kernel32.dll", SetLastError = true)]
-                public static extern IntPtr GetModuleHandle(string lpModuleName);
-
-                // Token: 0x06000017 RID: 23
-                [DllImport("kernel32.dll", SetLastError = true)]
-                public static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
-
-                // Token: 0x06000018 RID: 24
-                [DllImport("kernel32.dll", SetLastError = true)]
-                public static extern IntPtr OpenProcess(uint dwDesiredAccess, int bInheritHandle, uint dwProcessId);
-
-                // Token: 0x06000019 RID: 25
-                [DllImport("kernel32.dll", SetLastError = true)]
-                public static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, IntPtr dwSize, uint flAllocationType, uint flProtect);
-
-                // Token: 0x0600001A RID: 26
-                [DllImport("kernel32.dll", SetLastError = true)]
-                public static extern int WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] buffer, uint size, out IntPtr lpNumberOfBytesWritten);
-
-                // Token: 0x02000008 RID: 8
-                public static class VAE_Enums
-                {
-                    // Token: 0x02000009 RID: 9
-                    public enum AllocationType
-                    {
-                        // Token: 0x04000007 RID: 7
-                        MEM_COMMIT = 4096,
-                        // Token: 0x04000008 RID: 8
-                        MEM_RESERVE = 8192,
-                        // Token: 0x04000009 RID: 9
-                        MEM_RESET = 524288
-                    }
-
-                    // Token: 0x0200000A RID: 10
-                    public enum ProtectionConstants
-                    {
-                        // Token: 0x0400000B RID: 11
-                        PAGE_EXECUTE = 16,
-                        // Token: 0x0400000C RID: 12
-                        PAGE_EXECUTE_READ = 32,
-                        // Token: 0x0400000D RID: 13
-                        PAGE_EXECUTE_READWRITE = 4,
-                        // Token: 0x0400000E RID: 14
-                        PAGE_EXECUTE_WRITECOPY = 8,
-                        // Token: 0x0400000F RID: 15
-                        PAGE_NOACCESS = 1
-                    }
-                }
-            }
-        }
         private void injectDll_private_btm_Click(object sender, EventArgs e)
         {
             string err = "";
             Inject.DoInject(Process.GetProcessById(process.Id), pathToDll_txtbx.Text, out err);
             MessageBox.Show("Dll injected");
         }
-        //watermark
+//watermark
         static int step = 1;
-        private void watermark_timer_Tick(object sender, EventArgs e)
-        {
-            WaterMarkStep(step);
-            watermark.Refresh();
-            step += 1;
-            if (step >= 42)
-                step = 1;
-        }
         public static int symbolsCounter = 0;
         private void WaterMarkStep(int step)
         {
@@ -1066,7 +964,7 @@ namespace ProcessManager
             }
             catch { log_txtbx.Text = ""; symbolsCounter = 0; }
         }
-        //delete file
+//delete file
         public static string ProcessName = "";
         public void UnlockFile(string path, out string processName)
         {
@@ -1075,32 +973,11 @@ namespace ProcessManager
             {
                 log = path;
                 Process[] procList = Process.GetProcesses();
-                int counter = 0;
-                foreach (Process p in procList)
+                try
                 {
-                    ProcessName = "\t|\t" + p.ProcessName;
-                    if (stop)
-                    {
-                        log = "";
-                        break;
-                    }
-                    try
-                    {
-                        ProcessModuleCollection modules = p.Modules;
-                        foreach (ProcessModule m in modules)
-                        {
-                            if (path.ToLower() == m.FileName.ToLower())
-                            {
-                                processName = p.ProcessName;
-                                p.Kill();
-                                File.Delete(path);
-                                break;
-                            }
-                        }
-                    }
-                    catch { }
-                    counter++;
+                    Proc.KillByFile(path, out processName);
                 }
+                catch { }
                 log_txtbx.Text = "";
             }
             catch { }
@@ -1279,7 +1156,7 @@ namespace ProcessManager
         {
             stop = true;
         }
-        //blacklist
+//blacklist
         private void addProcess_Click(object sender, EventArgs e)
         {
             if (process_txtbx.Text != "")
@@ -1295,9 +1172,8 @@ namespace ProcessManager
                 processBlacklist_listbx.Items.RemoveAt(this.processBlacklist_listbx.SelectedIndex);
             }
         }
-
         string pathToCfg = @"C:\Users\" + Environment.UserName + @"\AppData\Roaming\Process Manager";
-        //save cfg
+//save cfg
         private void Form1_Deactivate(object sender, EventArgs e)
         {
             //save blacklist
@@ -1402,6 +1278,28 @@ namespace ProcessManager
                 blacklistChecker.Interval = 1000;
                 historyRefreshing.Interval = 1000;
                 watermarkspeed.Enabled = true;
+            }
+        }
+        private void compare_btm_Click(object sender, EventArgs e)
+        {
+            openFileDialog.Filter = "AnyFiles | *.*";
+            FileInfo fn1;
+            FileInfo fn2;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                fn1 = new FileInfo(openFileDialog.FileName);
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    fn2 = new FileInfo(openFileDialog.FileName);
+                    if (Files.CompareFilesByHash(fn1, fn2))
+                    {
+                        MessageBox.Show("That is the same files");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Different files\nMD5: " + Files.GetMD5Hash(fn1.FullName) + "\nMD5: " + Files.GetMD5Hash(fn2.FullName));
+                    }
+                }
             }
         }
     }
