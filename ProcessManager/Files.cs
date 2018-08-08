@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ProcessManager
 {
@@ -24,19 +25,24 @@ namespace ProcessManager
         }
         public static string GetMD5Hash(string pathToFile)
         {
-            using (var md5 = MD5.Create())
+            try
             {
-                using (var stream = File.OpenRead(pathToFile))
+                using (var md5 = MD5.Create())
                 {
-                    byte[] bytes = md5.ComputeHash(stream);
-                    string MD5 = "";
-                    foreach (byte b in bytes)
+                    using (var stream = File.OpenRead(pathToFile))
                     {
-                        MD5 += Convert.ToString(b);
+                        byte[] bytes = md5.ComputeHash(stream);
+                        string MD5 = "";
+                        foreach (byte b in bytes)
+                        {
+                            MD5 += Convert.ToString(b);
+                        }
+                        return MD5;
                     }
-                    return MD5;
                 }
             }
+            catch { MessageBox.Show("GetMD5Hash method error"); }
+            return "";
         }
     }
 }

@@ -52,5 +52,25 @@ namespace ProcessManager
             }
             return 1;
         }
+        public static bool IsProcessExists(int Pid)
+        {
+            Process[] processes = Process.GetProcesses();
+            foreach (Process p in processes)
+            {
+                if (p.Id == Pid)
+                    return true;
+            }
+            return false;
+        }
+        public static bool IsProcessExists(string Name)
+        {
+            Process[] processes = Process.GetProcesses();
+            foreach (Process p in processes)
+            {
+                if (p.ProcessName == Name)
+                    return true;
+            }
+            return false;
+        }
     }
 }

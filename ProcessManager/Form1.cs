@@ -221,27 +221,17 @@ namespace ProcessManager
 //vars
         Process process = new Process();
         public static bool paused = false;
-        public static bool exists = false;
+        public static bool existsProcess = false;
         Random rnd = new Random();
+        Thread thread;
+        string pathToCfg = @"C:\Users\" + Environment.UserName + @"\AppData\Roaming\Process Manager";
+        static string[] lines = new string[2];
+        public static string pathToAutoStart = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs";
 
 //methods
-        private void OpenFileDialogMethod(object sender, EventArgs e)
-        {
-            openFileDialog.Filter = "exe files | *.exe";   
-            if(openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                pathToFile.Text = openFileDialog.FileName;
-
-                FileInfo fn = new FileInfo(pathToFile.Text);
-                fileName_lbl.Text = "Name: " + fn.Name;
-                size_lbl.Text = "Size: " + fn.Length + " bytes";
-                creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
-                file_hash_lbl.Text = "MD5: " + Files.GetMD5Hash(pathToFile.Text);
-            }
-        }
         private void StartProcess(object sender, EventArgs e)
         {
-            if (exists)
+            if (existsProcess)
             {
                 process.Kill();
                 listBox1.Items.Clear();
@@ -257,7 +247,7 @@ namespace ProcessManager
                     process.StartInfo.FileName = pathToFile.Text;
                     process.Start();
                     int pid = process.Id;
-                    exists = true;
+                    existsProcess = true;
                     if (pauseOnStart.Checked)
                     {
                         SuspendProcess(pid);
@@ -330,20 +320,141 @@ namespace ProcessManager
         }
 
 //события
+   //icon
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            if(WindowState == FormWindowState.Minimized)
+            {
+                icon.Visible = true;
+                this.ShowInTaskbar = false;
+                icon.BalloonTipText = "I am here";
+                icon.ShowBalloonTip(100);
+            }
+            else if (WindowState == FormWindowState.Maximized)
+            {
+                icon.Visible = false;
+                this.ShowInTaskbar = true;
+            }
+        }
+        private void icon_MouseClick(object sender, MouseEventArgs e)
+        {
+            icon.Visible = false;
+            WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
+        }
+        private void blacklistChecker_Tick(object sender, EventArgs e)
+        {
+            //blacklist
+            if (blacklistIsSorted.Checked)
+                processBlacklist_listbx.Sorted = true;
+            else
+                processBlacklist_listbx.Sorted = false;
+            string[] processBlackList = new string[processBlacklist_listbx.Items.Count];
+            for (int i = 0; i < processBlackList.Length; i++)
+            {
+                processBlackList[i] = processBlacklist_listbx.Items[i].ToString();
+
+                Process[] p = Process.GetProcessesByName(processBlackList[i]);
+                foreach (var proc in p)
+                {
+                    try
+                    {
+                        proc.Kill();
+                        DateTime date = DateTime.Now;
+                        string temp = String.Format("[ {0} ]\tProcess {1} from blacklist killed", date.ToString(), processBlackList[i]);
+                        history_listbx.Items.Add(temp);
+                    }
+                    catch { }
+                }
+            }
+            //end blacklist
+            //status 
+            if (paused)
+            {
+                pause.Text = "Resume Process";
+                status_txtbx.Text = "Paused";
+            }
+            else
+            {
+                if (existsProcess)
+                {
+                    pause.Text = "Pause Process";
+                    status_txtbx.Text = "Working";
+                }
+                else
+                {
+                    pause.Text = "Pause Process";
+                }
+            }
+            //design
+            if (optimization_checkbx.Checked)
+            {
+                //watermark
+                watermark_timer.Interval = watermarkspeed.Value;
+                //colors
+                history_listbx.BackColor = listBox1.BackColor;
+                history_listbx.ForeColor = listBox1.ForeColor;
+
+                processList.BackColor = listBox1.BackColor;
+                processList.ForeColor = listBox1.ForeColor;
+
+                symbols_txtbx.BackColor = listBox1.BackColor;
+                symbols_txtbx.ForeColor = listBox1.ForeColor;
+
+                processBlacklist_listbx.BackColor = history_listbx.BackColor;
+                processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
+                //progressbar
+                progressBar1.Maximum = numOfFiles;
+                progressBar1.Value = numOfFilesChecked;
+                //end disign
+                //timers intervals
+                timer.Interval = 280;
+                blacklistChecker.Interval = 1800;
+                historyRefreshing.Interval = 2000;
+
+                watermarkspeed.Value = 1500;
+                watermarkspeed.Enabled = false;
+            }
+            else
+            {
+                timer.Interval = 10;
+                blacklistChecker.Interval = 1000;
+                historyRefreshing.Interval = 1000;
+                watermarkspeed.Enabled = true;
+            }
+            //correct
+            if (!existsProcess)
+            {
+               // fileName_lbl.Text = "Name:";
+               // size_lbl.Text = "Size:";
+               // creationTime_lbl.Text = "Creation time:";
+               // file_hash_lbl.Text = "MD5";
+
+                listBox1.Items.Clear();
+                name_lbl.Text = "Name:";
+                pid_lbl.Text = "Pid:";
+                startTime_lbl.Text = "Start time:";
+                priority_lbl.Text = "Priority:";
+            }
+            //end correct
+        }
+   //end icon
+   //timers
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (exists)
+            GC.Collect();
+            if (existsProcess)
             {
                 try
                 {
-                    if (exists)
+                    if (existsProcess)
                         if (process.HasExited)
-                            exists = false;
+                            existsProcess = false;
                 }
                 catch (Exception ex)
                 {
                     string ex_ = ex.ToString();
-                    exists = false;
+                    existsProcess = false;
                     paused = false;
                     processName_txtbx.Text = "";
                     pathToFile.Text = "";
@@ -351,7 +462,7 @@ namespace ProcessManager
                     MessageBox.Show("System process");
                 }
             } //check if process here
-            if (!exists)
+            if (!existsProcess)
             {
                 status_txtbx.Text = "No process";
 
@@ -443,6 +554,25 @@ namespace ProcessManager
                 cancel_btm.Enabled = false;
             }
         }
+        private void historyRefreshing_Tick(object sender, EventArgs e)
+        {
+            history_listbx.Refresh();
+            history_listbx.BackColor = listBox1.BackColor;
+            history_listbx.ForeColor = listBox1.ForeColor;
+
+            history_listbx.TopIndex = history_listbx.Items.Count - 1;
+           // history_listbx.SelectedIndex = history_listbx.Items.Count - 1;
+        }
+        private void watermark_timer_Tick(object sender, EventArgs e)
+        {
+            WaterMarkStep(step);
+            watermark.Refresh();
+            step += 1;
+            if (step >= 42)
+                step = 1;
+        }
+   //end timers
+   //main
         private void start_Click_1(object sender, EventArgs e)
         {
             StartProcess(sender, e);
@@ -451,62 +581,209 @@ namespace ProcessManager
         {
             PauseProcess(sender, e);
         }
+        private void compare_btm_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                openFileDialog.Filter = "AnyFiles | *.*";
+                FileInfo fn1;
+                FileInfo fn2;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    fn1 = new FileInfo(openFileDialog.FileName);
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        fn2 = new FileInfo(openFileDialog.FileName);
+                        if (Files.CompareFilesByHash(fn1, fn2))
+                        {
+                            MessageBox.Show("That is the same files");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Different files\nMD5: " + Files.GetMD5Hash(fn1.FullName) + "\nMD5: " + Files.GetMD5Hash(fn2.FullName));
+                        }
+                    }
+                }
+            }
+            catch { }
+        }
+        private void copyMD5_btm_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(Files.GetMD5Hash(pathToFile.Text));
+            }
+            catch { }
+        }
+        private void cancel_btm_Click(object sender, EventArgs e)
+        {
+            stop = true;
+        }
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                openFileDialog.Filter = "exe files | *.exe";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    pathToFile.Text = openFileDialog.FileName;
+
+                    FileInfo fn = new FileInfo(pathToFile.Text);
+                    fileName_lbl.Text = "Name: " + fn.Name;
+                    size_lbl.Text = "Size: " + fn.Length + " bytes";
+                    creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
+                    file_hash_lbl.Text = "MD5: " + Files.GetMD5Hash(pathToFile.Text);
+                }
+            }
+            catch { MessageBox.Show("FileDialog Method error"); }
+        }
+        //right side
+        private void unlock_btm_Click(object sender, EventArgs e)
+        {
+            string path = "";
+            string process = "";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                path = openFileDialog.FileName;
+                UnlockFile(path, out process);
+                if(process != "")
+                {
+                    MessageBox.Show("Process \"" + process + "\" killed");
+                }
+                else
+                {
+                    MessageBox.Show("Already unlocked");
+                }
+            }
+            log = "";
+            numOfFilesChecked = 0;
+        }
+        private void deleteFile_btm_Click(object sender, EventArgs e)
+        {
+            openFileDialog.Filter = "any files | *.*";
+            string path = "";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string procName = "";
+                path = openFileDialog.FileName;
+                UnlockFile(path, out procName);
+                try
+                {
+                    File.Delete(path);
+                }
+                catch { }
+                if (procName != "")
+                {
+                    MessageBox.Show("File deleted");
+                }
+                else
+                {
+                    MessageBox.Show("process " + procName + " killed. File deleted");
+                }
+            }
+            log = "";
+        }
+        private void unlockDir_btm_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                thread = new Thread(UnlockDirMethod);
+                thread.IsBackground = true;
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    // string path = folderBrowserDialog1.SelectedPath;
+                    thread.Start();
+                    delete = false;
+                }
+                log = "";
+                numOfFilesChecked = 0;
+            }
+            catch { }
+        }
+        private void unlockDirAndDel_btm_Click(object sender, EventArgs e)
+        {
+            Thread thread = new Thread(UnlockDirMethod);
+            thread.IsBackground = true;
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                // string path = folderBrowserDialog1.SelectedPath;
+                thread.Start();
+                delete = true;
+            }
+            log = "";
+            numOfFilesChecked = 0;
+        }
+        //end right side
+   //end main
+
+   //blacklist
+        private void addProcess_Click(object sender, EventArgs e)
+        {
+            if (process_txtbx.Text != "")
+            {
+                processBlacklist_listbx.Items.Add(process_txtbx.Text);
+                process_txtbx.Text = "";
+            }
+        }
+        private void removeProcess_Click(object sender, EventArgs e)
+        {
+            if(processBlacklist_listbx.SelectedIndex >= 0)
+            {
+                processBlacklist_listbx.Items.RemoveAt(this.processBlacklist_listbx.SelectedIndex);
+            }
+        }
+   //end blacklist   
+   //process tab
+        private void selectProcess_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                process = Process.GetProcessById(Convert.ToInt32(processPid_txtbx.Text));
+                existsProcess = true;
+                paused = false;
+                WriteModulesInListbox1(sender, e);
+
+            
+                pathToFile.Text = process.MainModule.FileName;
+                /*file info*/
+                FileInfo fn = new FileInfo(pathToFile.Text);
+                fileName_lbl.Text = "Name: " + fn.Name;
+                size_lbl.Text = "Size: " + fn.Length + " bytes";
+                creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
+
+                DateTime date = DateTime.Now;
+                string temp = String.Format("[ {0} ]\tConnected to process {1}", date.ToString(), process.ProcessName);
+                history_listbx.Items.Add(temp);
+
+                processPid_txtbx.Text = "";
+            }
+            catch { }
+        }
         private void getModules_Click_1(object sender, EventArgs e)
         {
             WriteModulesInListbox1(sender, e);
         }
         private void kill_btm_Click(object sender, EventArgs e)
         {
-            DateTime date = DateTime.Now;
-            string temp = String.Format("[ {0} ]\tTrying to kill process {1}", date.ToString(), pathToFile.Text);
-            string process_ = pathToFile.Text;
-            history_listbx.Items.Add(temp);
-            int count = 0;
-            while (true)
+
+            string ProcessName = process.ProcessName;
+
+            int counter = 0;
+            while (Proc.IsProcessExists(ProcessName))
             {
-                try
+                Proc.KillByName(ProcessName);
+                if(counter > 10)
                 {
-                    Process[] ps1 = Process.GetProcessesByName(process.ProcessName);
-                    foreach (Process p1 in ps1)
-                        p1.Kill();
-
-                    process.Kill();
-                    pathToFile.Text = "";
-                    listBox1.Items.Clear();
-                    exists = false;
-                    paused = false;
-                    temp = String.Format("[ {0} ]\tProcess killed {1}", date.ToString(), process_);
-                    history_listbx.Items.Add(temp);
-                    break;
+                    DateTime date1 = DateTime.Now;
+                    string temp1 = String.Format("[ {0} ]\tUnable to kill process {1}", date1.ToString(), ProcessName);
+                    history_listbx.Items.Add(temp1);
                 }
-                catch { }
-                count++;
-                if(count > 10)
-                {
-                    try
-                    {
-                        Process[] ps1 = Process.GetProcessesByName(process.ProcessName);
-                        foreach (Process p1 in ps1)
-                            p1.Kill();
-
-                        process.Kill();
-                        pathToFile.Text = "";
-                        listBox1.Items.Clear();
-                        exists = false;
-                        paused = false;
-                        temp = String.Format("[ {0} ]\tProcess killed {1}", date.ToString(), process_);
-                        history_listbx.Items.Add(temp);
-                        break;
-                    }
-                    catch(Exception ex)
-                    {
-                        temp = String.Format("[ {0} ]\tError while killing process {1}, exception {2}", date.ToString(), process_, ex.ToString());
-                        history_listbx.Items.Add(temp);
-                        break;
-                    }
-                }
-                Thread.Sleep(100);
             }
+
+            DateTime date = DateTime.Now;
+            string temp = String.Format("[ {0} ]\tProcess {1} killed", date.ToString(), ProcessName);
+            history_listbx.Items.Add(temp);
+
             listBox1.Items.Clear();
             processList.Items.Clear();
             Process[] procList = Process.GetProcesses();
@@ -516,14 +793,77 @@ namespace ProcessManager
                 processList.Sorted = true;
             }
         }
-        private void copyMD5_btm_Click(object sender, EventArgs e)
+        private void refreshProcList_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(Files.GetMD5Hash(pathToFile.Text));
+            processList.Items.Clear();
+            Process[] procList = Process.GetProcesses();
+            foreach (Process p in procList)
+            {
+                processList.Items.Add(p.ProcessName + "\t" + p.Id);
+                processList.Sorted = true;
+            }
         }
-        private void button1_Click_1(object sender, EventArgs e)
+        private void SelectDll_Click(object sender, EventArgs e)
         {
-            OpenFileDialogMethod(sender, e);
+            openFileDialog.Filter = "dll files | *.dll";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                pathToDll_txtbx.Text = openFileDialog.FileName;
+            }
         }
+        private void injectDll_Click(object sender, EventArgs e)
+        {
+            if (pathToDll_txtbx.Text != "" && processName_txtbx.Text != "")
+            {
+                inj = new DllInjector(pathToDll_txtbx.Text);
+                inj.Inject(process.ProcessName, pathToDll_txtbx.Text);
+                MessageBox.Show("Dll injected");
+            }
+        }
+        private void injectDll_private_btm_Click(object sender, EventArgs e)
+        {
+            string err = "";
+            Inject.DoInject(Process.GetProcessById(process.Id), pathToDll_txtbx.Text, out err);
+            MessageBox.Show("Dll injected");
+        }
+        private void unselect_btm_Click(object sender, EventArgs e)
+        {
+            existsProcess = false;
+            paused = false;
+            processName_txtbx.Text = "";
+            pathToFile.Text = "";
+            listBox1.Items.Clear();
+        }
+   //end process tab
+
+   //form
+        //save cfg
+        private void Form1_Deactivate(object sender, EventArgs e)
+        {
+            //save blacklist
+            string[] linesInBlacklist = new string[processBlacklist_listbx.Items.Count];
+            for (int i = 0; i < linesInBlacklist.Length; i++)
+            {
+                linesInBlacklist[i] = processBlacklist_listbx.Items[i].ToString();
+            }
+            File.WriteAllLines(pathToCfg + "\\blacklist.txt", linesInBlacklist);
+            //save other
+            string[] linesOther = new string[6];
+            //0)blacklist sorted 1 or 0
+            //1)watermarkspeed 
+            //2)helper on?
+            //3)color index
+            //4)theme index
+            //5)optimization
+            linesOther[0] = Convert.ToString(Convert.ToInt32(blacklistIsSorted.Checked));
+            linesOther[1] = Convert.ToString(watermarkspeed.Value);
+            linesOther[2] = Convert.ToString(Convert.ToInt32(help_withId.Checked));
+            linesOther[3] = Convert.ToString(colorSwitcher.SelectedIndex);
+            linesOther[4] = Convert.ToString(themeSwitcher.SelectedIndex);
+            linesOther[5] = Convert.ToString(Convert.ToInt32(optimization_checkbx.Checked)); 
+            File.WriteAllLines(pathToCfg + "\\other.txt", linesOther);
+        }
+        //end save cfg
         private void Form1_Load(object sender, EventArgs e)
         {
             colorSwitcher.SelectedIndex = 11;
@@ -587,7 +927,10 @@ namespace ProcessManager
             }
             else
                 Directory.CreateDirectory(pathToCfg);
+            //autostart
+            
         }
+        //theme
         private void colorSwitcher_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (colorSwitcher.Text)
@@ -653,7 +996,6 @@ namespace ProcessManager
                     break;
             }
         }
-        static string[] lines = new string[2];
         private void themeSwitcher_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             switch (themeSwitcher.SelectedIndex)
@@ -684,128 +1026,7 @@ namespace ProcessManager
                     break;
             }
         }
-        private void watermark_timer_Tick(object sender, EventArgs e)
-        {
-            WaterMarkStep(step);
-            watermark.Refresh();
-            step += 1;
-            if (step >= 42)
-                step = 1;
-        }
-        private void historyRefreshing_Tick(object sender, EventArgs e)
-        {
-            history_listbx.Refresh();
-            history_listbx.BackColor = listBox1.BackColor;
-            history_listbx.ForeColor = listBox1.ForeColor;
-        }
-        private void injectDll_Click(object sender, EventArgs e)
-        {
-            if (pathToDll_txtbx.Text != "" && processName_txtbx.Text != "")
-            {
-                inj = new DllInjector(pathToDll_txtbx.Text);
-                inj.Inject(process.ProcessName, pathToDll_txtbx.Text);
-                MessageBox.Show("Dll injected");
-            }
-        }
-        private void tryToFindModules_Click(object sender, EventArgs e)
-        {
-            if (exists)
-            {
-                listBox1.Items.Clear();
-                int counter = 0;
-                while ("ti lox" == "ti lox")
-                {
-                    try
-                    {
-                        ProcessModuleCollection pmc = process.Modules;
-                        for (int i = 0; i < pmc.Count; i++)
-                        {
-                            listBox1.Items.Add(pmc[i].ToString().Substring("system.diagnostics.Modules.Module".Length));
-                        }
-                        break;
-                    }
-                    catch { }
-                    counter++;
-                    if (counter >= 10)
-                    {
-                        try
-                        {
-                            ProcessModuleCollection pmc = process.Modules;
-                            listBox1.Items.Add("Fail (" + pmc.Count + " modules)");
-                        }
-                        catch { listBox1.Items.Add("Fail"); }
-                        break;
-                    }
-                    if (paused)
-                    {
-                        ResumeProcess(process.Id);
-                        Thread.Sleep(275);
-                        SuspendProcess(process.Id);
-                    }
-                    else
-                    {
-                        Thread.Sleep(100);
-                    }
-                }
-            }
-        }
-        private void SelectDll_Click(object sender, EventArgs e)
-        {
-            openFileDialog.Filter = "dll files | *.dll";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                pathToDll_txtbx.Text = openFileDialog.FileName;
-            }
-        }
-        private void selectProcess_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                process = Process.GetProcessById(Convert.ToInt32(processPid_txtbx.Text));
-                exists = true;
-                paused = false;
-                WriteModulesInListbox1(sender, e);
-
-            
-                pathToFile.Text = process.MainModule.FileName;
-                /*file info*/
-                FileInfo fn = new FileInfo(pathToFile.Text);
-                fileName_lbl.Text = "Name: " + fn.Name;
-                size_lbl.Text = "Size: " + fn.Length + " bytes";
-                creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
-
-                DateTime date = DateTime.Now;
-                string temp = String.Format("[ {0} ]\tConnected to process {1}", date.ToString(), process.ProcessName);
-                history_listbx.Items.Add(temp);
-
-                processPid_txtbx.Text = "";
-            }
-            catch { }
-        }
-        private void refreshProcList_Click(object sender, EventArgs e)
-        {
-            processList.Items.Clear();
-            Process[] procList = Process.GetProcesses();
-            foreach (Process p in procList)
-            {
-                processList.Items.Add(p.ProcessName + "\t" + p.Id);
-                processList.Sorted = true;
-            }
-        }
-        private void unselect_btm_Click(object sender, EventArgs e)
-        {
-            exists = false;
-            paused = false;
-            processName_txtbx.Text = "";
-            pathToFile.Text = "";
-            listBox1.Items.Clear();
-        }
-        private void injectDll_private_btm_Click(object sender, EventArgs e)
-        {
-            string err = "";
-            Inject.DoInject(Process.GetProcessById(process.Id), pathToDll_txtbx.Text, out err);
-            MessageBox.Show("Dll injected");
-        }
+        //end theme
 //watermark
         static int step = 1;
         public static int symbolsCounter = 0;
@@ -964,6 +1185,8 @@ namespace ProcessManager
             }
             catch { log_txtbx.Text = ""; symbolsCounter = 0; }
         }
+//end watermark
+
 //delete file
         public static string ProcessName = "";
         public void UnlockFile(string path, out string processName)
@@ -982,69 +1205,6 @@ namespace ProcessManager
             }
             catch { }
             log = "";
-        }
-        private void deleteFile_btm_Click(object sender, EventArgs e)
-        {
-            openFileDialog.Filter = "any files | *.*";
-            string path = "";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string procName = "";
-                path = openFileDialog.FileName;
-                UnlockFile(path, out procName);
-                try
-                {
-                    File.Delete(path);
-                }
-                catch { }
-                if (procName != "")
-                {
-                    MessageBox.Show("File deleted");
-                }
-                else
-                {
-                    MessageBox.Show("process " + procName + " killed. File deleted");
-                }
-            }
-            log = "";
-        }
-        private void unlock_btm_Click(object sender, EventArgs e)
-        {
-            string path = "";
-            string process = "";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                path = openFileDialog.FileName;
-                UnlockFile(path, out process);
-                if(process != "")
-                {
-                    MessageBox.Show("Process \"" + process + "\" killed");
-                }
-                else
-                {
-                    MessageBox.Show("Already unlocked");
-                }
-            }
-            log = "";
-            numOfFilesChecked = 0;
-        }
-        Thread thread;
-        private void unlockDir_btm_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                thread = new Thread(UnlockDirMethod);
-                thread.IsBackground = true;
-                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    // string path = folderBrowserDialog1.SelectedPath;
-                    thread.Start();
-                    delete = false;
-                }
-                log = "";
-                numOfFilesChecked = 0;
-            }
-            catch { }
         }
         public static int numOfFiles = 0;
         public static int numOfFilesChecked = 0;
@@ -1138,169 +1298,6 @@ namespace ProcessManager
             log = "";
         }
         public static bool delete = false;
-        private void unlockDirAndDel_btm_Click(object sender, EventArgs e)
-        {
-            Thread thread = new Thread(UnlockDirMethod);
-            thread.IsBackground = true;
-            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-            {
-                // string path = folderBrowserDialog1.SelectedPath;
-                thread.Start();
-                delete = true;
-            }
-            log = "";
-            numOfFilesChecked = 0;
-        }
         public static bool stop = false;
-        private void cancel_btm_Click(object sender, EventArgs e)
-        {
-            stop = true;
-        }
-//blacklist
-        private void addProcess_Click(object sender, EventArgs e)
-        {
-            if (process_txtbx.Text != "")
-            {
-                processBlacklist_listbx.Items.Add(process_txtbx.Text);
-                process_txtbx.Text = "";
-            }
-        }
-        private void removeProcess_Click(object sender, EventArgs e)
-        {
-            if(processBlacklist_listbx.SelectedIndex >= 0)
-            {
-                processBlacklist_listbx.Items.RemoveAt(this.processBlacklist_listbx.SelectedIndex);
-            }
-        }
-        string pathToCfg = @"C:\Users\" + Environment.UserName + @"\AppData\Roaming\Process Manager";
-//save cfg
-        private void Form1_Deactivate(object sender, EventArgs e)
-        {
-            //save blacklist
-            string[] linesInBlacklist = new string[processBlacklist_listbx.Items.Count];
-            for (int i = 0; i < linesInBlacklist.Length; i++)
-            {
-                linesInBlacklist[i] = processBlacklist_listbx.Items[i].ToString();
-            }
-            File.WriteAllLines(pathToCfg + "\\blacklist.txt", linesInBlacklist);
-            //save other
-            string[] linesOther = new string[6];
-            //0)blacklist sorted 1 or 0
-            //1)watermarkspeed 
-            //2)helper on?
-            //3)color index
-            //4)theme index
-            //5)optimization
-            linesOther[0] = Convert.ToString(Convert.ToInt32(blacklistIsSorted.Checked));
-            linesOther[1] = Convert.ToString(watermarkspeed.Value);
-            linesOther[2] = Convert.ToString(Convert.ToInt32(help_withId.Checked));
-            linesOther[3] = Convert.ToString(colorSwitcher.SelectedIndex);
-            linesOther[4] = Convert.ToString(themeSwitcher.SelectedIndex);
-            linesOther[5] = Convert.ToString(Convert.ToInt32(optimization_checkbx.Checked)); 
-            File.WriteAllLines(pathToCfg + "\\other.txt", linesOther);
-        }
-        private void blacklistChecker_Tick(object sender, EventArgs e)
-        {
-            //blacklist
-            if (blacklistIsSorted.Checked)
-                processBlacklist_listbx.Sorted = true;
-            else
-                processBlacklist_listbx.Sorted = false;
-            string[] processBlackList = new string[processBlacklist_listbx.Items.Count];
-            for (int i = 0; i < processBlackList.Length; i++)
-            {
-                processBlackList[i] = processBlacklist_listbx.Items[i].ToString();
-
-                Process[] p = Process.GetProcessesByName(processBlackList[i]);
-                foreach (var proc in p)
-                {
-                    try
-                    {
-                        proc.Kill();
-                        DateTime date = DateTime.Now;
-                        string temp = String.Format("[ {0} ]\tProcess {1} from blacklist killed", date.ToString(), processBlackList[i]);
-                        history_listbx.Items.Add(temp);
-                    }
-                    catch { }
-                }
-            }
-            //end blacklist
-            //status 
-            if (paused)
-            {
-                pause.Text = "Resume Process";
-                status_txtbx.Text = "Paused";
-            }
-            else
-            {
-                if (exists)
-                {
-                    pause.Text = "Pause Process";
-                    status_txtbx.Text = "Working";
-                }
-                else
-                {
-                    pause.Text = "Pause Process";
-                }
-            }
-            //design
-            if (optimization_checkbx.Checked)
-            {
-                //watermark
-                watermark_timer.Interval = watermarkspeed.Value;
-                //colors
-                history_listbx.BackColor = listBox1.BackColor;
-                history_listbx.ForeColor = listBox1.ForeColor;
-
-                processList.BackColor = listBox1.BackColor;
-                processList.ForeColor = listBox1.ForeColor;
-
-                symbols_txtbx.BackColor = listBox1.BackColor;
-                symbols_txtbx.ForeColor = listBox1.ForeColor;
-
-                processBlacklist_listbx.BackColor = history_listbx.BackColor;
-                processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
-                //progressbar
-                progressBar1.Maximum = numOfFiles;
-                progressBar1.Value = numOfFilesChecked;
-                //end disign
-                //timers intervals
-                timer.Interval = 280;
-                blacklistChecker.Interval = 1800;
-                historyRefreshing.Interval = 2000;
-
-                watermarkspeed.Value = 1500;
-                watermarkspeed.Enabled = false;
-            }
-            else
-            {
-                timer.Interval = 10;
-                blacklistChecker.Interval = 1000;
-                historyRefreshing.Interval = 1000;
-                watermarkspeed.Enabled = true;
-            }
-        }
-        private void compare_btm_Click(object sender, EventArgs e)
-        {
-            openFileDialog.Filter = "AnyFiles | *.*";
-            FileInfo fn1;
-            FileInfo fn2;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                fn1 = new FileInfo(openFileDialog.FileName);
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    fn2 = new FileInfo(openFileDialog.FileName);
-                    if (Files.CompareFilesByHash(fn1, fn2))
-                    {
-                        MessageBox.Show("That is the same files");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Different files\nMD5: " + Files.GetMD5Hash(fn1.FullName) + "\nMD5: " + Files.GetMD5Hash(fn2.FullName));
-                    }
-                }
-            }
-        }
     }
 }
