@@ -318,30 +318,37 @@ namespace ProcessManager
                 Thread.Sleep(100);
             }
         }
-
 //события
    //icon
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
-            if(WindowState == FormWindowState.Minimized)
+            if (icon_checkbx.Checked)
             {
-                icon.Visible = true;
-                this.ShowInTaskbar = false;
-                icon.BalloonTipText = "I am here";
-                icon.ShowBalloonTip(100);
-            }
-            else if (WindowState == FormWindowState.Maximized)
-            {
-                icon.Visible = false;
-                this.ShowInTaskbar = true;
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    icon.Visible = true;
+                    this.ShowInTaskbar = false;
+                    icon.BalloonTipText = "I am here";
+                    icon.ShowBalloonTip(100);
+                }
+                else if (WindowState == FormWindowState.Maximized)
+                {
+                    icon.Visible = false;
+                    this.ShowInTaskbar = true;
+                }
             }
         }
         private void icon_MouseClick(object sender, MouseEventArgs e)
         {
-            icon.Visible = false;
-            WindowState = FormWindowState.Normal;
-            this.ShowInTaskbar = true;
+            if (icon_checkbx.Checked)
+            {
+                icon.Visible = false;
+                WindowState = FormWindowState.Normal;
+                this.ShowInTaskbar = true;
+            }
         }
+   //end icon
+   //timers
         private void blacklistChecker_Tick(object sender, EventArgs e)
         {
             //blacklist
@@ -438,8 +445,6 @@ namespace ProcessManager
             }
             //end correct
         }
-   //end icon
-   //timers
         private void timer_Tick(object sender, EventArgs e)
         {
             GC.Collect();
@@ -521,8 +526,6 @@ namespace ProcessManager
                 pathToModule_lbl.Text = "No info";
             }
             //design
-            if (!optimization_checkbx.Checked)
-            {
                 //watermark
                 watermark_timer.Interval = watermarkspeed.Value;
                 //colors
@@ -535,13 +538,15 @@ namespace ProcessManager
                 symbols_txtbx.BackColor = listBox1.BackColor;
                 symbols_txtbx.ForeColor = listBox1.ForeColor;
 
+                timer_listbx.BackColor = listBox1.BackColor;
+                timer_listbx.ForeColor = listBox1.ForeColor;
+
                 processBlacklist_listbx.BackColor = history_listbx.BackColor;
                 processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
                 //progressbar
                 progressBar1.Maximum = numOfFiles;
                 progressBar1.Value = numOfFilesChecked;
                 //end disign
-            }
             //log
             if (log != "")
             {
@@ -553,6 +558,15 @@ namespace ProcessManager
             {
                 cancel_btm.Enabled = false;
             }
+            //icon
+            if (icon_checkbx.Checked)
+            {
+                icon.Visible = true;
+            }
+            else
+            {
+                icon.Visible = false;
+            }
         }
         private void historyRefreshing_Tick(object sender, EventArgs e)
         {
@@ -561,7 +575,7 @@ namespace ProcessManager
             history_listbx.ForeColor = listBox1.ForeColor;
 
             history_listbx.TopIndex = history_listbx.Items.Count - 1;
-           // history_listbx.SelectedIndex = history_listbx.Items.Count - 1;
+            // history_listbx.SelectedIndex = history_listbx.Items.Count - 1;
         }
         private void watermark_timer_Tick(object sender, EventArgs e)
         {
@@ -835,7 +849,39 @@ namespace ProcessManager
             listBox1.Items.Clear();
         }
    //end process tab
-
+   //timerprocess
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            timer_listbx.Items.Add(timerProcessName_textbx.Text + "\t" + "Mins: 0");
+            timerProcessName_textbx.Text = "";
+        }
+        //timer every minute
+        private void timerProcess_Tick(object sender, EventArgs e)
+        {
+            //getting array
+            string[] itemsInListbox = new string[timer_listbx.Items.Count];
+            for (int i = 0; i < timer_listbx.Items.Count; i++)
+            {
+                itemsInListbox[i] = timer_listbx.Items[i].ToString();
+            }
+            //adding minutes(if procExists)
+            for (int i = 0; i < timer_listbx.Items.Count; i++)
+            {
+                if (Proc.IsProcessExists(itemsInListbox[i].Split('\t')[0]))
+                {
+                    int numOfMins = Convert.ToInt32(itemsInListbox[i].Split('\t')[1].Substring(6));
+                    numOfMins += 1;
+                    itemsInListbox[i] = itemsInListbox[i].Split('\t')[0] + "\t" + "Mins: " + numOfMins;
+                }
+            }
+            timer_listbx.Items.Clear();
+            //writeInListbx
+            for (int i = 0; i < itemsInListbox.Length; i++)
+            {
+                timer_listbx.Items.Add(itemsInListbox[i]);
+            }
+        }
+   //end timerprocess
    //form
         //save cfg
         private void Form1_Deactivate(object sender, EventArgs e)
@@ -848,7 +894,7 @@ namespace ProcessManager
             }
             File.WriteAllLines(pathToCfg + "\\blacklist.txt", linesInBlacklist);
             //save other
-            string[] linesOther = new string[6];
+            string[] linesOther = new string[7];
             //0)blacklist sorted 1 or 0
             //1)watermarkspeed 
             //2)helper on?
@@ -861,7 +907,15 @@ namespace ProcessManager
             linesOther[3] = Convert.ToString(colorSwitcher.SelectedIndex);
             linesOther[4] = Convert.ToString(themeSwitcher.SelectedIndex);
             linesOther[5] = Convert.ToString(Convert.ToInt32(optimization_checkbx.Checked)); 
+            linesOther[6] = Convert.ToString(Convert.ToInt32(icon_checkbx.Checked));
             File.WriteAllLines(pathToCfg + "\\other.txt", linesOther);
+            //timer
+            string[] timerListbx = new string[timer_listbx.Items.Count];
+            for (int i = 0; i < timer_listbx.Items.Count; i++)
+            {
+                timerListbx[i] = timer_listbx.Items[i].ToString();
+            }
+            File.WriteAllLines(pathToCfg + "\\timer.txt", timerListbx);
         }
         //end save cfg
         private void Form1_Load(object sender, EventArgs e)
@@ -919,16 +973,28 @@ namespace ProcessManager
                         optimization_checkbx.Checked = true;
                     else
                         optimization_checkbx.Checked = false;
+                    if (linesOther[6] == "1")
+                        icon_checkbx.Checked = true;
+                    else
+                        icon_checkbx.Checked = false;
+                    //timer
+                   
+                    string[] timerListbx = File.ReadAllLines(pathToCfg + "\\timer.txt");
+                    for (int i = 0; i < timerListbx.Length; i++)
+                    {
+                        timer_listbx.Items.Add(timerListbx[i]);
+                    }
                 }
                 catch
                 {
                     File.Delete(pathToCfg + "\\other.txt");
+                    File.Delete(pathToCfg + "\\timer.txt");
                 }
             }
             else
                 Directory.CreateDirectory(pathToCfg);
             //autostart
-            
+              //no auto
         }
         //theme
         private void colorSwitcher_SelectedIndexChanged(object sender, EventArgs e)
@@ -1218,7 +1284,7 @@ namespace ProcessManager
                 string[] files = Directory.GetFiles(path);
                 numOfFiles = files.Length;
                 string process = "";
-                string[] arrOfProcesses = new string[9999999];
+                string[] arrOfProcesses = new string[Process.GetProcesses().Length];
                 int counterOfProcesses = 0;
                 int numOfProc = 0;
                 for (int i = 0; i < files.Length; i++)
@@ -1299,5 +1365,13 @@ namespace ProcessManager
         }
         public static bool delete = false;
         public static bool stop = false;
+
+        private void delete_processTimer_Click(object sender, EventArgs e)
+        {
+            if (timer_listbx.SelectedIndex >= 0)
+            {
+                timer_listbx.Items.RemoveAt(timer_listbx.SelectedIndex);
+            }
+        }
     }
 }

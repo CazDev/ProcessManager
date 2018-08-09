@@ -32,7 +32,6 @@ namespace ProcessManager
             catch { return 1; }
             return 0;
         }
-
         public static int KillByFile(string pathToFile, out string ProcessName)
         {
             ProcessName = "";
@@ -52,6 +51,7 @@ namespace ProcessManager
             }
             return 1;
         }
+
         public static bool IsProcessExists(int Pid)
         {
             Process[] processes = Process.GetProcesses();
