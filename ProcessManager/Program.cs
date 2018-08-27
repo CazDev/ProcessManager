@@ -20,13 +20,13 @@ namespace ProcessManager
                 MessageBox.Show("Program is already running");
                 Environment.Exit(1);
             }
-           // try
-           // {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
-           // }
-           // catch { MessageBox.Show("Unknown error"); }
+            //try
+            //{
+              Application.EnableVisualStyles();
+              Application.SetCompatibleTextRenderingDefault(false);
+              Application.Run(new Form1());
+            //}
+            //catch { MessageBox.Show("Unknown error"); }
         }
         public static Process PriorProcess()
         {

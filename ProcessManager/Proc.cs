@@ -38,16 +38,21 @@ namespace ProcessManager
             Process[] allProcesses = Process.GetProcesses();
             foreach (Process p in allProcesses)
             {
-                ProcessModuleCollection modules = p.Modules;
-                foreach (ProcessModule m in modules)
+                try
                 {
-                    if (m.FileName == pathToFile)
+                    ProcessModuleCollection modules = p.Modules;
+                    foreach (ProcessModule m in modules)
                     {
-                        ProcessName = p.ProcessName;
-                        p.Kill();
-                        return 0;
+                        //if (p.Id == 8708)
+                        if (m.FileName == pathToFile)
+                        {
+                            ProcessName = p.ProcessName;
+                            p.Kill();
+                            return 0;
+                        }
                     }
                 }
+                catch { }
             }
             return 1;
         }
