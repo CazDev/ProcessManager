@@ -426,6 +426,12 @@ namespace ProcessManager
 
                     processBlacklist_listbx.BackColor = history_listbx.BackColor;
                     processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
+
+                    listbx_whitelist.ForeColor = listBox1.ForeColor;
+                    listbx_whitelist.BackColor = listBox1.BackColor;
+
+                    listbx_killed.ForeColor = listBox1.ForeColor;
+                    listbx_killed.BackColor = listBox1.BackColor;
                     //progressbar
                     progressBar1.Maximum = numOfFiles;
                     progressBar1.Value = numOfFilesChecked;
@@ -574,6 +580,12 @@ namespace ProcessManager
 
                 processBlacklist_listbx.BackColor = history_listbx.BackColor;
                 processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
+
+                listbx_whitelist.ForeColor = listBox1.ForeColor;
+                listbx_whitelist.BackColor = listBox1.BackColor;
+
+                listbx_killed.ForeColor = listBox1.ForeColor;
+                listbx_killed.BackColor = listBox1.BackColor;
                 //progressbar
                 progressBar1.Maximum = numOfFiles;
                 progressBar1.Value = numOfFilesChecked;
@@ -974,6 +986,12 @@ namespace ProcessManager
 
             processList.BackColor = listBox1.BackColor;
             processList.ForeColor = listBox1.ForeColor;
+
+            listbx_whitelist.ForeColor = listBox1.ForeColor;
+            listbx_whitelist.BackColor = listBox1.BackColor;
+
+            listbx_killed.ForeColor = listBox1.ForeColor;
+            listbx_killed.BackColor = listBox1.BackColor;
 
             processList.Items.Clear();
             Process[] procList = Process.GetProcesses();
@@ -1456,6 +1474,130 @@ namespace ProcessManager
                 MessageBox.Show("Removed from autostart");
             else
                 MessageBox.Show("Failed to remove from autostart");
+        }
+
+        // safe mode
+        private void btn_add_Click(object sender, EventArgs e)
+        {
+            if(txtbx_ProcessName.Text != "")
+            {
+                listbx_whitelist.Items.Add(txtbx_ProcessName.Text);
+                txtbx_ProcessName.Text = "";
+            }
+        }
+
+        private void btn_del_Click(object sender, EventArgs e)
+        {
+            string name = "";
+            if(listbx_whitelist.SelectedIndex >= 0)
+            {
+                name = listbx_whitelist.Items[listbx_whitelist.SelectedIndex].ToString();
+                listbx_whitelist.Items.RemoveAt(listbx_whitelist.SelectedIndex);
+            }
+            while (true)
+            {
+                bool ok = true;
+                for (int i = 0; i < listbx_whitelist.Items.Count; i++)
+                {
+                    if (listbx_whitelist.Items[i].ToString() == name)
+                    {
+                        listbx_whitelist.Items.RemoveAt(i);
+                        ok = false;
+                        break;
+                    }
+                    else
+                        ok = true;
+                }
+                if (ok)
+                    break;
+            }
+        }
+
+        private void checkbx_safemode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkbx_safemode.Checked)
+            {
+                Process[] processes = Process.GetProcesses();
+                for (int i = 0; i < processes.Length; i++)
+                {
+                    listbx_whitelist.Items.Add(processes[i].ProcessName);
+                }
+            }
+            else
+            {
+                listbx_whitelist.Items.Clear();
+            }
+        }
+
+        private void SafeModeChecker_Tick(object sender, EventArgs e)
+        {
+            listbx_whitelist.ForeColor = listBox1.ForeColor;
+            listbx_whitelist.BackColor = listBox1.BackColor;
+
+            listbx_killed.ForeColor = listBox1.ForeColor;
+            listbx_killed.BackColor = listBox1.BackColor;
+            if (checkbx_safemode.Checked)
+            {
+                List<string> whiteList = new List<string>();
+                for (int i = 0; i < listbx_whitelist.Items.Count; i++)
+                {
+                    whiteList.Add(listbx_whitelist.Items[i].ToString());
+                }
+
+                Process[] prces = Process.GetProcesses();
+                List<string> startedProcesses = new List<string>();
+                for (int i = 0; i < prces.Length; i++)
+                {
+                    startedProcesses.Add(prces[i].ProcessName);
+                }
+
+                for (int i = 0; i < startedProcesses.Count; i++)
+                {
+                    bool kill = true;
+                    for (int j = 0; j < whiteList.Count; j++)
+                    {
+                        if (startedProcesses[i] == whiteList[j])
+                        {
+                            kill = false;
+                            break;
+                        }
+                        else
+                            kill = true;
+                    }
+                    if (kill)
+                    {
+                        Process[] proc = Process.GetProcessesByName(startedProcesses[i]);
+                        for (int k = 0; k < proc.Length; k++)
+                        {
+                            try
+                            {
+                                listbx_killed.Items.Add($"{proc[k].ProcessName} % {proc[k].MainModule.FileName}");
+                                if (!checkbx_spyOnly.Checked)
+                                {
+                                    proc[k].Kill();
+                                }
+                                else
+                                    listbx_whitelist.Items.Add(proc[k].ProcessName);
+                            }
+                            catch { }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void listbx_killed_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listbx_killed.SelectedIndex >= 0)
+            {
+                txtbx_procName.Text = listbx_killed.Items[listbx_killed.SelectedIndex].ToString().Split('%')[0];
+                txtbx_pathtofile.Text = listbx_killed.Items[listbx_killed.SelectedIndex].ToString().Split('%')[1];
+            }
+            else
+            {
+                txtbx_procName.Text = "";
+                txtbx_pathtofile.Text = "";
+            }
         }
     }
 }
