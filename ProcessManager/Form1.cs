@@ -216,6 +216,9 @@ namespace ProcessManager
         {
             InitializeComponent();
             this.StyleManager = metroStyleManager1;
+            log_Changed();
+            UpdateColors();
+            StatusUpdate();
         }
         DllInjector inj = null;
 //end stf
@@ -250,10 +253,12 @@ namespace ProcessManager
                     process.Start();
                     int pid = process.Id;
                     existsProcess = true;
+                    StatusUpdate();
                     if (pauseOnStart.Checked)
                     {
                         SuspendProcess(pid);
                         paused = true;
+                        StatusUpdate();
                     }
                     WriteModulesInListbox1(sender, e);
                     /*file info*/
@@ -277,6 +282,7 @@ namespace ProcessManager
             {
                 ResumeProcess(process.Id);
                 paused = false;
+                StatusUpdate();
                 DateTime date = DateTime.Now;
                 string temp = String.Format("[ {0} ]\tUnpausing Process {1}", date.ToString(), pathToFile.Text);
                 history_listbx.Items.Add(temp);
@@ -285,6 +291,7 @@ namespace ProcessManager
             {
                 SuspendProcess(process.Id);
                 paused = true;
+                StatusUpdate();
                 DateTime date = DateTime.Now;
                 string temp = String.Format("[ {0} ]\tPausing Process {1}", date.ToString(), pathToFile.Text);
                 history_listbx.Items.Add(temp);
@@ -320,47 +327,194 @@ namespace ProcessManager
                 Thread.Sleep(100);
             }
         }
-//события
-   //icon
-        private void Form1_SizeChanged(object sender, EventArgs e)
+        public void FormSizeChanged(bool iconEnabled, FormWindowState formState)
         {
-            if (icon_checkbx.Checked)
+            if (iconEnabled)
             {
-                if (WindowState == FormWindowState.Minimized)
+                if (formState == FormWindowState.Minimized)
                 {
                     icon.Visible = true;
-                    this.ShowInTaskbar = false;
+                    ShowInTaskbar = false;
                     icon.BalloonTipText = "I am here";
                     icon.ShowBalloonTip(100);
                 }
-                else if (WindowState == FormWindowState.Maximized)
+                else if (formState == FormWindowState.Maximized)
                 {
                     icon.Visible = false;
                     this.ShowInTaskbar = true;
                 }
             }
+            else
+            {
+                icon.Visible = false;
+                ShowInTaskbar = true;
+            }
         }
-        private void icon_MouseClick(object sender, MouseEventArgs e)
+        private void StatusUpdate()
+        {
+            if (paused)
+            {
+                pause.Text = "Resume Process";
+                status_txtbx.Text = "Paused";
+            }
+            else
+            {
+                if (existsProcess)
+                {
+                    pause.Text = "Pause Process";
+                    status_txtbx.Text = "Working";
+
+                    kill_btm.Enabled = true;
+                    pause.Enabled = true;
+                    // infoPanel.Visible = true;
+                    getModules.Enabled = true;
+                    injectDll_btm.Enabled = true;
+                    injectDll_private_btm.Enabled = true;
+                    selectProcess.Enabled = false;
+                    /**/
+                    name_lbl.Text = "Name: " + process.ProcessName;
+                    pid_lbl.Text = "Pid: " + process.Id;
+                    DateTime started = process.StartTime;
+                    startTime_lbl.Text = "Start time: " + started.ToString("dd.hh.mm.ss");
+                    priority_lbl.Text = "Priority: " + process.PriorityClass;
+                    //process_txtbx
+                    processName_txtbx.Text = process.ProcessName;
+                    processPid_txtbx.Text = process.Id.ToString();
+                }
+                else
+                {
+                    pause.Text = "Pause Process";
+
+                    listBox1.Items.Clear();
+                    name_lbl.Text = "Name:";
+                    pid_lbl.Text = "Pid:";
+                    startTime_lbl.Text = "Start time:";
+                    priority_lbl.Text = "Priority:";
+
+                    status_txtbx.Text = "No process";
+
+                    kill_btm.Enabled = false;
+                    pause.Enabled = false;
+                    //infoPanel.Visible = false;
+                    getModules.Enabled = false;
+                    injectDll_btm.Enabled = false;
+                    injectDll_private_btm.Enabled = false;
+                    selectProcess.Enabled = true;
+                    //process_txtbx
+                    //processName_txtbx.Text = "";
+                }
+            }
+        }
+        private void UpdateColors()
+        {
+            history_listbx.BackColor = listBox1.BackColor;
+            history_listbx.ForeColor = listBox1.ForeColor;
+
+            processList.BackColor = listBox1.BackColor;
+            processList.ForeColor = listBox1.ForeColor;
+
+            symbols_txtbx.BackColor = listBox1.BackColor;
+            symbols_txtbx.ForeColor = listBox1.ForeColor;
+
+            processBlacklist_listbx.BackColor = history_listbx.BackColor;
+            processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
+
+            listbx_whitelist.ForeColor = listBox1.ForeColor;
+            listbx_whitelist.BackColor = listBox1.BackColor;
+
+            listbx_killed.ForeColor = listBox1.ForeColor;
+            listbx_killed.BackColor = listBox1.BackColor;
+
+            timer_listbx.BackColor = listBox1.BackColor;
+            timer_listbx.ForeColor = listBox1.ForeColor;
+        }
+        private void log_Changed()
+        {
+            if (log != "")
+            {
+
+                log_txtbx.Text = log + ProcessName;
+                cancel_btm.Enabled = true;
+            }
+            else
+            {
+                cancel_btm.Enabled = false;
+            }
+        }
+        //события
+        private void watermarkspeed_Scroll(object sender, ScrollEventArgs e)
+        {
+            watermark_timer.Interval = watermarkspeed.Value;
+        }
+        private void blacklistIsSorted_CheckedChanged(object sender, EventArgs e)
+        {
+            if (blacklistIsSorted.Checked)
+                processBlacklist_listbx.Sorted = true;
+            else
+                processBlacklist_listbx.Sorted = false;
+        }
+        private void processList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (help_withId.Checked)
+            {
+                if (processList.SelectedIndex >= 0)
+                {
+                    string obj = processList.SelectedItem.ToString();
+                    string[] arr = obj.Split('\t');
+                    string id = arr[1];
+                    processPid_txtbx.Text = id;
+                    try
+                    {
+                        if (processName_txtbx.Text != Process.GetProcessById(Convert.ToInt32(id)).ProcessName)
+                            processName_txtbx.Text = Process.GetProcessById(Convert.ToInt32(id)).ProcessName;
+                    }
+                    catch { }
+                }
+            }
+        }
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listBox1.SelectedIndex >= 0)
+                {
+                    ProcessModuleCollection pmc = process.Modules;
+                    int index = listBox1.SelectedIndex;
+                    pathToModule_lbl.Text = pmc[index].FileName.ToString();
+                }
+            }
+            catch
+            {
+                pathToModule_lbl.Text = "No info";
+            }
+        }
+        private void icon_checkbx_CheckedChanged(object sender, EventArgs e)
         {
             if (icon_checkbx.Checked)
             {
-                icon.Visible = false;
-                WindowState = FormWindowState.Normal;
-                this.ShowInTaskbar = true;
+                icon.Visible = true;
             }
+            else
+            {
+                icon.Visible = false;
+            }
+        }
+        //icon
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            FormSizeChanged(icon_checkbx.Checked, WindowState);
+        }
+        private void icon_MouseClick(object sender, MouseEventArgs e)
+        {
+            icon.Visible = false;
+            WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
         }
    //end icon
    //timers
         private void blacklistChecker_Tick(object sender, EventArgs e)
         {
             //blacklist
-            if (WindowState != FormWindowState.Minimized)
-            {
-                if (blacklistIsSorted.Checked)
-                    processBlacklist_listbx.Sorted = true;
-                else
-                    processBlacklist_listbx.Sorted = false;
-            }
             string[] processBlackList = new string[processBlacklist_listbx.Items.Count];
             Process[] processes = Process.GetProcesses();
             for (int j = 0; j < processBlacklist_listbx.Items.Count; j++)
@@ -385,231 +539,42 @@ namespace ProcessManager
                     }
                 }
             }
-            if (WindowState == FormWindowState.Minimized)
-                Thread.Sleep(2000);
-            
             //end blacklist
-            //status 
+            
             if (WindowState != FormWindowState.Minimized)
             {
-                if (paused)
-                {
-                    pause.Text = "Resume Process";
-                    status_txtbx.Text = "Paused";
-                }
-                else
-                {
-                    if (existsProcess)
-                    {
-                        pause.Text = "Pause Process";
-                        status_txtbx.Text = "Working";
-                    }
-                    else
-                    {
-                        pause.Text = "Pause Process";
-                    }
-                }
+                progressBar1.Maximum = numOfFiles;
+                progressBar1.Value = numOfFilesChecked;
                 //design
-                if (optimization_checkbx.Checked)
-                {
-                    //watermark
-                    watermark_timer.Interval = watermarkspeed.Value;
-                    //colors
-                    history_listbx.BackColor = listBox1.BackColor;
-                    history_listbx.ForeColor = listBox1.ForeColor;
-
-                    processList.BackColor = listBox1.BackColor;
-                    processList.ForeColor = listBox1.ForeColor;
-
-                    symbols_txtbx.BackColor = listBox1.BackColor;
-                    symbols_txtbx.ForeColor = listBox1.ForeColor;
-
-                    processBlacklist_listbx.BackColor = history_listbx.BackColor;
-                    processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
-
-                    listbx_whitelist.ForeColor = listBox1.ForeColor;
-                    listbx_whitelist.BackColor = listBox1.BackColor;
-
-                    listbx_killed.ForeColor = listBox1.ForeColor;
-                    listbx_killed.BackColor = listBox1.BackColor;
-                    //progressbar
-                    progressBar1.Maximum = numOfFiles;
-                    progressBar1.Value = numOfFilesChecked;
-                    //end disign
-                    //timers intervals
-                    timer.Interval = 280;
-                    blacklistChecker.Interval = 1800;
-                    historyRefreshing.Interval = 2000;
-
-                    watermarkspeed.Value = 1500;
-                    watermarkspeed.Enabled = false;
-                }
-                else
-                {
-                    timer.Interval = 10;
-                    blacklistChecker.Interval = 1000;
-                    historyRefreshing.Interval = 1000;
-                    watermarkspeed.Enabled = true;
-                }
-
-                //correct
-                if (!existsProcess)
-                {
-                    // fileName_lbl.Text = "Name:";
-                    // size_lbl.Text = "Size:";
-                    // creationTime_lbl.Text = "Creation time:";
-                    // file_hash_lbl.Text = "MD5";
-
-                    listBox1.Items.Clear();
-                    name_lbl.Text = "Name:";
-                    pid_lbl.Text = "Pid:";
-                    startTime_lbl.Text = "Start time:";
-                    priority_lbl.Text = "Priority:";
-                }
-                //end correct
             }
         }
-        private void timer_Tick(object sender, EventArgs e)
+        private void CheckProcessExists(object sender, EventArgs e)
         {
             if (WindowState != FormWindowState.Minimized /*its design etc*/)
             {
-                GC.Collect();
-
                 if (existsProcess)
                 {
                     try
                     {
                         if (existsProcess)
                             if (process.HasExited)
+                            {
                                 existsProcess = false;
+                                StatusUpdate();
+                            }
                     }
                     catch (Exception ex)
                     {
                         string ex_ = ex.ToString();
                         existsProcess = false;
                         paused = false;
+                        StatusUpdate();
                         //processName_txtbx.Text = "";
                         pathToFile.Text = "";
                         listBox1.Items.Clear();
                         MessageBox.Show("System process");
                     }
                 } //check if process here
-
-                if (!existsProcess)
-                {
-                    status_txtbx.Text = "No process";
-
-                    kill_btm.Enabled = false;
-                    pause.Enabled = false;
-                    //infoPanel.Visible = false;
-                    getModules.Enabled = false;
-                    injectDll_btm.Enabled = false;
-                    injectDll_private_btm.Enabled = false;
-                    selectProcess.Enabled = true;
-                    //process_txtbx
-                    //processName_txtbx.Text = "";
-                }
-
-                else
-                {
-                    kill_btm.Enabled = true;
-                    pause.Enabled = true;
-                    // infoPanel.Visible = true;
-                    getModules.Enabled = true;
-                    injectDll_btm.Enabled = true;
-                    injectDll_private_btm.Enabled = true;
-                    selectProcess.Enabled = false;
-                    /**/
-                    name_lbl.Text = "Name: " + process.ProcessName;
-                    pid_lbl.Text = "Pid: " + process.Id;
-                    DateTime started = process.StartTime;
-                    startTime_lbl.Text = "Start time: " + started.ToString("dd.hh.mm.ss");
-                    priority_lbl.Text = "Priority: " + process.PriorityClass;
-                    //process_txtbx
-                    processName_txtbx.Text = process.ProcessName;
-                    processPid_txtbx.Text = process.Id.ToString();
-                } //if exists get info
-
-                if (help_withId.Checked)
-                {
-                    if (processList.SelectedIndex >= 0)
-                    {
-                        string obj = processList.SelectedItem.ToString();
-                        string[] arr = obj.Split('\t');
-                        string id = arr[1];
-                        processPid_txtbx.Text = id;
-                        try
-                        {
-                            if (processName_txtbx.Text != Process.GetProcessById(Convert.ToInt32(id)).ProcessName)
-                                processName_txtbx.Text = Process.GetProcessById(Convert.ToInt32(id)).ProcessName;
-                        }
-                        catch { }
-                    }
-                }
-
-                //modules
-                try
-                {
-                    if (listBox1.SelectedIndex >= 0)
-                    {
-                        ProcessModuleCollection pmc = process.Modules;
-                        int index = listBox1.SelectedIndex;
-                        pathToModule_lbl.Text = pmc[index].FileName.ToString();
-                    }
-                }
-                catch
-                {
-                    pathToModule_lbl.Text = "No info";
-                }
-
-                //design
-                //watermark
-                watermark_timer.Interval = watermarkspeed.Value;
-                //colors
-                history_listbx.BackColor = listBox1.BackColor;
-                history_listbx.ForeColor = listBox1.ForeColor;
-
-                processList.BackColor = listBox1.BackColor;
-                processList.ForeColor = listBox1.ForeColor;
-
-                symbols_txtbx.BackColor = listBox1.BackColor;
-                symbols_txtbx.ForeColor = listBox1.ForeColor;
-
-                timer_listbx.BackColor = listBox1.BackColor;
-                timer_listbx.ForeColor = listBox1.ForeColor;
-
-                processBlacklist_listbx.BackColor = history_listbx.BackColor;
-                processBlacklist_listbx.ForeColor = history_listbx.ForeColor;
-
-                listbx_whitelist.ForeColor = listBox1.ForeColor;
-                listbx_whitelist.BackColor = listBox1.BackColor;
-
-                listbx_killed.ForeColor = listBox1.ForeColor;
-                listbx_killed.BackColor = listBox1.BackColor;
-                //progressbar
-                progressBar1.Maximum = numOfFiles;
-                progressBar1.Value = numOfFilesChecked;
-                //end disign
-                //log
-                if (log != "")
-                {
-
-                    log_txtbx.Text = log + ProcessName;
-                    cancel_btm.Enabled = true;
-                }
-                else
-                {
-                    cancel_btm.Enabled = false;
-                }
-                //icon
-                if (icon_checkbx.Checked)
-                {
-                    icon.Visible = true;
-                }
-                else
-                {
-                    icon.Visible = false;
-                }
             }
         }
         private void historyRefreshing_Tick(object sender, EventArgs e)
@@ -617,10 +582,8 @@ namespace ProcessManager
             if (WindowState != FormWindowState.Minimized)
             {
                 history_listbx.Refresh();
-                history_listbx.BackColor = listBox1.BackColor;
-                history_listbx.ForeColor = listBox1.ForeColor;
-
                 history_listbx.TopIndex = history_listbx.Items.Count - 1;
+                UpdateColors();
                 // history_listbx.SelectedIndex = history_listbx.Items.Count - 1;
             }
         }
@@ -720,6 +683,7 @@ namespace ProcessManager
                 }
             }
             log = "";
+            log_Changed();
             numOfFilesChecked = 0;
         }
         private void deleteFile_btm_Click(object sender, EventArgs e)
@@ -746,6 +710,7 @@ namespace ProcessManager
                 }
             }
             log = "";
+            log_Changed();
         }
         private void unlockDir_btm_Click(object sender, EventArgs e)
         {
@@ -760,6 +725,7 @@ namespace ProcessManager
                     delete = false;
                 }
                 log = "";
+                log_Changed();
                 numOfFilesChecked = 0;
             }
             catch { }
@@ -775,6 +741,7 @@ namespace ProcessManager
                 delete = true;
             }
             log = "";
+            log_Changed();
             numOfFilesChecked = 0;
         }
         //end right side
@@ -805,6 +772,7 @@ namespace ProcessManager
                 process = Process.GetProcessById(Convert.ToInt32(processPid_txtbx.Text));
                 existsProcess = true;
                 paused = false;
+                StatusUpdate();
                 WriteModulesInListbox1(sender, e);
 
             
@@ -894,6 +862,7 @@ namespace ProcessManager
         {
             existsProcess = false;
             paused = false;
+            StatusUpdate();
             processName_txtbx.Text = "";
             pathToFile.Text = "";
             listBox1.Items.Clear();
@@ -1054,7 +1023,8 @@ namespace ProcessManager
             else
                 Directory.CreateDirectory(pathToCfg);
             //autostart
-              //no auto
+            UpdateColors();
+            watermark_timer.Interval = watermarkspeed.Value;
         }
         //theme
         private void colorSwitcher_SelectedIndexChanged(object sender, EventArgs e)
@@ -1121,6 +1091,7 @@ namespace ProcessManager
 
                     break;
             }
+            UpdateColors();
         }
         private void themeSwitcher_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -1151,6 +1122,7 @@ namespace ProcessManager
                     lines[1] = "1";
                     break;
             }
+            UpdateColors();
         }
         //end theme
 //watermark
@@ -1169,6 +1141,7 @@ namespace ProcessManager
                 case 3:
                     watermark.Text = "ded by Tavvi in C#  ";
                     break;
+                // i know that is stupid *_*
                 case 4:
                     watermark.Text = "ed by Tavvi in C#   ";
                     break;
@@ -1318,16 +1291,12 @@ namespace ProcessManager
         public void UnlockFile(string path, out string processName)
         {
             processName = "";
-           // try
-           // {
-                log = path;
-              //  Process[] procList = Process.GetProcesses();
-                Proc.KillByFile(path, out processName);
+            log = path;
+            Proc.KillByFile(path, out processName);
             Thread.Sleep(500);
-                log_txtbx.Text = "";
-            //}
-            //catch { }
+            log_txtbx.Text = "";
             log = "";
+            log_Changed();
         }
         public static int numOfFiles = 0;
         public static int numOfFilesChecked = 0;
@@ -1419,6 +1388,7 @@ namespace ProcessManager
             }
             catch { }
             log = "";
+            log_Changed();
         }
         public static bool delete = false;
         public static bool stop = false;
@@ -1475,7 +1445,6 @@ namespace ProcessManager
             else
                 MessageBox.Show("Failed to remove from autostart");
         }
-
         // safe mode
         private void btn_add_Click(object sender, EventArgs e)
         {
@@ -1485,7 +1454,6 @@ namespace ProcessManager
                 txtbx_ProcessName.Text = "";
             }
         }
-
         private void btn_del_Click(object sender, EventArgs e)
         {
             string name = "";
@@ -1512,7 +1480,6 @@ namespace ProcessManager
                     break;
             }
         }
-
         private void checkbx_safemode_CheckedChanged(object sender, EventArgs e)
         {
             if (checkbx_safemode.Checked)
@@ -1528,7 +1495,6 @@ namespace ProcessManager
                 listbx_whitelist.Items.Clear();
             }
         }
-
         private void SafeModeChecker_Tick(object sender, EventArgs e)
         {
             listbx_whitelist.ForeColor = listBox1.ForeColor;
@@ -1585,7 +1551,6 @@ namespace ProcessManager
                 }
             }
         }
-
         private void listbx_killed_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listbx_killed.SelectedIndex >= 0)
