@@ -907,7 +907,7 @@ namespace ProcessManager
    //end timerprocess
    //form
         //save cfg
-        private void Form1_Deactivate(object sender, EventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             //save blacklist
             string[] linesInBlacklist = new string[processBlacklist_listbx.Items.Count];
@@ -923,13 +923,13 @@ namespace ProcessManager
             //2)helper on?
             //3)color index
             //4)theme index
-            //5)optimization
+            //5)Minimize
             linesOther[0] = Convert.ToString(Convert.ToInt32(blacklistIsSorted.Checked));
             linesOther[1] = Convert.ToString(watermarkspeed.Value);
             linesOther[2] = Convert.ToString(Convert.ToInt32(help_withId.Checked));
             linesOther[3] = Convert.ToString(colorSwitcher.SelectedIndex);
             linesOther[4] = Convert.ToString(themeSwitcher.SelectedIndex);
-            linesOther[5] = Convert.ToString(Convert.ToInt32(optimization_checkbx.Checked)); 
+            linesOther[5] = Convert.ToString(Convert.ToInt32(minimize_checkbx.Checked));
             linesOther[6] = Convert.ToString(Convert.ToInt32(icon_checkbx.Checked));
             File.WriteAllLines(pathToCfg + "\\other.txt", linesOther);
             //timer
@@ -999,9 +999,9 @@ namespace ProcessManager
                     colorSwitcher.SelectedIndex = Convert.ToInt32(linesOther[3]);
                     themeSwitcher.SelectedIndex = Convert.ToInt32(linesOther[4]);
                     if (linesOther[5] == "1")
-                        optimization_checkbx.Checked = true;
+                        minimize_checkbx.Checked = true;
                     else
-                        optimization_checkbx.Checked = false;
+                        minimize_checkbx.Checked = false;
                     if (linesOther[6] == "1")
                         icon_checkbx.Checked = true;
                     else
@@ -1023,6 +1023,8 @@ namespace ProcessManager
             else
                 Directory.CreateDirectory(pathToCfg);
             //autostart
+            if (minimize_checkbx.Checked)
+                WindowState = FormWindowState.Minimized;
             UpdateColors();
             watermark_timer.Interval = watermarkspeed.Value;
         }

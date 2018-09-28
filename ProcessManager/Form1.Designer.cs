@@ -55,6 +55,27 @@
             this.pathToFile = new MetroFramework.Controls.MetroTextBox();
             this.start = new MetroFramework.Controls.MetroButton();
             this.pauseOnStart = new MetroFramework.Controls.MetroCheckBox();
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.pathToModule_lbl = new MetroFramework.Controls.MetroLabel();
+            this.injectDll_private_btm = new MetroFramework.Controls.MetroButton();
+            this.unselect_btm = new MetroFramework.Controls.MetroButton();
+            this.refreshProcList = new MetroFramework.Controls.MetroButton();
+            this.processList = new System.Windows.Forms.ListBox();
+            this.processPid_txtbx = new MetroFramework.Controls.MetroTextBox();
+            this.SelectDll = new MetroFramework.Controls.MetroButton();
+            this.selectProcess = new MetroFramework.Controls.MetroButton();
+            this.kill_btm = new System.Windows.Forms.Button();
+            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
+            this.pathToDll_txtbx = new MetroFramework.Controls.MetroTextBox();
+            this.getModules = new MetroFramework.Controls.MetroButton();
+            this.processName_txtbx = new MetroFramework.Controls.MetroTextBox();
+            this.injectDll_btm = new MetroFramework.Controls.MetroButton();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.priority_lbl = new MetroFramework.Controls.MetroLabel();
+            this.startTime_lbl = new MetroFramework.Controls.MetroLabel();
+            this.pid_lbl = new MetroFramework.Controls.MetroLabel();
+            this.name_lbl = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage7 = new MetroFramework.Controls.MetroTabPage();
             this.txtbx_procName = new MetroFramework.Controls.MetroTextBox();
             this.checkbx_spyOnly = new MetroFramework.Controls.MetroToggle();
@@ -73,7 +94,7 @@
             this.autostart_btm = new MetroFramework.Controls.MetroButton();
             this.icon_checkbx = new MetroFramework.Controls.MetroToggle();
             this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
-            this.optimization_checkbx = new MetroFramework.Controls.MetroToggle();
+            this.minimize_checkbx = new MetroFramework.Controls.MetroToggle();
             this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
             this.blacklistIsSorted = new MetroFramework.Controls.MetroToggle();
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
@@ -101,27 +122,6 @@
             this.btn_addPrc = new MetroFramework.Controls.MetroButton();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
             this.process_txtbx = new MetroFramework.Controls.MetroTextBox();
-            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
-            this.pathToModule_lbl = new MetroFramework.Controls.MetroLabel();
-            this.injectDll_private_btm = new MetroFramework.Controls.MetroButton();
-            this.unselect_btm = new MetroFramework.Controls.MetroButton();
-            this.refreshProcList = new MetroFramework.Controls.MetroButton();
-            this.processList = new System.Windows.Forms.ListBox();
-            this.processPid_txtbx = new MetroFramework.Controls.MetroTextBox();
-            this.SelectDll = new MetroFramework.Controls.MetroButton();
-            this.selectProcess = new MetroFramework.Controls.MetroButton();
-            this.kill_btm = new System.Windows.Forms.Button();
-            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
-            this.pathToDll_txtbx = new MetroFramework.Controls.MetroTextBox();
-            this.getModules = new MetroFramework.Controls.MetroButton();
-            this.processName_txtbx = new MetroFramework.Controls.MetroTextBox();
-            this.injectDll_btm = new MetroFramework.Controls.MetroButton();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
-            this.priority_lbl = new MetroFramework.Controls.MetroLabel();
-            this.startTime_lbl = new MetroFramework.Controls.MetroLabel();
-            this.pid_lbl = new MetroFramework.Controls.MetroLabel();
-            this.name_lbl = new MetroFramework.Controls.MetroLabel();
             this.status_txtbx = new MetroFramework.Controls.MetroTextBox();
             this.status_lbl = new MetroFramework.Controls.MetroLabel();
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
@@ -138,12 +138,12 @@
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroPanel1.SuspendLayout();
+            this.metroTabPage2.SuspendLayout();
             this.metroTabPage7.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             this.metroTabPage4.SuspendLayout();
             this.metroTabPage6.SuspendLayout();
             this.metroTabPage5.SuspendLayout();
-            this.metroTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -164,8 +164,8 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage7);
+            this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Controls.Add(this.metroTabPage6);
@@ -388,6 +388,220 @@
             this.pauseOnStart.Text = "Pause on start";
             this.pauseOnStart.UseVisualStyleBackColor = true;
             // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.Controls.Add(this.pathToModule_lbl);
+            this.metroTabPage2.Controls.Add(this.injectDll_private_btm);
+            this.metroTabPage2.Controls.Add(this.unselect_btm);
+            this.metroTabPage2.Controls.Add(this.refreshProcList);
+            this.metroTabPage2.Controls.Add(this.processList);
+            this.metroTabPage2.Controls.Add(this.processPid_txtbx);
+            this.metroTabPage2.Controls.Add(this.SelectDll);
+            this.metroTabPage2.Controls.Add(this.selectProcess);
+            this.metroTabPage2.Controls.Add(this.kill_btm);
+            this.metroTabPage2.Controls.Add(this.metroLabel4);
+            this.metroTabPage2.Controls.Add(this.pathToDll_txtbx);
+            this.metroTabPage2.Controls.Add(this.getModules);
+            this.metroTabPage2.Controls.Add(this.processName_txtbx);
+            this.metroTabPage2.Controls.Add(this.injectDll_btm);
+            this.metroTabPage2.Controls.Add(this.listBox1);
+            this.metroTabPage2.Controls.Add(this.metroLabel1);
+            this.metroTabPage2.Controls.Add(this.priority_lbl);
+            this.metroTabPage2.Controls.Add(this.startTime_lbl);
+            this.metroTabPage2.Controls.Add(this.pid_lbl);
+            this.metroTabPage2.Controls.Add(this.name_lbl);
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 35);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(698, 311);
+            this.metroTabPage2.TabIndex = 1;
+            this.metroTabPage2.Text = "Process";
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            // 
+            // pathToModule_lbl
+            // 
+            this.pathToModule_lbl.AutoSize = true;
+            this.pathToModule_lbl.Location = new System.Drawing.Point(5, 285);
+            this.pathToModule_lbl.Name = "pathToModule_lbl";
+            this.pathToModule_lbl.Size = new System.Drawing.Size(53, 19);
+            this.pathToModule_lbl.TabIndex = 34;
+            this.pathToModule_lbl.Text = "No info";
+            // 
+            // injectDll_private_btm
+            // 
+            this.injectDll_private_btm.Location = new System.Drawing.Point(373, 167);
+            this.injectDll_private_btm.Name = "injectDll_private_btm";
+            this.injectDll_private_btm.Size = new System.Drawing.Size(97, 23);
+            this.injectDll_private_btm.TabIndex = 33;
+            this.injectDll_private_btm.Text = "Inject dll(v2)";
+            this.injectDll_private_btm.Click += new System.EventHandler(this.injectDll_private_btm_Click);
+            // 
+            // unselect_btm
+            // 
+            this.unselect_btm.Location = new System.Drawing.Point(372, 196);
+            this.unselect_btm.Name = "unselect_btm";
+            this.unselect_btm.Size = new System.Drawing.Size(97, 23);
+            this.unselect_btm.TabIndex = 32;
+            this.unselect_btm.Text = "Unselect process";
+            this.unselect_btm.Click += new System.EventHandler(this.unselect_btm_Click);
+            // 
+            // refreshProcList
+            // 
+            this.refreshProcList.Location = new System.Drawing.Point(373, 109);
+            this.refreshProcList.Name = "refreshProcList";
+            this.refreshProcList.Size = new System.Drawing.Size(97, 23);
+            this.refreshProcList.TabIndex = 31;
+            this.refreshProcList.Text = "Refresh List";
+            this.refreshProcList.Click += new System.EventHandler(this.refreshProcList_Click);
+            // 
+            // processList
+            // 
+            this.processList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.processList.FormattingEnabled = true;
+            this.processList.Location = new System.Drawing.Point(475, 4);
+            this.processList.Name = "processList";
+            this.processList.Size = new System.Drawing.Size(196, 273);
+            this.processList.TabIndex = 30;
+            this.processList.SelectedIndexChanged += new System.EventHandler(this.processList_SelectedIndexChanged);
+            // 
+            // processPid_txtbx
+            // 
+            this.processPid_txtbx.Location = new System.Drawing.Point(327, 10);
+            this.processPid_txtbx.Name = "processPid_txtbx";
+            this.processPid_txtbx.Size = new System.Drawing.Size(58, 23);
+            this.processPid_txtbx.TabIndex = 29;
+            // 
+            // SelectDll
+            // 
+            this.SelectDll.Location = new System.Drawing.Point(408, 39);
+            this.SelectDll.Name = "SelectDll";
+            this.SelectDll.Size = new System.Drawing.Size(62, 23);
+            this.SelectDll.TabIndex = 27;
+            this.SelectDll.Text = "•••";
+            this.SelectDll.Click += new System.EventHandler(this.SelectDll_Click);
+            // 
+            // selectProcess
+            // 
+            this.selectProcess.Location = new System.Drawing.Point(391, 10);
+            this.selectProcess.Name = "selectProcess";
+            this.selectProcess.Size = new System.Drawing.Size(79, 23);
+            this.selectProcess.TabIndex = 26;
+            this.selectProcess.Text = "Add by pID";
+            this.selectProcess.Click += new System.EventHandler(this.selectProcess_Click);
+            // 
+            // kill_btm
+            // 
+            this.kill_btm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.kill_btm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.kill_btm.ForeColor = System.Drawing.Color.Red;
+            this.kill_btm.Location = new System.Drawing.Point(372, 225);
+            this.kill_btm.Name = "kill_btm";
+            this.kill_btm.Size = new System.Drawing.Size(97, 23);
+            this.kill_btm.TabIndex = 20;
+            this.kill_btm.Text = "KILL";
+            this.kill_btm.UseVisualStyleBackColor = true;
+            this.kill_btm.Click += new System.EventHandler(this.kill_btm_Click);
+            // 
+            // metroLabel4
+            // 
+            this.metroLabel4.AutoSize = true;
+            this.metroLabel4.Location = new System.Drawing.Point(3, 41);
+            this.metroLabel4.Name = "metroLabel4";
+            this.metroLabel4.Size = new System.Drawing.Size(27, 19);
+            this.metroLabel4.TabIndex = 25;
+            this.metroLabel4.Text = "Dll:";
+            // 
+            // pathToDll_txtbx
+            // 
+            this.pathToDll_txtbx.Location = new System.Drawing.Point(65, 39);
+            this.pathToDll_txtbx.Name = "pathToDll_txtbx";
+            this.pathToDll_txtbx.ReadOnly = true;
+            this.pathToDll_txtbx.Size = new System.Drawing.Size(337, 23);
+            this.pathToDll_txtbx.TabIndex = 18;
+            // 
+            // getModules
+            // 
+            this.getModules.Location = new System.Drawing.Point(373, 80);
+            this.getModules.Name = "getModules";
+            this.getModules.Size = new System.Drawing.Size(97, 23);
+            this.getModules.TabIndex = 22;
+            this.getModules.Text = "Refresh Modules";
+            this.getModules.Click += new System.EventHandler(this.getModules_Click_1);
+            // 
+            // processName_txtbx
+            // 
+            this.processName_txtbx.Location = new System.Drawing.Point(65, 10);
+            this.processName_txtbx.Name = "processName_txtbx";
+            this.processName_txtbx.ReadOnly = true;
+            this.processName_txtbx.Size = new System.Drawing.Size(256, 23);
+            this.processName_txtbx.TabIndex = 18;
+            // 
+            // injectDll_btm
+            // 
+            this.injectDll_btm.Location = new System.Drawing.Point(372, 138);
+            this.injectDll_btm.Name = "injectDll_btm";
+            this.injectDll_btm.Size = new System.Drawing.Size(97, 23);
+            this.injectDll_btm.TabIndex = 24;
+            this.injectDll_btm.Text = "Inject dll(simple)";
+            this.injectDll_btm.Click += new System.EventHandler(this.injectDll_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBox1.ForeColor = System.Drawing.SystemColors.InfoText;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(185, 65);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(182, 208);
+            this.listBox1.TabIndex = 3;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            // 
+            // metroLabel1
+            // 
+            this.metroLabel1.AutoSize = true;
+            this.metroLabel1.Location = new System.Drawing.Point(3, 11);
+            this.metroLabel1.Name = "metroLabel1";
+            this.metroLabel1.Size = new System.Drawing.Size(56, 19);
+            this.metroLabel1.TabIndex = 15;
+            this.metroLabel1.Text = "Process:";
+            // 
+            // priority_lbl
+            // 
+            this.priority_lbl.AutoSize = true;
+            this.priority_lbl.Location = new System.Drawing.Point(3, 176);
+            this.priority_lbl.Name = "priority_lbl";
+            this.priority_lbl.Size = new System.Drawing.Size(58, 19);
+            this.priority_lbl.TabIndex = 15;
+            this.priority_lbl.Text = "Priority: ";
+            // 
+            // startTime_lbl
+            // 
+            this.startTime_lbl.AutoSize = true;
+            this.startTime_lbl.Location = new System.Drawing.Point(3, 157);
+            this.startTime_lbl.Name = "startTime_lbl";
+            this.startTime_lbl.Size = new System.Drawing.Size(69, 19);
+            this.startTime_lbl.TabIndex = 2;
+            this.startTime_lbl.Text = "Start time:";
+            // 
+            // pid_lbl
+            // 
+            this.pid_lbl.AutoSize = true;
+            this.pid_lbl.Location = new System.Drawing.Point(3, 138);
+            this.pid_lbl.Name = "pid_lbl";
+            this.pid_lbl.Size = new System.Drawing.Size(35, 19);
+            this.pid_lbl.TabIndex = 1;
+            this.pid_lbl.Text = "Pid: ";
+            // 
+            // name_lbl
+            // 
+            this.name_lbl.AutoSize = true;
+            this.name_lbl.Location = new System.Drawing.Point(3, 119);
+            this.name_lbl.Name = "name_lbl";
+            this.name_lbl.Size = new System.Drawing.Size(52, 19);
+            this.name_lbl.TabIndex = 0;
+            this.name_lbl.Text = "Name: ";
+            // 
             // metroTabPage7
             // 
             this.metroTabPage7.Controls.Add(this.txtbx_procName);
@@ -524,7 +738,7 @@
             this.metroTabPage3.Controls.Add(this.autostart_btm);
             this.metroTabPage3.Controls.Add(this.icon_checkbx);
             this.metroTabPage3.Controls.Add(this.metroLabel9);
-            this.metroTabPage3.Controls.Add(this.optimization_checkbx);
+            this.metroTabPage3.Controls.Add(this.minimize_checkbx);
             this.metroTabPage3.Controls.Add(this.metroLabel8);
             this.metroTabPage3.Controls.Add(this.blacklistIsSorted);
             this.metroTabPage3.Controls.Add(this.metroLabel7);
@@ -586,26 +800,26 @@
             this.metroLabel9.TabIndex = 43;
             this.metroLabel9.Text = "Icon:";
             // 
-            // optimization_checkbx
+            // minimize_checkbx
             // 
-            this.optimization_checkbx.AutoSize = true;
-            this.optimization_checkbx.Checked = true;
-            this.optimization_checkbx.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.optimization_checkbx.Location = new System.Drawing.Point(154, 109);
-            this.optimization_checkbx.Name = "optimization_checkbx";
-            this.optimization_checkbx.Size = new System.Drawing.Size(80, 17);
-            this.optimization_checkbx.TabIndex = 42;
-            this.optimization_checkbx.Text = "On";
-            this.optimization_checkbx.UseVisualStyleBackColor = true;
+            this.minimize_checkbx.AutoSize = true;
+            this.minimize_checkbx.Checked = true;
+            this.minimize_checkbx.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.minimize_checkbx.Location = new System.Drawing.Point(154, 109);
+            this.minimize_checkbx.Name = "minimize_checkbx";
+            this.minimize_checkbx.Size = new System.Drawing.Size(80, 17);
+            this.minimize_checkbx.TabIndex = 42;
+            this.minimize_checkbx.Text = "On";
+            this.minimize_checkbx.UseVisualStyleBackColor = true;
             // 
             // metroLabel8
             // 
             this.metroLabel8.AutoSize = true;
             this.metroLabel8.Location = new System.Drawing.Point(3, 107);
             this.metroLabel8.Name = "metroLabel8";
-            this.metroLabel8.Size = new System.Drawing.Size(88, 19);
+            this.metroLabel8.Size = new System.Drawing.Size(97, 19);
             this.metroLabel8.TabIndex = 41;
-            this.metroLabel8.Text = "Optimization:";
+            this.metroLabel8.Text = "Auto minimize:";
             // 
             // blacklistIsSorted
             // 
@@ -882,220 +1096,6 @@
             this.process_txtbx.Size = new System.Drawing.Size(209, 23);
             this.process_txtbx.TabIndex = 2;
             // 
-            // metroTabPage2
-            // 
-            this.metroTabPage2.Controls.Add(this.pathToModule_lbl);
-            this.metroTabPage2.Controls.Add(this.injectDll_private_btm);
-            this.metroTabPage2.Controls.Add(this.unselect_btm);
-            this.metroTabPage2.Controls.Add(this.refreshProcList);
-            this.metroTabPage2.Controls.Add(this.processList);
-            this.metroTabPage2.Controls.Add(this.processPid_txtbx);
-            this.metroTabPage2.Controls.Add(this.SelectDll);
-            this.metroTabPage2.Controls.Add(this.selectProcess);
-            this.metroTabPage2.Controls.Add(this.kill_btm);
-            this.metroTabPage2.Controls.Add(this.metroLabel4);
-            this.metroTabPage2.Controls.Add(this.pathToDll_txtbx);
-            this.metroTabPage2.Controls.Add(this.getModules);
-            this.metroTabPage2.Controls.Add(this.processName_txtbx);
-            this.metroTabPage2.Controls.Add(this.injectDll_btm);
-            this.metroTabPage2.Controls.Add(this.listBox1);
-            this.metroTabPage2.Controls.Add(this.metroLabel1);
-            this.metroTabPage2.Controls.Add(this.priority_lbl);
-            this.metroTabPage2.Controls.Add(this.startTime_lbl);
-            this.metroTabPage2.Controls.Add(this.pid_lbl);
-            this.metroTabPage2.Controls.Add(this.name_lbl);
-            this.metroTabPage2.HorizontalScrollbarBarColor = true;
-            this.metroTabPage2.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(698, 311);
-            this.metroTabPage2.TabIndex = 1;
-            this.metroTabPage2.Text = "Process";
-            this.metroTabPage2.VerticalScrollbarBarColor = true;
-            // 
-            // pathToModule_lbl
-            // 
-            this.pathToModule_lbl.AutoSize = true;
-            this.pathToModule_lbl.Location = new System.Drawing.Point(5, 285);
-            this.pathToModule_lbl.Name = "pathToModule_lbl";
-            this.pathToModule_lbl.Size = new System.Drawing.Size(53, 19);
-            this.pathToModule_lbl.TabIndex = 34;
-            this.pathToModule_lbl.Text = "No info";
-            // 
-            // injectDll_private_btm
-            // 
-            this.injectDll_private_btm.Location = new System.Drawing.Point(373, 167);
-            this.injectDll_private_btm.Name = "injectDll_private_btm";
-            this.injectDll_private_btm.Size = new System.Drawing.Size(97, 23);
-            this.injectDll_private_btm.TabIndex = 33;
-            this.injectDll_private_btm.Text = "Inject dll(v2)";
-            this.injectDll_private_btm.Click += new System.EventHandler(this.injectDll_private_btm_Click);
-            // 
-            // unselect_btm
-            // 
-            this.unselect_btm.Location = new System.Drawing.Point(372, 196);
-            this.unselect_btm.Name = "unselect_btm";
-            this.unselect_btm.Size = new System.Drawing.Size(97, 23);
-            this.unselect_btm.TabIndex = 32;
-            this.unselect_btm.Text = "Unselect process";
-            this.unselect_btm.Click += new System.EventHandler(this.unselect_btm_Click);
-            // 
-            // refreshProcList
-            // 
-            this.refreshProcList.Location = new System.Drawing.Point(373, 109);
-            this.refreshProcList.Name = "refreshProcList";
-            this.refreshProcList.Size = new System.Drawing.Size(97, 23);
-            this.refreshProcList.TabIndex = 31;
-            this.refreshProcList.Text = "Refresh List";
-            this.refreshProcList.Click += new System.EventHandler(this.refreshProcList_Click);
-            // 
-            // processList
-            // 
-            this.processList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.processList.FormattingEnabled = true;
-            this.processList.Location = new System.Drawing.Point(475, 4);
-            this.processList.Name = "processList";
-            this.processList.Size = new System.Drawing.Size(196, 273);
-            this.processList.TabIndex = 30;
-            this.processList.SelectedIndexChanged += new System.EventHandler(this.processList_SelectedIndexChanged);
-            // 
-            // processPid_txtbx
-            // 
-            this.processPid_txtbx.Location = new System.Drawing.Point(327, 10);
-            this.processPid_txtbx.Name = "processPid_txtbx";
-            this.processPid_txtbx.Size = new System.Drawing.Size(58, 23);
-            this.processPid_txtbx.TabIndex = 29;
-            // 
-            // SelectDll
-            // 
-            this.SelectDll.Location = new System.Drawing.Point(408, 39);
-            this.SelectDll.Name = "SelectDll";
-            this.SelectDll.Size = new System.Drawing.Size(62, 23);
-            this.SelectDll.TabIndex = 27;
-            this.SelectDll.Text = "•••";
-            this.SelectDll.Click += new System.EventHandler(this.SelectDll_Click);
-            // 
-            // selectProcess
-            // 
-            this.selectProcess.Location = new System.Drawing.Point(391, 10);
-            this.selectProcess.Name = "selectProcess";
-            this.selectProcess.Size = new System.Drawing.Size(79, 23);
-            this.selectProcess.TabIndex = 26;
-            this.selectProcess.Text = "Add by pID";
-            this.selectProcess.Click += new System.EventHandler(this.selectProcess_Click);
-            // 
-            // kill_btm
-            // 
-            this.kill_btm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.kill_btm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.kill_btm.ForeColor = System.Drawing.Color.Red;
-            this.kill_btm.Location = new System.Drawing.Point(372, 225);
-            this.kill_btm.Name = "kill_btm";
-            this.kill_btm.Size = new System.Drawing.Size(97, 23);
-            this.kill_btm.TabIndex = 20;
-            this.kill_btm.Text = "KILL";
-            this.kill_btm.UseVisualStyleBackColor = true;
-            this.kill_btm.Click += new System.EventHandler(this.kill_btm_Click);
-            // 
-            // metroLabel4
-            // 
-            this.metroLabel4.AutoSize = true;
-            this.metroLabel4.Location = new System.Drawing.Point(3, 41);
-            this.metroLabel4.Name = "metroLabel4";
-            this.metroLabel4.Size = new System.Drawing.Size(27, 19);
-            this.metroLabel4.TabIndex = 25;
-            this.metroLabel4.Text = "Dll:";
-            // 
-            // pathToDll_txtbx
-            // 
-            this.pathToDll_txtbx.Location = new System.Drawing.Point(65, 39);
-            this.pathToDll_txtbx.Name = "pathToDll_txtbx";
-            this.pathToDll_txtbx.ReadOnly = true;
-            this.pathToDll_txtbx.Size = new System.Drawing.Size(337, 23);
-            this.pathToDll_txtbx.TabIndex = 18;
-            // 
-            // getModules
-            // 
-            this.getModules.Location = new System.Drawing.Point(373, 80);
-            this.getModules.Name = "getModules";
-            this.getModules.Size = new System.Drawing.Size(97, 23);
-            this.getModules.TabIndex = 22;
-            this.getModules.Text = "Refresh Modules";
-            this.getModules.Click += new System.EventHandler(this.getModules_Click_1);
-            // 
-            // processName_txtbx
-            // 
-            this.processName_txtbx.Location = new System.Drawing.Point(65, 10);
-            this.processName_txtbx.Name = "processName_txtbx";
-            this.processName_txtbx.ReadOnly = true;
-            this.processName_txtbx.Size = new System.Drawing.Size(256, 23);
-            this.processName_txtbx.TabIndex = 18;
-            // 
-            // injectDll_btm
-            // 
-            this.injectDll_btm.Location = new System.Drawing.Point(372, 138);
-            this.injectDll_btm.Name = "injectDll_btm";
-            this.injectDll_btm.Size = new System.Drawing.Size(97, 23);
-            this.injectDll_btm.TabIndex = 24;
-            this.injectDll_btm.Text = "Inject dll(simple)";
-            this.injectDll_btm.Click += new System.EventHandler(this.injectDll_Click);
-            // 
-            // listBox1
-            // 
-            this.listBox1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBox1.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(185, 65);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(182, 208);
-            this.listBox1.TabIndex = 3;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            // 
-            // metroLabel1
-            // 
-            this.metroLabel1.AutoSize = true;
-            this.metroLabel1.Location = new System.Drawing.Point(3, 11);
-            this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(56, 19);
-            this.metroLabel1.TabIndex = 15;
-            this.metroLabel1.Text = "Process:";
-            // 
-            // priority_lbl
-            // 
-            this.priority_lbl.AutoSize = true;
-            this.priority_lbl.Location = new System.Drawing.Point(3, 176);
-            this.priority_lbl.Name = "priority_lbl";
-            this.priority_lbl.Size = new System.Drawing.Size(58, 19);
-            this.priority_lbl.TabIndex = 15;
-            this.priority_lbl.Text = "Priority: ";
-            // 
-            // startTime_lbl
-            // 
-            this.startTime_lbl.AutoSize = true;
-            this.startTime_lbl.Location = new System.Drawing.Point(3, 157);
-            this.startTime_lbl.Name = "startTime_lbl";
-            this.startTime_lbl.Size = new System.Drawing.Size(69, 19);
-            this.startTime_lbl.TabIndex = 2;
-            this.startTime_lbl.Text = "Start time:";
-            // 
-            // pid_lbl
-            // 
-            this.pid_lbl.AutoSize = true;
-            this.pid_lbl.Location = new System.Drawing.Point(3, 138);
-            this.pid_lbl.Name = "pid_lbl";
-            this.pid_lbl.Size = new System.Drawing.Size(35, 19);
-            this.pid_lbl.TabIndex = 1;
-            this.pid_lbl.Text = "Pid: ";
-            // 
-            // name_lbl
-            // 
-            this.name_lbl.AutoSize = true;
-            this.name_lbl.Location = new System.Drawing.Point(3, 119);
-            this.name_lbl.Name = "name_lbl";
-            this.name_lbl.Size = new System.Drawing.Size(52, 19);
-            this.name_lbl.TabIndex = 0;
-            this.name_lbl.Text = "Name: ";
-            // 
             // status_txtbx
             // 
             this.status_txtbx.Location = new System.Drawing.Point(59, 375);
@@ -1188,7 +1188,7 @@
             this.Name = "Form1";
             this.ShadowType = MetroFramework.Forms.MetroForm.MetroFormShadowType.None;
             this.Text = "Process Manager";
-            this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -1197,6 +1197,8 @@
             this.metroTabPage1.PerformLayout();
             this.metroPanel1.ResumeLayout(false);
             this.metroPanel1.PerformLayout();
+            this.metroTabPage2.ResumeLayout(false);
+            this.metroTabPage2.PerformLayout();
             this.metroTabPage7.ResumeLayout(false);
             this.metroTabPage7.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
@@ -1206,8 +1208,6 @@
             this.metroTabPage6.PerformLayout();
             this.metroTabPage5.ResumeLayout(false);
             this.metroTabPage5.PerformLayout();
-            this.metroTabPage2.ResumeLayout(false);
-            this.metroTabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1288,7 +1288,7 @@
         private MetroFramework.Controls.MetroToggle blacklistIsSorted;
         private MetroFramework.Controls.MetroLabel metroLabel7;
         private System.Windows.Forms.Timer blacklistChecker;
-        private MetroFramework.Controls.MetroToggle optimization_checkbx;
+        private MetroFramework.Controls.MetroToggle minimize_checkbx;
         private MetroFramework.Controls.MetroLabel metroLabel8;
         private MetroFramework.Controls.MetroLabel file_hash_lbl;
         private MetroFramework.Controls.MetroButton copyMD5_btm;
