@@ -55,6 +55,19 @@
             this.pathToFile = new MetroFramework.Controls.MetroTextBox();
             this.start = new MetroFramework.Controls.MetroButton();
             this.pauseOnStart = new MetroFramework.Controls.MetroCheckBox();
+            this.metroTabPage7 = new MetroFramework.Controls.MetroTabPage();
+            this.txtbx_procName = new MetroFramework.Controls.MetroTextBox();
+            this.checkbx_spyOnly = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel13 = new MetroFramework.Controls.MetroLabel();
+            this.checkbx_safemode = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel12 = new MetroFramework.Controls.MetroLabel();
+            this.listbx_killed = new System.Windows.Forms.ListBox();
+            this.listbx_whitelist = new System.Windows.Forms.ListBox();
+            this.txtbx_pathtofile = new MetroFramework.Controls.MetroTextBox();
+            this.btn_del = new MetroFramework.Controls.MetroButton();
+            this.btn_add = new MetroFramework.Controls.MetroButton();
+            this.metroLabel11 = new MetroFramework.Controls.MetroLabel();
+            this.txtbx_ProcessName = new MetroFramework.Controls.MetroTextBox();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.pathToModule_lbl = new MetroFramework.Controls.MetroLabel();
             this.injectDll_private_btm = new MetroFramework.Controls.MetroButton();
@@ -76,19 +89,6 @@
             this.startTime_lbl = new MetroFramework.Controls.MetroLabel();
             this.pid_lbl = new MetroFramework.Controls.MetroLabel();
             this.name_lbl = new MetroFramework.Controls.MetroLabel();
-            this.metroTabPage7 = new MetroFramework.Controls.MetroTabPage();
-            this.txtbx_procName = new MetroFramework.Controls.MetroTextBox();
-            this.checkbx_spyOnly = new MetroFramework.Controls.MetroToggle();
-            this.metroLabel13 = new MetroFramework.Controls.MetroLabel();
-            this.checkbx_safemode = new MetroFramework.Controls.MetroToggle();
-            this.metroLabel12 = new MetroFramework.Controls.MetroLabel();
-            this.listbx_killed = new System.Windows.Forms.ListBox();
-            this.listbx_whitelist = new System.Windows.Forms.ListBox();
-            this.txtbx_pathtofile = new MetroFramework.Controls.MetroTextBox();
-            this.btn_del = new MetroFramework.Controls.MetroButton();
-            this.btn_add = new MetroFramework.Controls.MetroButton();
-            this.metroLabel11 = new MetroFramework.Controls.MetroLabel();
-            this.txtbx_ProcessName = new MetroFramework.Controls.MetroTextBox();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.removeFromAutostart_btm = new MetroFramework.Controls.MetroButton();
             this.autostart_btm = new MetroFramework.Controls.MetroButton();
@@ -138,8 +138,8 @@
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroPanel1.SuspendLayout();
-            this.metroTabPage2.SuspendLayout();
             this.metroTabPage7.SuspendLayout();
+            this.metroTabPage2.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             this.metroTabPage4.SuspendLayout();
             this.metroTabPage6.SuspendLayout();
@@ -164,15 +164,15 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage7);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
+            this.metroTabControl1.Controls.Add(this.metroTabPage7);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Controls.Add(this.metroTabPage6);
             this.metroTabControl1.Controls.Add(this.metroTabPage5);
             this.metroTabControl1.Location = new System.Drawing.Point(2, 23);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 2;
+            this.metroTabControl1.SelectedIndex = 1;
             this.metroTabControl1.Size = new System.Drawing.Size(706, 350);
             this.metroTabControl1.TabIndex = 13;
             // 
@@ -388,6 +388,136 @@
             this.pauseOnStart.Text = "Pause on start";
             this.pauseOnStart.UseVisualStyleBackColor = true;
             // 
+            // metroTabPage7
+            // 
+            this.metroTabPage7.Controls.Add(this.txtbx_procName);
+            this.metroTabPage7.Controls.Add(this.checkbx_spyOnly);
+            this.metroTabPage7.Controls.Add(this.metroLabel13);
+            this.metroTabPage7.Controls.Add(this.checkbx_safemode);
+            this.metroTabPage7.Controls.Add(this.metroLabel12);
+            this.metroTabPage7.Controls.Add(this.listbx_killed);
+            this.metroTabPage7.Controls.Add(this.listbx_whitelist);
+            this.metroTabPage7.Controls.Add(this.txtbx_pathtofile);
+            this.metroTabPage7.Controls.Add(this.btn_del);
+            this.metroTabPage7.Controls.Add(this.btn_add);
+            this.metroTabPage7.Controls.Add(this.metroLabel11);
+            this.metroTabPage7.Controls.Add(this.txtbx_ProcessName);
+            this.metroTabPage7.HorizontalScrollbarBarColor = true;
+            this.metroTabPage7.Location = new System.Drawing.Point(4, 35);
+            this.metroTabPage7.Name = "metroTabPage7";
+            this.metroTabPage7.Size = new System.Drawing.Size(698, 311);
+            this.metroTabPage7.TabIndex = 6;
+            this.metroTabPage7.Text = "Safe mode";
+            this.metroTabPage7.VerticalScrollbarBarColor = true;
+            // 
+            // txtbx_procName
+            // 
+            this.txtbx_procName.Location = new System.Drawing.Point(471, 14);
+            this.txtbx_procName.Name = "txtbx_procName";
+            this.txtbx_procName.Size = new System.Drawing.Size(227, 23);
+            this.txtbx_procName.TabIndex = 49;
+            // 
+            // checkbx_spyOnly
+            // 
+            this.checkbx_spyOnly.AutoSize = true;
+            this.checkbx_spyOnly.Location = new System.Drawing.Point(383, 14);
+            this.checkbx_spyOnly.Name = "checkbx_spyOnly";
+            this.checkbx_spyOnly.Size = new System.Drawing.Size(80, 17);
+            this.checkbx_spyOnly.TabIndex = 48;
+            this.checkbx_spyOnly.Text = "Off";
+            this.checkbx_spyOnly.UseVisualStyleBackColor = true;
+            // 
+            // metroLabel13
+            // 
+            this.metroLabel13.AutoSize = true;
+            this.metroLabel13.Location = new System.Drawing.Point(303, 14);
+            this.metroLabel13.Name = "metroLabel13";
+            this.metroLabel13.Size = new System.Drawing.Size(61, 19);
+            this.metroLabel13.TabIndex = 47;
+            this.metroLabel13.Text = "Spy only:";
+            // 
+            // checkbx_safemode
+            // 
+            this.checkbx_safemode.AutoSize = true;
+            this.checkbx_safemode.Location = new System.Drawing.Point(154, 14);
+            this.checkbx_safemode.Name = "checkbx_safemode";
+            this.checkbx_safemode.Size = new System.Drawing.Size(80, 17);
+            this.checkbx_safemode.TabIndex = 46;
+            this.checkbx_safemode.Text = "Off";
+            this.checkbx_safemode.UseVisualStyleBackColor = true;
+            this.checkbx_safemode.CheckedChanged += new System.EventHandler(this.checkbx_safemode_CheckedChanged);
+            // 
+            // metroLabel12
+            // 
+            this.metroLabel12.AutoSize = true;
+            this.metroLabel12.Location = new System.Drawing.Point(3, 14);
+            this.metroLabel12.Name = "metroLabel12";
+            this.metroLabel12.Size = new System.Drawing.Size(76, 19);
+            this.metroLabel12.TabIndex = 45;
+            this.metroLabel12.Text = "Safe mode:";
+            // 
+            // listbx_killed
+            // 
+            this.listbx_killed.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listbx_killed.FormattingEnabled = true;
+            this.listbx_killed.Location = new System.Drawing.Point(468, 69);
+            this.listbx_killed.Name = "listbx_killed";
+            this.listbx_killed.Size = new System.Drawing.Size(230, 234);
+            this.listbx_killed.Sorted = true;
+            this.listbx_killed.TabIndex = 13;
+            this.listbx_killed.SelectedIndexChanged += new System.EventHandler(this.listbx_killed_SelectedIndexChanged);
+            // 
+            // listbx_whitelist
+            // 
+            this.listbx_whitelist.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listbx_whitelist.FormattingEnabled = true;
+            this.listbx_whitelist.Location = new System.Drawing.Point(6, 70);
+            this.listbx_whitelist.Name = "listbx_whitelist";
+            this.listbx_whitelist.Size = new System.Drawing.Size(457, 234);
+            this.listbx_whitelist.Sorted = true;
+            this.listbx_whitelist.TabIndex = 12;
+            // 
+            // txtbx_pathtofile
+            // 
+            this.txtbx_pathtofile.Location = new System.Drawing.Point(471, 40);
+            this.txtbx_pathtofile.Name = "txtbx_pathtofile";
+            this.txtbx_pathtofile.Size = new System.Drawing.Size(227, 23);
+            this.txtbx_pathtofile.TabIndex = 11;
+            // 
+            // btn_del
+            // 
+            this.btn_del.Location = new System.Drawing.Point(391, 40);
+            this.btn_del.Name = "btn_del";
+            this.btn_del.Size = new System.Drawing.Size(75, 23);
+            this.btn_del.TabIndex = 10;
+            this.btn_del.Text = "DEL";
+            this.btn_del.Click += new System.EventHandler(this.btn_del_Click);
+            // 
+            // btn_add
+            // 
+            this.btn_add.Location = new System.Drawing.Point(310, 40);
+            this.btn_add.Name = "btn_add";
+            this.btn_add.Size = new System.Drawing.Size(75, 23);
+            this.btn_add.TabIndex = 9;
+            this.btn_add.Text = "ADD";
+            this.btn_add.Click += new System.EventHandler(this.btn_add_Click);
+            // 
+            // metroLabel11
+            // 
+            this.metroLabel11.AutoSize = true;
+            this.metroLabel11.Location = new System.Drawing.Point(1, 41);
+            this.metroLabel11.Name = "metroLabel11";
+            this.metroLabel11.Size = new System.Drawing.Size(93, 19);
+            this.metroLabel11.TabIndex = 8;
+            this.metroLabel11.Text = "Process Name";
+            // 
+            // txtbx_ProcessName
+            // 
+            this.txtbx_ProcessName.Location = new System.Drawing.Point(95, 40);
+            this.txtbx_ProcessName.Name = "txtbx_ProcessName";
+            this.txtbx_ProcessName.Size = new System.Drawing.Size(209, 23);
+            this.txtbx_ProcessName.TabIndex = 7;
+            // 
             // metroTabPage2
             // 
             this.metroTabPage2.Controls.Add(this.pathToModule_lbl);
@@ -580,7 +710,7 @@
             this.startTime_lbl.AutoSize = true;
             this.startTime_lbl.Location = new System.Drawing.Point(3, 157);
             this.startTime_lbl.Name = "startTime_lbl";
-            this.startTime_lbl.Size = new System.Drawing.Size(69, 19);
+            this.startTime_lbl.Size = new System.Drawing.Size(70, 19);
             this.startTime_lbl.TabIndex = 2;
             this.startTime_lbl.Text = "Start time:";
             // 
@@ -601,136 +731,6 @@
             this.name_lbl.Size = new System.Drawing.Size(52, 19);
             this.name_lbl.TabIndex = 0;
             this.name_lbl.Text = "Name: ";
-            // 
-            // metroTabPage7
-            // 
-            this.metroTabPage7.Controls.Add(this.txtbx_procName);
-            this.metroTabPage7.Controls.Add(this.checkbx_spyOnly);
-            this.metroTabPage7.Controls.Add(this.metroLabel13);
-            this.metroTabPage7.Controls.Add(this.checkbx_safemode);
-            this.metroTabPage7.Controls.Add(this.metroLabel12);
-            this.metroTabPage7.Controls.Add(this.listbx_killed);
-            this.metroTabPage7.Controls.Add(this.listbx_whitelist);
-            this.metroTabPage7.Controls.Add(this.txtbx_pathtofile);
-            this.metroTabPage7.Controls.Add(this.btn_del);
-            this.metroTabPage7.Controls.Add(this.btn_add);
-            this.metroTabPage7.Controls.Add(this.metroLabel11);
-            this.metroTabPage7.Controls.Add(this.txtbx_ProcessName);
-            this.metroTabPage7.HorizontalScrollbarBarColor = true;
-            this.metroTabPage7.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage7.Name = "metroTabPage7";
-            this.metroTabPage7.Size = new System.Drawing.Size(698, 311);
-            this.metroTabPage7.TabIndex = 6;
-            this.metroTabPage7.Text = "Safe mode";
-            this.metroTabPage7.VerticalScrollbarBarColor = true;
-            // 
-            // txtbx_procName
-            // 
-            this.txtbx_procName.Location = new System.Drawing.Point(471, 14);
-            this.txtbx_procName.Name = "txtbx_procName";
-            this.txtbx_procName.Size = new System.Drawing.Size(227, 23);
-            this.txtbx_procName.TabIndex = 49;
-            // 
-            // checkbx_spyOnly
-            // 
-            this.checkbx_spyOnly.AutoSize = true;
-            this.checkbx_spyOnly.Location = new System.Drawing.Point(383, 14);
-            this.checkbx_spyOnly.Name = "checkbx_spyOnly";
-            this.checkbx_spyOnly.Size = new System.Drawing.Size(80, 17);
-            this.checkbx_spyOnly.TabIndex = 48;
-            this.checkbx_spyOnly.Text = "Off";
-            this.checkbx_spyOnly.UseVisualStyleBackColor = true;
-            // 
-            // metroLabel13
-            // 
-            this.metroLabel13.AutoSize = true;
-            this.metroLabel13.Location = new System.Drawing.Point(303, 14);
-            this.metroLabel13.Name = "metroLabel13";
-            this.metroLabel13.Size = new System.Drawing.Size(61, 19);
-            this.metroLabel13.TabIndex = 47;
-            this.metroLabel13.Text = "Spy only:";
-            // 
-            // checkbx_safemode
-            // 
-            this.checkbx_safemode.AutoSize = true;
-            this.checkbx_safemode.Location = new System.Drawing.Point(154, 14);
-            this.checkbx_safemode.Name = "checkbx_safemode";
-            this.checkbx_safemode.Size = new System.Drawing.Size(80, 17);
-            this.checkbx_safemode.TabIndex = 46;
-            this.checkbx_safemode.Text = "Off";
-            this.checkbx_safemode.UseVisualStyleBackColor = true;
-            this.checkbx_safemode.CheckedChanged += new System.EventHandler(this.checkbx_safemode_CheckedChanged);
-            // 
-            // metroLabel12
-            // 
-            this.metroLabel12.AutoSize = true;
-            this.metroLabel12.Location = new System.Drawing.Point(3, 14);
-            this.metroLabel12.Name = "metroLabel12";
-            this.metroLabel12.Size = new System.Drawing.Size(76, 19);
-            this.metroLabel12.TabIndex = 45;
-            this.metroLabel12.Text = "Safe mode:";
-            // 
-            // listbx_killed
-            // 
-            this.listbx_killed.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listbx_killed.FormattingEnabled = true;
-            this.listbx_killed.Location = new System.Drawing.Point(468, 69);
-            this.listbx_killed.Name = "listbx_killed";
-            this.listbx_killed.Size = new System.Drawing.Size(230, 234);
-            this.listbx_killed.Sorted = true;
-            this.listbx_killed.TabIndex = 13;
-            this.listbx_killed.SelectedIndexChanged += new System.EventHandler(this.listbx_killed_SelectedIndexChanged);
-            // 
-            // listbx_whitelist
-            // 
-            this.listbx_whitelist.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listbx_whitelist.FormattingEnabled = true;
-            this.listbx_whitelist.Location = new System.Drawing.Point(6, 70);
-            this.listbx_whitelist.Name = "listbx_whitelist";
-            this.listbx_whitelist.Size = new System.Drawing.Size(457, 234);
-            this.listbx_whitelist.Sorted = true;
-            this.listbx_whitelist.TabIndex = 12;
-            // 
-            // txtbx_pathtofile
-            // 
-            this.txtbx_pathtofile.Location = new System.Drawing.Point(471, 40);
-            this.txtbx_pathtofile.Name = "txtbx_pathtofile";
-            this.txtbx_pathtofile.Size = new System.Drawing.Size(227, 23);
-            this.txtbx_pathtofile.TabIndex = 11;
-            // 
-            // btn_del
-            // 
-            this.btn_del.Location = new System.Drawing.Point(391, 40);
-            this.btn_del.Name = "btn_del";
-            this.btn_del.Size = new System.Drawing.Size(75, 23);
-            this.btn_del.TabIndex = 10;
-            this.btn_del.Text = "DEL";
-            this.btn_del.Click += new System.EventHandler(this.btn_del_Click);
-            // 
-            // btn_add
-            // 
-            this.btn_add.Location = new System.Drawing.Point(310, 40);
-            this.btn_add.Name = "btn_add";
-            this.btn_add.Size = new System.Drawing.Size(75, 23);
-            this.btn_add.TabIndex = 9;
-            this.btn_add.Text = "ADD";
-            this.btn_add.Click += new System.EventHandler(this.btn_add_Click);
-            // 
-            // metroLabel11
-            // 
-            this.metroLabel11.AutoSize = true;
-            this.metroLabel11.Location = new System.Drawing.Point(1, 41);
-            this.metroLabel11.Name = "metroLabel11";
-            this.metroLabel11.Size = new System.Drawing.Size(93, 19);
-            this.metroLabel11.TabIndex = 8;
-            this.metroLabel11.Text = "Process Name";
-            // 
-            // txtbx_ProcessName
-            // 
-            this.txtbx_ProcessName.Location = new System.Drawing.Point(95, 40);
-            this.txtbx_ProcessName.Name = "txtbx_ProcessName";
-            this.txtbx_ProcessName.Size = new System.Drawing.Size(209, 23);
-            this.txtbx_ProcessName.TabIndex = 7;
             // 
             // metroTabPage3
             // 
@@ -839,7 +839,7 @@
             this.metroLabel7.AutoSize = true;
             this.metroLabel7.Location = new System.Drawing.Point(3, 126);
             this.metroLabel7.Name = "metroLabel7";
-            this.metroLabel7.Size = new System.Drawing.Size(102, 19);
+            this.metroLabel7.Size = new System.Drawing.Size(103, 19);
             this.metroLabel7.TabIndex = 39;
             this.metroLabel7.Text = "Black list sorted:";
             // 
@@ -935,7 +935,7 @@
             this.color_lbl.AutoSize = true;
             this.color_lbl.Location = new System.Drawing.Point(1, 209);
             this.color_lbl.Name = "color_lbl";
-            this.color_lbl.Size = new System.Drawing.Size(45, 19);
+            this.color_lbl.Size = new System.Drawing.Size(46, 19);
             this.color_lbl.TabIndex = 20;
             this.color_lbl.Text = "Color:";
             // 
@@ -944,7 +944,7 @@
             this.metroLabel3.AutoSize = true;
             this.metroLabel3.Location = new System.Drawing.Point(3, 145);
             this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(117, 19);
+            this.metroLabel3.Size = new System.Drawing.Size(116, 19);
             this.metroLabel3.TabIndex = 36;
             this.metroLabel3.Text = "Watermark speed:";
             // 
@@ -953,7 +953,7 @@
             this.watermark.AutoSize = true;
             this.watermark.Location = new System.Drawing.Point(3, 24);
             this.watermark.Name = "watermark";
-            this.watermark.Size = new System.Drawing.Size(135, 19);
+            this.watermark.Size = new System.Drawing.Size(133, 19);
             this.watermark.TabIndex = 23;
             this.watermark.Text = "Coded by Tavvi in C#";
             // 
@@ -1109,7 +1109,7 @@
             this.status_lbl.AutoSize = true;
             this.status_lbl.Location = new System.Drawing.Point(2, 377);
             this.status_lbl.Name = "status_lbl";
-            this.status_lbl.Size = new System.Drawing.Size(55, 19);
+            this.status_lbl.Size = new System.Drawing.Size(51, 19);
             this.status_lbl.TabIndex = 18;
             this.status_lbl.Text = "STATUS";
             // 
@@ -1197,10 +1197,10 @@
             this.metroTabPage1.PerformLayout();
             this.metroPanel1.ResumeLayout(false);
             this.metroPanel1.PerformLayout();
-            this.metroTabPage2.ResumeLayout(false);
-            this.metroTabPage2.PerformLayout();
             this.metroTabPage7.ResumeLayout(false);
             this.metroTabPage7.PerformLayout();
+            this.metroTabPage2.ResumeLayout(false);
+            this.metroTabPage2.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             this.metroTabPage4.ResumeLayout(false);

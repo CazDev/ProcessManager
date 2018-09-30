@@ -36,3 +36,16 @@ C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\Proc
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.CoreCompileInputs.cache
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\Process Manager.exe
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\Process Manager.pdb
+C:\C#\ProcesssManager\ProcessManager\bin\Debug\Process Manager.exe.config
+C:\C#\ProcesssManager\ProcessManager\bin\Debug\Process Manager.exe
+C:\C#\ProcesssManager\ProcessManager\bin\Debug\Process Manager.pdb
+C:\C#\ProcesssManager\ProcessManager\bin\Debug\MetroFramework.dll
+C:\C#\ProcesssManager\ProcessManager\bin\Debug\MetroFramework.Fonts.dll
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csprojAssemblyReference.cache
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.Form1.resources
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.Properties.Resources.resources
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.GenerateResource.cache
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.CoreCompileInputs.cache
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.CopyComplete
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\Process Manager.exe
+C:\C#\ProcesssManager\ProcessManager\obj\Debug\Process Manager.pdb
