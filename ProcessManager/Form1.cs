@@ -1562,6 +1562,43 @@ namespace ProcessManager
                             try
                             {
                                 listbx_killed.Items.Add($"{proc[k].ProcessName} % {proc[k].MainModule.FileName}");
+                                //remove doubles from whitelist
+                                String[] processes;
+                                List<string> prs = new List<string>();
+                                for (int l = 0; l < listbx_whitelist.Items.Count; l++)
+                                {
+                                    prs.Add(listbx_whitelist.Items[l].ToString());
+                                }
+                                processes = prs.ToArray();
+                                List<string> processWithoutDoubles = new List<string>();
+                                for (int s = 0; s < processes.Length; s++)
+                                {
+                                    bool add = true;
+                                    for (int j = 0; j < processWithoutDoubles.Count; j++)
+                                    {
+                                        if (processes[s] == processWithoutDoubles[j])
+                                        {
+                                            add = false;
+                                            break;
+                                        }
+                                        else
+                                            add = true;
+                                    }
+                                    if (add)
+                                        processWithoutDoubles.Add(processes[s]);
+                                }
+                                listbx_whitelist.Items.Clear();
+                                for (int z = 0; z < processWithoutDoubles.Count; z++)
+                                {
+                                    listbx_whitelist.Items.Add(processWithoutDoubles[z]);
+                                }
+                                //Doubles removed from whitelist
+                                //remove doubles from killed prcs list bx
+
+                                RemoveDoublesfromKilled_listbx(prs, processWithoutDoubles);
+
+                                //removed
+
                                 if (!checkbx_spyOnly.Checked)
                                 {
                                     proc[k].Kill();
@@ -1570,75 +1607,50 @@ namespace ProcessManager
                                     listbx_whitelist.Items.Add(proc[k].ProcessName);
                             }
                             catch { }
-                        }
-                       //remove doubles from whitelist
-                        String[] processes;
-                        List<string> prs = new List<string>();
-                        for (int l = 0; l < listbx_whitelist.Items.Count; l++)
-                        {
-                            prs.Add(listbx_whitelist.Items[l].ToString());
-                        }
-                        processes = prs.ToArray();
-                        List<string> processWithoutDoubles = new List<string>();
-                        for (int k = 0; k < processes.Length; k++)
-                        {
-                            bool add = true;
-                            for (int j = 0; j < processWithoutDoubles.Count; j++)
-                            {
-                                if (processes[k] == processWithoutDoubles[j])
-                                {
-                                    add = false;
-                                    break;
-                                }
-                                else
-                                    add = true;
-                            }
-                            if (add)
-                                processWithoutDoubles.Add(processes[k]);
-                        }
-                        listbx_whitelist.Items.Clear();
-                        for (int z = 0; z < processWithoutDoubles.Count; z++)
-                        {
-                            listbx_whitelist.Items.Add(processWithoutDoubles[z]);
-                        }
-                        //Doubles removed from whitelist
+                        }                       
                     }
                     //one more if xD
                     if (kill)
                     {
-                        String[] processes;
-                        List<string> prs = new List<string>();
-                        for (int l = 0; l < listbx_killed.Items.Count; l++)
-                        {
-                            prs.Add(listbx_killed.Items[l].ToString());
-                        }
-                        processes = prs.ToArray();
-                        List<string> processWithoutDoubles = new List<string>();
-                        for (int k = 0; k < processes.Length; k++)
-                        {
-                            bool add = true;
-                            for (int p = 0; p < processWithoutDoubles.Count; p++)
-                            {
-                                if (processes[k] == processWithoutDoubles[p])
-                                {
-                                    add = false;
-                                    break;
-                                }
-                                else
-                                    add = true;
-                            }
-                            if (add)
-                                processWithoutDoubles.Add(processes[k]);
-                        }
-                        listbx_killed.Items.Clear();
-                        for (int z = 0; z < processWithoutDoubles.Count; z++)
-                        {
-                            listbx_killed.Items.Add(processWithoutDoubles[z]);
-                        }
+                        
                     }
                 }
             }
         }
+
+        private void RemoveDoublesfromKilled_listbx(List<string> prs, List<string> processWithoutDoubles)
+        {
+            string[] processes;
+            List<string> _processes = new List<string>();
+            for (int l = 0; l < listbx_killed.Items.Count; l++)
+            {
+                _processes.Add(listbx_killed.Items[l].ToString());
+            }
+            processes = _processes.ToArray();
+            List<string> _processWithoutDoubles = new List<string>();
+            for (int k = 0; k < processes.Length; k++)
+            {
+                bool add = true;
+                for (int p = 0; p < _processWithoutDoubles.Count; p++)
+                {
+                    if (processes[k] == _processWithoutDoubles[p])
+                    {
+                        add = false;
+                        break;
+                    }
+                    else
+                        add = true;
+                }
+                if (add)
+                    _processWithoutDoubles.Add(processes[k]);
+            }
+            listbx_killed.Items.Clear();
+            for (int z = 0; z < _processWithoutDoubles.Count; z++)
+            {
+                listbx_killed.Items.Add(_processWithoutDoubles[z]);
+            }
+        }
+
         private void listbx_killed_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listbx_killed.SelectedIndex >= 0)

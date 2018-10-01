@@ -29,7 +29,6 @@ C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\bin\Debug\Proc
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\bin\Debug\Process Manager.pdb
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\bin\Debug\MetroFramework.dll
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\bin\Debug\MetroFramework.Fonts.dll
-C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csprojResolveAssemblyReference.cache
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.Form1.resources
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.Properties.Resources.resources
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.GenerateResource.Cache
@@ -49,3 +48,5 @@ C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.CoreCompile
 C:\C#\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.CopyComplete
 C:\C#\ProcesssManager\ProcessManager\obj\Debug\Process Manager.exe
 C:\C#\ProcesssManager\ProcessManager\obj\Debug\Process Manager.pdb
+C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csprojAssemblyReference.cache
+C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.CopyComplete
