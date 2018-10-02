@@ -427,6 +427,25 @@ namespace ProcessManager
 
             timer_listbx.BackColor = listBox1.BackColor;
             timer_listbx.ForeColor = listBox1.ForeColor;
+
+            pictureBox1.BackColor = listBox1.BackColor;
+        }
+        public static string MD5HashString(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Convert the byte array to hexadecimal string
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
         }
         private void log_Changed()
         {
@@ -941,8 +960,60 @@ namespace ProcessManager
             File.WriteAllLines(pathToCfg + "\\timer.txt", timerListbx);
         }
         //end save cfg
+        public static bool PassworldEntered = false;
+        public static string passworld;
         private void Form1_Load(object sender, EventArgs e)
         {
+            if (!File.Exists(pathToCfg + "\\wut.txt"))
+            {
+                if (!File.Exists(pathToCfg + "\\ok.txt"))
+                {
+                    if (MessageBox.Show("Do you want to set passworld?", "Process Manager", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        PasswordEnter enter = new PasswordEnter();
+                        enter.ShowDialog();
+                        if (PassworldEntered)
+                        {
+                            File.WriteAllText(pathToCfg + "\\wut.txt", MD5HashString(passworld));
+                        }
+                        else { }
+                        //stf
+                    }
+                    else
+                        File.WriteAllText(pathToCfg + "\\ok.txt", "");
+                }
+                else
+                {
+                    btn_deletePass.Enabled = false;
+                    btn_setpassword.Enabled = true;
+                }
+            }
+            else
+            {
+                PasswordEnter enter = new PasswordEnter();
+                enter.ShowDialog();
+                if (PassworldEntered)
+                {
+                    string md5 = File.ReadAllText(pathToCfg + "\\wut.txt");
+                    string enteredMD5 = MD5HashString(passworld);
+                    if(!(md5 == enteredMD5))
+                    {
+                        MessageBox.Show("Nice try");
+                        Environment.Exit(1);
+                    }
+                }
+                else { Environment.Exit(1); }
+            }
+            if (File.Exists(pathToCfg + "\\wut.txt"))
+            {
+                btn_deletePass.Enabled = true;
+                btn_setpassword.Enabled = false;
+            }
+            else
+            {
+                btn_deletePass.Enabled = false;
+                btn_setpassword.Enabled = true;
+            }
             colorSwitcher.SelectedIndex = 11;
             themeSwitcher.SelectedIndex = 1;
 
@@ -1617,7 +1688,6 @@ namespace ProcessManager
                 }
             }
         }
-
         private void RemoveDoublesfromKilled_listbx(List<string> prs, List<string> processWithoutDoubles)
         {
             string[] processes;
@@ -1650,7 +1720,6 @@ namespace ProcessManager
                 listbx_killed.Items.Add(_processWithoutDoubles[z]);
             }
         }
-
         private void listbx_killed_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listbx_killed.SelectedIndex >= 0)
@@ -1663,6 +1732,56 @@ namespace ProcessManager
                 txtbx_procName.Text = "";
                 txtbx_pathtofile.Text = "";
             }
+        }
+        private void ntn_clearListbx_killed_Click(object sender, EventArgs e)
+        {
+            listbx_killed.Items.Clear();
+            txtbx_procName.Text = "";
+            txtbx_pathtofile.Text = "";
+        }
+        //passworld
+        private void btn_deletePass_Click(object sender, EventArgs e)
+        {
+            string md5 = File.ReadAllText(pathToCfg + "\\wut.txt");
+            PasswordEnter enter = new PasswordEnter();
+            enter.ShowDialog();
+            if (PassworldEntered)
+            {
+                string enteredMD5 = MD5HashString(passworld);
+                if (md5 == enteredMD5)
+                {
+                    MessageBox.Show("Passworld deleted");
+                    string temp = "";
+                    Proc.KillByFile(pathToCfg + "\\wut.txt",out temp);
+                    File.Delete(pathToCfg + "\\wut.txt");
+                    btn_deletePass.Enabled = false;
+                    btn_setpassword.Enabled = true;
+                }
+                else
+                {
+                    MessageBox.Show("Password is not correct");
+                }
+            }
+            else {}
+        }
+
+        private void btn_setpassword_Click(object sender, EventArgs e)
+        {
+            PasswordEnter enter = new PasswordEnter();
+            enter.ShowDialog();
+            if (PassworldEntered)
+            {
+                File.WriteAllText(pathToCfg + "\\wut.txt", MD5HashString(passworld));
+                MessageBox.Show("Password created");
+                btn_deletePass.Enabled = true;
+                btn_setpassword.Enabled = false;
+                try
+                {
+                    File.Delete(pathToCfg + "\\ok.txt");
+                }
+                catch { }
+            }
+            else { }
         }
     }
 }
