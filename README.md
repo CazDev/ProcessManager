@@ -1,4 +1,4 @@
-# Processs Manager
+# Process Manager
 ## What is it made for?
 +   you can start/stop processes
 +   you can compare 2 files using MD5 hash function
@@ -12,8 +12,8 @@
 
 ## Instruction
 #### How to pause/unpause process?
-+ Go to "Process" tab. 
-+ Select process you want to pause and click "Add with pID" .
++ Go to "Process" tab
++ Select process you want to pause and click "Add with pID"
 + Go to "Main" tab and click "Pause process"
 #### How to compare 2 files?
 + Go to "Main" tab
