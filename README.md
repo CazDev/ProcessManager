@@ -8,6 +8,8 @@
 +   you can add processes to blacklist
 ## Download
 
+[Process Manager 1.3](https://github.com/tavvi1337/ProcessManager/releases/tag/1.3 "Download")
+
 [Process Manager 1.2](https://github.com/tavvi1337/ProcesssManager/releases/tag/1.2 "Download")
 
 ## Instruction
