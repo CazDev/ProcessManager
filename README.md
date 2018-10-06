@@ -1,4 +1,4 @@
-# Process Manager
+﻿# Process Manager
 ## What is it made for?
 +   you can start/stop processes
 +   you can compare 2 files using MD5 hash function
@@ -7,6 +7,8 @@
 +   you can inject dll file into process
 +   you can add processes to blacklist
 ## Download
+
+[Process Manager 1.4](https://github.com/tavvi1337/ProcessManager/releases/tag/1.4 "Download")
 
 [Process Manager 1.3](https://github.com/tavvi1337/ProcessManager/releases/tag/1.3 "Download")
 

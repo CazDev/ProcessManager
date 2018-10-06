@@ -429,6 +429,19 @@ namespace ProcessManager
             timer_listbx.ForeColor = listBox1.ForeColor;
 
             pictureBox1.BackColor = listBox1.BackColor;
+
+            pictureBox1.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox2.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox3.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox4.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox5.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox6.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox7.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox8.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox9.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox10.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+            pictureBox11.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+
         }
         public static string MD5HashString(string input)
         {
@@ -679,6 +692,8 @@ namespace ProcessManager
                     size_lbl.Text = "Size: " + fn.Length + " bytes";
                     creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
                     file_hash_lbl.Text = "MD5: " + Files.GetMD5Hash(pathToFile.Text);
+                    btn_addToAutostart.Enabled = true;
+                    btn_removeFromAutostart.Enabled = true;
                 }
             }
             catch { MessageBox.Show("FileDialog Method error"); }
@@ -990,9 +1005,9 @@ namespace ProcessManager
             }
             else
             {
-                PasswordEnter enter = new PasswordEnter();
+                PasswordConfirm enter = new PasswordConfirm();
                 enter.ShowDialog();
-                if (PassworldEntered)
+                if (enter.PasswordEntered)
                 {
                     string md5 = File.ReadAllText(pathToCfg + "\\wut.txt");
                     string enteredMD5 = MD5HashString(passworld);
@@ -1021,17 +1036,8 @@ namespace ProcessManager
             string temp = String.Format("[ {0} ]\tProgram loaded", date.ToString());
             history_listbx.Items.Add(temp);
 
-            history_listbx.BackColor = listBox1.BackColor;
-            history_listbx.ForeColor = listBox1.ForeColor;
-
-            processList.BackColor = listBox1.BackColor;
-            processList.ForeColor = listBox1.ForeColor;
-
-            listbx_whitelist.ForeColor = listBox1.ForeColor;
-            listbx_whitelist.BackColor = listBox1.BackColor;
-
-            listbx_killed.ForeColor = listBox1.ForeColor;
-            listbx_killed.BackColor = listBox1.BackColor;
+            btn_addToAutostart.Enabled = false;
+            btn_removeFromAutostart.Enabled = false;
 
             processList.Items.Clear();
             Process[] procList = Process.GetProcesses();
@@ -1743,9 +1749,9 @@ namespace ProcessManager
         private void btn_deletePass_Click(object sender, EventArgs e)
         {
             string md5 = File.ReadAllText(pathToCfg + "\\wut.txt");
-            PasswordEnter enter = new PasswordEnter();
+            PasswordConfirm enter = new PasswordConfirm();
             enter.ShowDialog();
-            if (PassworldEntered)
+            if (enter.PasswordEntered)
             {
                 string enteredMD5 = MD5HashString(passworld);
                 if (md5 == enteredMD5)
@@ -1767,6 +1773,7 @@ namespace ProcessManager
 
         private void btn_setpassword_Click(object sender, EventArgs e)
         {
+            PassworldEntered = false;
             PasswordEnter enter = new PasswordEnter();
             enter.ShowDialog();
             if (PassworldEntered)
@@ -1782,6 +1789,183 @@ namespace ProcessManager
                 catch { }
             }
             else { }
+        }
+        //pictures
+        public int[] GetSwicherRGBColor()
+        {
+            int[] colors;
+            switch (colorSwitcher.Text)
+            {
+                case "Default":
+                    colors = new Int32[] { 0, 174, 219 };
+                    break;
+                case "White":
+                    colors = new Int32[] { 255, 255, 255 };
+                    break;
+                case "Black":
+                    colors = new Int32[] { 0, 0, 0 };
+                    break;
+                case "Blue":
+                    colors = new Int32[] { 0, 174, 219 };
+                    break;
+                case "Lime":
+                    colors = new Int32[] { 142, 188, 0 };
+                    break;
+                case "Orange":
+                    colors = new Int32[] { 0, 174, 219 };
+                    break;
+                case "Teal":
+                    colors = new Int32[] { 0, 170, 173 };
+                    break;
+                case "Brown":
+                    colors = new Int32[] { 165, 81, 0 };
+                    break;
+                case "Magenta":
+                    colors = new Int32[] { 255, 0, 148 };
+                    break;
+                case "Pink":
+                    colors = new Int32[] { 231, 113, 189 };
+                    break;
+                case "Purple":
+                    colors = new Int32[] { 124, 65, 153 };
+                    break;
+                case "Red":
+                    colors = new Int32[] { 209, 17, 65 };
+                    break;
+                default:
+                    colors = new Int32[] { 17, 17, 17 };
+                    break;
+            }
+            return colors;
+        }
+        private void pictureBox2_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox2.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox3_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox3.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox4_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox4.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox5_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox5.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox6_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox6.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox7_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox7.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox8_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox8.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox10_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox10.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox9_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox9.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        private void pictureBox11_MouseMove(object sender, MouseEventArgs e)
+        {
+            pictureBox11.BackColor = Color.FromArgb(GetSwicherRGBColor()[0], GetSwicherRGBColor()[1], GetSwicherRGBColor()[2]);
+        }
+        public int[] GetForeColorRGB()
+        {
+            int[] colors;
+            switch (themeSwitcher.SelectedIndex)
+            {
+                case 1:
+                    colors = new Int32[] { 17, 17, 17 };
+                break;
+                case 0:
+                    colors = new Int32[] { 255, 255, 255 };
+                    break;
+                default:
+                    colors = new Int32[] {255,255,255 };
+                    break;
+            }
+            return colors;
+        }
+        private void pictureBox2_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox2.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox3_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox3.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox4_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox4.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox5_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox5.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox6_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox6.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox7_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox7.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox8_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox8.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox10_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox10.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox9_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox9.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox11_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBox11.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        private void pictureBox3_MouseLeave_1(object sender, EventArgs e)
+        {
+            pictureBox3.BackColor = Color.FromArgb(GetForeColorRGB()[0], GetForeColorRGB()[1], GetForeColorRGB()[2]);
+        }
+        //end pictures
+        private void btn_addToAutostart_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                RegistryKey reg = Registry.CurrentUser.CreateSubKey("software\\microsoft\\windows\\currentversion\\run\\");
+                string name = pathToFile.Text.Split('\\')[pathToFile.Text.Split('\\').Length - 1];
+                reg.SetValue(name, pathToFile.Text);
+                reg.Flush();
+                reg.Close();
+                MessageBox.Show("Added to auto start");
+            }
+            catch { MessageBox.Show("Error"); }
+        }
+
+        private void btn_removeFromAutostart_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                RegistryKey reg = Registry.CurrentUser.CreateSubKey("software\\microsoft\\windows\\currentversion\\run\\");
+                string name = pathToFile.Text.Split('\\')[pathToFile.Text.Split('\\').Length - 1];
+                reg.DeleteValue(name);
+                reg.Flush();
+                reg.Close();
+                MessageBox.Show("Removed from auto start");
+            }
+            catch { MessageBox.Show("Registry key not found"); }
         }
     }
 }

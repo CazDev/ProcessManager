@@ -51,3 +51,5 @@ C:\C#\ProcesssManager\ProcessManager\obj\Debug\Process Manager.pdb
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csprojAssemblyReference.cache
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.csproj.CopyComplete
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.PasswordEnter.resources
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.PasswordEnter.resources
+C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.PasswordConfirm.resources
