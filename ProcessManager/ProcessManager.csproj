@@ -93,6 +93,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Injectors.cs" />
+    <Compile Include="ManageFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManageFile.Designer.cs">
+      <DependentUpon>ManageFile.cs</DependentUpon>
+    </Compile>
     <Compile Include="PasswordConfirm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManageFile.resx">
+      <DependentUpon>ManageFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PasswordConfirm.resx">
       <DependentUpon>PasswordConfirm.cs</DependentUpon>

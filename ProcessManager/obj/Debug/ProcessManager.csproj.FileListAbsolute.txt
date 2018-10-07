@@ -53,3 +53,19 @@ C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\Proc
 C:\Users\Нина\Documents\GitHub\ProcesssManager\ProcessManager\obj\Debug\ProcessManager.PasswordEnter.resources
 C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.PasswordEnter.resources
 C:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.PasswordConfirm.resources
+B:\C#\ProcessManager\ProcessManager\bin\Debug\Process Manager.exe.config
+B:\C#\ProcessManager\ProcessManager\bin\Debug\Process Manager.exe
+B:\C#\ProcessManager\ProcessManager\bin\Debug\Process Manager.pdb
+B:\C#\ProcessManager\ProcessManager\bin\Debug\MetroFramework.dll
+B:\C#\ProcessManager\ProcessManager\bin\Debug\MetroFramework.Fonts.dll
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csprojAssemblyReference.cache
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.Form1.resources
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.PasswordConfirm.resources
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.PasswordEnter.resources
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.Properties.Resources.resources
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csproj.GenerateResource.cache
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csproj.CoreCompileInputs.cache
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csproj.CopyComplete
+B:\C#\ProcessManager\ProcessManager\obj\Debug\Process Manager.exe
+B:\C#\ProcessManager\ProcessManager\obj\Debug\Process Manager.pdb
+B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.ManageFile.resources

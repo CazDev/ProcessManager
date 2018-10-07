@@ -221,9 +221,9 @@ namespace ProcessManager
             StatusUpdate();
         }
         DllInjector inj = null;
-//end stf
+        //end stf
 
-//vars
+        //vars
         Process process = new Process();
         public static bool paused = false;
         public static bool existsProcess = false;
@@ -233,7 +233,7 @@ namespace ProcessManager
         static string[] lines = new string[2];
         public static string pathToAutoStart = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + @"\Programs";
 
-//methods
+        //methods
         private void StartProcess(object sender, EventArgs e)
         {
             if (existsProcess)
@@ -268,7 +268,7 @@ namespace ProcessManager
                     creationTime_lbl.Text = "Creation time: " + fn.CreationTime;
                     file_hash_lbl.Text = "MD5: " + Files.GetMD5Hash(pathToFile.Text);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     date = DateTime.Now;
                     temp = String.Format("[ {0} ]\tFailed to start process {1}, exception {2}", date.ToString(), pathToFile.Text, ex.ToString());
@@ -278,7 +278,7 @@ namespace ProcessManager
         }
         private void PauseProcess(object sender, EventArgs e)
         {
-            if(pause.Text == "Resume Process")
+            if (pause.Text == "Resume Process")
             {
                 ResumeProcess(process.Id);
                 paused = false;
@@ -425,8 +425,8 @@ namespace ProcessManager
             listbx_killed.ForeColor = listBox1.ForeColor;
             listbx_killed.BackColor = listBox1.BackColor;
 
-            timer_listbx.BackColor = listBox1.BackColor;
-            timer_listbx.ForeColor = listBox1.ForeColor;
+            listbx_FileWatcher.BackColor = listBox1.BackColor;
+            listbx_FileWatcher.ForeColor = listBox1.ForeColor;
 
             pictureBox1.BackColor = listBox1.BackColor;
 
@@ -462,16 +462,6 @@ namespace ProcessManager
         }
         private void log_Changed()
         {
-            if (log != "")
-            {
-
-                log_txtbx.Text = log + ProcessName;
-                cancel_btm.Enabled = true;
-            }
-            else
-            {
-                cancel_btm.Enabled = false;
-            }
         }
         //события
         private void watermarkspeed_Scroll(object sender, ScrollEventArgs e)
@@ -542,8 +532,8 @@ namespace ProcessManager
             WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
         }
-   //end icon
-   //timers
+        //end icon
+        //timers
         private void blacklistChecker_Tick(object sender, EventArgs e)
         {
             //blacklist
@@ -572,13 +562,7 @@ namespace ProcessManager
                 }
             }
             //end blacklist
-            
-            if (WindowState != FormWindowState.Minimized)
-            {
-                progressBar1.Maximum = numOfFiles;
-                progressBar1.Value = numOfFilesChecked;
-                //design
-            }
+
         }
         private void CheckProcessExists(object sender, EventArgs e)
         {
@@ -630,8 +614,8 @@ namespace ProcessManager
                     step = 1;
             }
         }
-   //end timers
-   //main
+        //end timers
+        //main
         private void start_Click_1(object sender, EventArgs e)
         {
             StartProcess(sender, e);
@@ -707,7 +691,7 @@ namespace ProcessManager
             {
                 path = openFileDialog.FileName;
                 UnlockFile(path, out process);
-                if(process != "")
+                if (process != "")
                 {
                     MessageBox.Show("Process \"" + process + "\" killed");
                 }
@@ -779,9 +763,9 @@ namespace ProcessManager
             numOfFilesChecked = 0;
         }
         //end right side
-   //end main
+        //end main
 
-   //blacklist
+        //blacklist
         private void addProcess_Click(object sender, EventArgs e)
         {
             if (process_txtbx.Text != "")
@@ -792,13 +776,13 @@ namespace ProcessManager
         }
         private void removeProcess_Click(object sender, EventArgs e)
         {
-            if(processBlacklist_listbx.SelectedIndex >= 0)
+            if (processBlacklist_listbx.SelectedIndex >= 0)
             {
                 processBlacklist_listbx.Items.RemoveAt(this.processBlacklist_listbx.SelectedIndex);
             }
         }
-   //end blacklist   
-   //process tab
+        //end blacklist   
+        //process tab
         private void selectProcess_Click(object sender, EventArgs e)
         {
             try
@@ -809,7 +793,7 @@ namespace ProcessManager
                 StatusUpdate();
                 WriteModulesInListbox1(sender, e);
 
-            
+
                 pathToFile.Text = process.MainModule.FileName;
                 /*file info*/
                 FileInfo fn = new FileInfo(pathToFile.Text);
@@ -838,7 +822,7 @@ namespace ProcessManager
             while (Proc.IsProcessExists(ProcessName))
             {
                 Proc.KillByName(ProcessName);
-                if(counter > 10)
+                if (counter > 10)
                 {
                     DateTime date1 = DateTime.Now;
                     string temp1 = String.Format("[ {0} ]\tUnable to kill process {1}", date1.ToString(), ProcessName);
@@ -901,45 +885,9 @@ namespace ProcessManager
             pathToFile.Text = "";
             listBox1.Items.Clear();
         }
-   //end process tab
-   //timerprocess
-        private void metroButton1_Click(object sender, EventArgs e)
-        {
-            timer_listbx.Items.Add(timerProcessName_textbx.Text + "\t" + "Mins: 0");
-            timerProcessName_textbx.Text = "";
-        }
-        //timer every minute
-        private void timerProcess_Tick(object sender, EventArgs e)
-        {
-            //getting array
-            string[] itemsInListbox = new string[timer_listbx.Items.Count];
-            for (int i = 0; i < timer_listbx.Items.Count; i++)
-            {
-                itemsInListbox[i] = timer_listbx.Items[i].ToString();
-            }
-            //adding minutes(if procExists)
-            Process[] processes = Process.GetProcesses();
-            for (int i = 0; i < itemsInListbox.Length; i++)
-            {
-                for (int j = 0; j < processes.Length; j++)
-                {
-                    if (itemsInListbox[i].Split('\t')[0] == processes[j].ProcessName)
-                    {
-                        int numOfMins = Convert.ToInt32(itemsInListbox[j].Split('\t')[1].Substring(6));
-                        numOfMins += 1;
-                        itemsInListbox[j] = itemsInListbox[j].Split('\t')[0] + "\t" + "Mins: " + numOfMins;
-                    }
-                }
-            }
-            timer_listbx.Items.Clear();
-            //writeInListbx
-            for (int i = 0; i < itemsInListbox.Length; i++)
-            {
-                timer_listbx.Items.Add(itemsInListbox[i]);
-            }
-        }
-   //end timerprocess
-   //form
+        //end process tab
+        //end timerprocess
+        //form
         //save cfg
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -967,12 +915,6 @@ namespace ProcessManager
             linesOther[6] = Convert.ToString(Convert.ToInt32(icon_checkbx.Checked));
             File.WriteAllLines(pathToCfg + "\\other.txt", linesOther);
             //timer
-            string[] timerListbx = new string[timer_listbx.Items.Count];
-            for (int i = 0; i < timer_listbx.Items.Count; i++)
-            {
-                timerListbx[i] = timer_listbx.Items[i].ToString();
-            }
-            File.WriteAllLines(pathToCfg + "\\timer.txt", timerListbx);
         }
         //end save cfg
         public static bool PassworldEntered = false;
@@ -1011,7 +953,7 @@ namespace ProcessManager
                 {
                     string md5 = File.ReadAllText(pathToCfg + "\\wut.txt");
                     string enteredMD5 = MD5HashString(passworld);
-                    if(!(md5 == enteredMD5))
+                    if (!(md5 == enteredMD5))
                     {
                         MessageBox.Show("Nice try");
                         Environment.Exit(1);
@@ -1084,12 +1026,6 @@ namespace ProcessManager
                     else
                         icon_checkbx.Checked = false;
                     //timer
-                   
-                    string[] timerListbx = File.ReadAllLines(pathToCfg + "\\timer.txt");
-                    for (int i = 0; i < timerListbx.Length; i++)
-                    {
-                        timer_listbx.Items.Add(timerListbx[i]);
-                    }
                 }
                 catch
                 {
@@ -1104,6 +1040,7 @@ namespace ProcessManager
                 WindowState = FormWindowState.Minimized;
             UpdateColors();
             watermark_timer.Interval = watermarkspeed.Value;
+            txtbx_file_path.Text = "C:\\";
         }
         //theme
         private void colorSwitcher_SelectedIndexChanged(object sender, EventArgs e)
@@ -1204,7 +1141,7 @@ namespace ProcessManager
             UpdateColors();
         }
         //end theme
-//watermark
+        //watermark
         static int step = 1;
         public static int symbolsCounter = 0;
         private void WaterMarkStep(int step)
@@ -1337,17 +1274,17 @@ namespace ProcessManager
                     step = 0;
                     break;
             }
-            if(step % 2 == 0)
+            if (step % 2 == 0)
             {
                 sticks.Text = @"\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\";
-                if(log == "")
-                stop = false;
+                if (log == "")
+                    stop = false;
             }
             else
             {
                 sticks.Text = @"/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/";
-                if(log == "")
-                stop = false;
+                if (log == "")
+                    stop = false;
             }
             string[] chars = symbols_txtbx.Text.Split('\n');
             try
@@ -1363,9 +1300,9 @@ namespace ProcessManager
             }
             catch { log_txtbx.Text = ""; symbolsCounter = 0; }
         }
-//end watermark
+        //end watermark
 
-//delete file
+        //delete file
         public static string ProcessName = "";
         public void UnlockFile(string path, out string processName)
         {
@@ -1373,7 +1310,10 @@ namespace ProcessManager
             log = path;
             Proc.KillByFile(path, out processName);
             Thread.Sleep(500);
-            log_txtbx.Text = "";
+            log_txtbx.Invoke(new MethodInvoker(delegate
+            {
+                log_txtbx.Text = "";
+            }));
             log = "";
             log_Changed();
         }
@@ -1383,102 +1323,119 @@ namespace ProcessManager
         public static string log = "";
         private void UnlockDirMethod()
         {
-            try
+            stop = false;
+            cancel_btm.Invoke(new MethodInvoker(delegate
             {
-                string path = folderBrowserDialog1.SelectedPath;
-                string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
-                numOfFiles = files.Length;
-                string process = "";
-                string[] arrOfProcesses = new string[Process.GetProcesses().Length];
-                int counterOfProcesses = 0;
-                int numOfProc = 0;
-                for (int i = 0; i < files.Length; i++)
+                cancel_btm.Enabled = true;
+            }));
+            string path = folderBrowserDialog1.SelectedPath;
+            string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+            numOfFiles = files.Length;
+            string process = "";
+            string[] arrOfProcesses = new string[Process.GetProcesses().Length];
+            int counterOfProcesses = 0;
+            int numOfProc = 0;
+            for (int i = 0; i < files.Length; i++)
+            {
+                lbl_ProgessInfo.Invoke(new MethodInvoker(delegate
                 {
-                    if (stop)
-                    {
-                        log = "";
-                        break;
-                    }
-                    if (delete)
-                    {
-                        try
-                        {
-                            File.Delete(files[i]);
-                            continue;
-                        }
-                        catch { }
-                    }
-                    UnlockFile(files[i], out process);
-                    arrOfProcesses[counterOfProcesses] = process;
-                    counterOfProcesses++;
-                    if (delete)
-                        try { File.Delete(files[i]); }
-                        catch { }
-                    if (process != "")
-                    {
-                        numOfProc += 1;
-                        process = "";
-                    }
-                    numOfFilesChecked = i + 1;
-                }
-
-                if (!delete)
-                    MessageBox.Show(numOfProc + " processes killed");
-                for (int j = 0; j < 50; j++)
+                    lbl_ProgessInfo.Text = $"{numOfFilesChecked} / {numOfFiles}";
+                }));
+                log_txtbx.Invoke(new MethodInvoker(delegate
                 {
-                    try
-                    {
-                        progressBar1.Value = 0;
-                        break;
-                    }
-                    catch { }
-                    Thread.Sleep(50);
+                    log_txtbx.Text = files[i];
+                }));
+                progressBar1.Invoke(new MethodInvoker(delegate
+                {
+                    progressBar1.Maximum = numOfFiles;
+                    progressBar1.Value = numOfFilesChecked;
+                }));
+                if (stop)
+                {
+                    log = "";
+                    break;
                 }
                 if (delete)
                 {
                     try
                     {
-                        files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
-                        for (int i = 0; i < files.Length; i++)
-                        {
-                            try
-                            {
-                                File.Delete(files[i]);
-                            }
-                            catch { }
-                        }
-                        files = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-                        for (int i = files.Length - 1; i >= 0; i--)
-                        {
-                            try
-                            {
-                                Directory.Delete(files[i]);
-                            }
-                            catch { }
-                        }
-                        Directory.Delete(path);
-                        MessageBox.Show(numOfProc + " processes killed. Dir deleted");
+                        File.Delete(files[i]);
+                        continue;
                     }
-                    catch { MessageBox.Show(numOfProc + " processes killed"); }
+                    catch { }
                 }
-                numOfFilesChecked = 0;
-                log_txtbx.Text = "";
-                //arr of processes
+                UnlockFile(files[i], out process);
+                arrOfProcesses[counterOfProcesses] = process;
+                counterOfProcesses++;
+                if (delete)
+                    try { File.Delete(files[i]); }
+                    catch { }
+                if (process != "")
+                {
+                    numOfProc += 1;
+                    process = "";
+                }
+                numOfFilesChecked = i + 1;
             }
-            catch { }
+            if (!delete)
+                MessageBox.Show(numOfProc + " processes killed");
+            if (delete)
+            {
+                try
+                {
+                    files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        try
+                        {
+                            File.Delete(files[i]);
+                        }
+                        catch { }
+                    }
+                    files = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+                    for (int i = files.Length - 1; i >= 0; i--)
+                    {
+                        try
+                        {
+                            Directory.Delete(files[i]);
+                        }
+                        catch { }
+                    }
+                    Directory.Delete(path);
+                    MessageBox.Show(numOfProc + " processes killed. Dir deleted");
+                }
+                catch { MessageBox.Show(numOfProc + " processes killed"); }
+            }
+            numOfFilesChecked = 0;
+            log_txtbx.Invoke(new MethodInvoker(delegate
+            {
+                log_txtbx.Text = "";
+            }));
+            cancel_btm.Invoke(new MethodInvoker(delegate
+            {
+                cancel_btm.Enabled = false;
+            }));
             log = "";
             log_Changed();
+            numOfFiles = 0;
+            numOfFilesChecked = 0;
+            lbl_ProgessInfo.Invoke(new MethodInvoker(delegate
+            {
+                lbl_ProgessInfo.Text = $"{numOfFilesChecked} / {numOfFiles}";
+            }));
+            progressBar1.Invoke(new MethodInvoker(delegate
+            {
+                progressBar1.Maximum = numOfFiles;
+                progressBar1.Value = numOfFilesChecked;
+            }));
+            log_txtbx.Invoke(new MethodInvoker(delegate
+            {
+                log_txtbx.Text = "";
+            }));
         }
         public static bool delete = false;
         public static bool stop = false;
-        private void delete_processTimer_Click(object sender, EventArgs e)
-        {
-            if (timer_listbx.SelectedIndex >= 0)
-            {
-                timer_listbx.Items.RemoveAt(timer_listbx.SelectedIndex);
-            }
-        }
- //autostart
+        //autostart
         private void autostart_btm_Click(object sender, EventArgs e)
         {
             if (autostart_btm.Text == "Add to autostart")
@@ -1510,7 +1467,8 @@ namespace ProcessManager
                 }
                 reg.Flush();
                 reg.Close();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
                 return false;
@@ -1527,7 +1485,7 @@ namespace ProcessManager
         // safe mode
         private void btn_add_Click(object sender, EventArgs e)
         {
-            if(txtbx_ProcessName.Text != "")
+            if (txtbx_ProcessName.Text != "")
             {
                 listbx_whitelist.Items.Add(txtbx_ProcessName.Text);
                 txtbx_ProcessName.Text = "";
@@ -1536,7 +1494,7 @@ namespace ProcessManager
         private void btn_del_Click(object sender, EventArgs e)
         {
             string name = "";
-            if(listbx_whitelist.SelectedIndex >= 0)
+            if (listbx_whitelist.SelectedIndex >= 0)
             {
                 name = listbx_whitelist.Items[listbx_whitelist.SelectedIndex].ToString();
                 listbx_whitelist.Items.RemoveAt(listbx_whitelist.SelectedIndex);
@@ -1684,12 +1642,12 @@ namespace ProcessManager
                                     listbx_whitelist.Items.Add(proc[k].ProcessName);
                             }
                             catch { }
-                        }                       
+                        }
                     }
                     //one more if xD
                     if (kill)
                     {
-                        
+
                     }
                 }
             }
@@ -1758,7 +1716,7 @@ namespace ProcessManager
                 {
                     MessageBox.Show("Passworld deleted");
                     string temp = "";
-                    Proc.KillByFile(pathToCfg + "\\wut.txt",out temp);
+                    Proc.KillByFile(pathToCfg + "\\wut.txt", out temp);
                     File.Delete(pathToCfg + "\\wut.txt");
                     btn_deletePass.Enabled = false;
                     btn_setpassword.Enabled = true;
@@ -1768,7 +1726,7 @@ namespace ProcessManager
                     MessageBox.Show("Password is not correct");
                 }
             }
-            else {}
+            else { }
         }
 
         private void btn_setpassword_Click(object sender, EventArgs e)
@@ -1885,12 +1843,12 @@ namespace ProcessManager
             {
                 case 1:
                     colors = new Int32[] { 17, 17, 17 };
-                break;
+                    break;
                 case 0:
                     colors = new Int32[] { 255, 255, 255 };
                     break;
                 default:
-                    colors = new Int32[] {255,255,255 };
+                    colors = new Int32[] { 255, 255, 255 };
                     break;
             }
             return colors;
@@ -1966,6 +1924,80 @@ namespace ProcessManager
                 MessageBox.Show("Removed from auto start");
             }
             catch { MessageBox.Show("Registry key not found"); }
+        }
+        public static bool FileSystemWatcherEnabled = false;
+        private void btn_file_start_Click(object sender, EventArgs e)
+        {
+            if (btn_file_start.Text == "Start")
+            {
+                btn_file_start.Text = "Stop";
+                FileSystemWatcherEnabled = true;
+                listbx_FileWatcher.Items.Clear();
+                fileSystemWatcher.Filter = txtbx_file_filter.Text;
+                fileSystemWatcher.Path = txtbx_file_path.Text;
+
+                txtbx_file_filter.Enabled = false;
+                txtbx_file_path.Enabled = false;
+                btn_file_selectDir.Enabled = false;
+            }
+            else
+            {
+                btn_file_start.Text = "Start";
+                FileSystemWatcherEnabled = false;
+                txtbx_file_filter.Enabled = true;
+                txtbx_file_path.Enabled = true;
+                btn_file_selectDir.Enabled = true;
+            }
+        }
+
+        private void btn_file_selectDir_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txtbx_file_path.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+        private void fileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (FileSystemWatcherEnabled)
+            {
+                listbx_FileWatcher.Items.Add("Modified\t" + e.FullPath);
+                listbx_FileWatcher.SelectedIndex = listbx_FileWatcher.Items.Count - 1;
+            }
+        }
+
+        private void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            if (FileSystemWatcherEnabled)
+            {
+                listbx_FileWatcher.Items.Add("Created\t" + e.FullPath);
+                listbx_FileWatcher.SelectedIndex = listbx_FileWatcher.Items.Count - 1;
+            }
+        }
+
+        private void fileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
+        {
+            if (FileSystemWatcherEnabled)
+            {
+                listbx_FileWatcher.Items.Add("Deleted\t"+ e.FullPath);
+                listbx_FileWatcher.SelectedIndex = listbx_FileWatcher.Items.Count - 1;
+            }
+        }
+
+        private void fileSystemWatcher_Renamed(object sender, RenamedEventArgs e)
+        {
+            if (FileSystemWatcherEnabled)
+            {
+                listbx_FileWatcher.Items.Add("Renamed\t" + e.FullPath);
+                listbx_FileWatcher.SelectedIndex = listbx_FileWatcher.Items.Count - 1;
+            }
+        }
+
+        private void listbx_FileWatcher_DoubleClick(object sender, EventArgs e)
+        {
+            string fullname = listbx_FileWatcher.Items[listbx_FileWatcher.SelectedIndex].ToString().Split('\t')[1];
+            ManageFile mf = new ManageFile(fullname);
+            mf.Show();
         }
     }
 }
