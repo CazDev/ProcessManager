@@ -36,6 +36,7 @@
             // 
             // button1
             // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Location = new System.Drawing.Point(65, 112);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(138, 23);
@@ -55,6 +56,7 @@
             // 
             // textBox1
             // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox1.Location = new System.Drawing.Point(88, 47);
             this.textBox1.Name = "textBox1";
             this.textBox1.PasswordChar = '•';

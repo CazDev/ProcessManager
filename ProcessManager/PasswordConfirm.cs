@@ -12,9 +12,23 @@ namespace ProcessManager
 {
     public partial class PasswordConfirm : Form
     {
-        public PasswordConfirm()
+        private void SetColors(BackColorTheme theme)
+        {
+            if (theme == BackColorTheme.DARK)
+            {
+                this.BackColor = Color.FromArgb(15, 15, 15);
+                textBox1.BackColor = BackColor;
+                textBox1.ForeColor = Color.FromArgb(255, 255, 255);
+                button1.BackColor = textBox1.BackColor;
+                button1.ForeColor = Color.FromArgb(255, 255, 255);
+                label1.ForeColor = Color.FromArgb(255, 255, 255); 
+            }
+            //dont need else 
+        }
+        public PasswordConfirm(BackColorTheme theme)
         {
             InitializeComponent();
+            SetColors(theme);
         }
         public bool PasswordEntered = false;
 

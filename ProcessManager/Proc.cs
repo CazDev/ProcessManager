@@ -43,7 +43,6 @@ namespace ProcessManager
                     ProcessModuleCollection modules = p.Modules;
                     foreach (ProcessModule m in modules)
                     {
-                        //if (p.Id == 8708)
                         if (m.FileName == pathToFile)
                         {
                             ProcessName = p.ProcessName;

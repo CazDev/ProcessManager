@@ -58,7 +58,10 @@
             this.pathToFile = new MetroFramework.Controls.MetroTextBox();
             this.start = new MetroFramework.Controls.MetroButton();
             this.pauseOnStart = new MetroFramework.Controls.MetroCheckBox();
+            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
+            this.history_listbx = new System.Windows.Forms.ListBox();
             this.metroTabPage6 = new MetroFramework.Controls.MetroTabPage();
+            this.listbx_FileWatcher = new System.Windows.Forms.ListBox();
             this.txtbx_file_filter = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel10 = new MetroFramework.Controls.MetroLabel();
             this.btn_file_selectDir = new MetroFramework.Controls.MetroButton();
@@ -131,11 +134,9 @@
             this.startTime_lbl = new MetroFramework.Controls.MetroLabel();
             this.pid_lbl = new MetroFramework.Controls.MetroLabel();
             this.name_lbl = new MetroFramework.Controls.MetroLabel();
-            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
-            this.history_listbx = new System.Windows.Forms.ListBox();
             this.metroTabPage5 = new MetroFramework.Controls.MetroTabPage();
             this.btn_delPrc = new MetroFramework.Controls.MetroButton();
-            this.processBlacklist_listbx = new System.Windows.Forms.ListBox();
+            this.listbx_processBlacklist = new System.Windows.Forms.ListBox();
             this.btn_addPrc = new MetroFramework.Controls.MetroButton();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
             this.process_txtbx = new MetroFramework.Controls.MetroTextBox();
@@ -151,11 +152,13 @@
             this.icon = new System.Windows.Forms.NotifyIcon(this.components);
             this.SafeModeChecker = new System.Windows.Forms.Timer(this.components);
             this.fileSystemWatcher = new System.IO.FileSystemWatcher();
-            this.listbx_FileWatcher = new System.Windows.Forms.ListBox();
+            this.checkbx_blacklistEnabled = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel14 = new MetroFramework.Controls.MetroLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroPanel1.SuspendLayout();
+            this.metroTabPage4.SuspendLayout();
             this.metroTabPage6.SuspendLayout();
             this.metroTabPage7.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
@@ -171,7 +174,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.metroTabPage2.SuspendLayout();
-            this.metroTabPage4.SuspendLayout();
             this.metroTabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
@@ -202,7 +204,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage5);
             this.metroTabControl1.Location = new System.Drawing.Point(2, 23);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 1;
+            this.metroTabControl1.SelectedIndex = 6;
             this.metroTabControl1.Size = new System.Drawing.Size(706, 350);
             this.metroTabControl1.TabIndex = 13;
             // 
@@ -449,6 +451,28 @@
             this.pauseOnStart.Text = "Pause on start";
             this.pauseOnStart.UseVisualStyleBackColor = true;
             // 
+            // metroTabPage4
+            // 
+            this.metroTabPage4.Controls.Add(this.history_listbx);
+            this.metroTabPage4.HorizontalScrollbarBarColor = true;
+            this.metroTabPage4.Location = new System.Drawing.Point(4, 35);
+            this.metroTabPage4.Name = "metroTabPage4";
+            this.metroTabPage4.Size = new System.Drawing.Size(698, 311);
+            this.metroTabPage4.TabIndex = 3;
+            this.metroTabPage4.Text = "History";
+            this.metroTabPage4.VerticalScrollbarBarColor = true;
+            // 
+            // history_listbx
+            // 
+            this.history_listbx.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.history_listbx.FormattingEnabled = true;
+            this.history_listbx.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.history_listbx.Location = new System.Drawing.Point(0, 2);
+            this.history_listbx.Name = "history_listbx";
+            this.history_listbx.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.history_listbx.Size = new System.Drawing.Size(694, 286);
+            this.history_listbx.TabIndex = 2;
+            // 
             // metroTabPage6
             // 
             this.metroTabPage6.Controls.Add(this.listbx_FileWatcher);
@@ -464,6 +488,16 @@
             this.metroTabPage6.TabIndex = 5;
             this.metroTabPage6.Text = "File Watcher";
             this.metroTabPage6.VerticalScrollbarBarColor = true;
+            // 
+            // listbx_FileWatcher
+            // 
+            this.listbx_FileWatcher.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listbx_FileWatcher.FormattingEnabled = true;
+            this.listbx_FileWatcher.Location = new System.Drawing.Point(3, 44);
+            this.listbx_FileWatcher.Name = "listbx_FileWatcher";
+            this.listbx_FileWatcher.Size = new System.Drawing.Size(674, 260);
+            this.listbx_FileWatcher.TabIndex = 36;
+            this.listbx_FileWatcher.DoubleClick += new System.EventHandler(this.listbx_FileWatcher_DoubleClick);
             // 
             // txtbx_file_filter
             // 
@@ -798,7 +832,7 @@
             this.pictureBox3.Size = new System.Drawing.Size(30, 314);
             this.pictureBox3.TabIndex = 3;
             this.pictureBox3.TabStop = false;
-            this.pictureBox3.MouseLeave += new System.EventHandler(this.pictureBox3_MouseLeave_1);
+            this.pictureBox3.MouseLeave += new System.EventHandler(this.pictureBox3_MouseLeave);
             this.pictureBox3.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox3_MouseMove);
             // 
             // pictureBox2
@@ -1231,32 +1265,12 @@
             this.name_lbl.TabIndex = 0;
             this.name_lbl.Text = "Name: ";
             // 
-            // metroTabPage4
-            // 
-            this.metroTabPage4.Controls.Add(this.history_listbx);
-            this.metroTabPage4.HorizontalScrollbarBarColor = true;
-            this.metroTabPage4.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage4.Name = "metroTabPage4";
-            this.metroTabPage4.Size = new System.Drawing.Size(698, 311);
-            this.metroTabPage4.TabIndex = 3;
-            this.metroTabPage4.Text = "History";
-            this.metroTabPage4.VerticalScrollbarBarColor = true;
-            // 
-            // history_listbx
-            // 
-            this.history_listbx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.history_listbx.FormattingEnabled = true;
-            this.history_listbx.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.history_listbx.Location = new System.Drawing.Point(0, 2);
-            this.history_listbx.Name = "history_listbx";
-            this.history_listbx.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.history_listbx.Size = new System.Drawing.Size(694, 286);
-            this.history_listbx.TabIndex = 2;
-            // 
             // metroTabPage5
             // 
+            this.metroTabPage5.Controls.Add(this.checkbx_blacklistEnabled);
+            this.metroTabPage5.Controls.Add(this.metroLabel14);
             this.metroTabPage5.Controls.Add(this.btn_delPrc);
-            this.metroTabPage5.Controls.Add(this.processBlacklist_listbx);
+            this.metroTabPage5.Controls.Add(this.listbx_processBlacklist);
             this.metroTabPage5.Controls.Add(this.btn_addPrc);
             this.metroTabPage5.Controls.Add(this.metroLabel6);
             this.metroTabPage5.Controls.Add(this.process_txtbx);
@@ -1270,26 +1284,26 @@
             // 
             // btn_delPrc
             // 
-            this.btn_delPrc.Location = new System.Drawing.Point(390, 21);
+            this.btn_delPrc.Location = new System.Drawing.Point(390, 5);
             this.btn_delPrc.Name = "btn_delPrc";
             this.btn_delPrc.Size = new System.Drawing.Size(75, 23);
             this.btn_delPrc.TabIndex = 6;
             this.btn_delPrc.Text = "DEL";
             this.btn_delPrc.Click += new System.EventHandler(this.removeProcess_Click);
             // 
-            // processBlacklist_listbx
+            // listbx_processBlacklist
             // 
-            this.processBlacklist_listbx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.processBlacklist_listbx.FormattingEnabled = true;
-            this.processBlacklist_listbx.Location = new System.Drawing.Point(0, 48);
-            this.processBlacklist_listbx.Name = "processBlacklist_listbx";
-            this.processBlacklist_listbx.Size = new System.Drawing.Size(698, 260);
-            this.processBlacklist_listbx.Sorted = true;
-            this.processBlacklist_listbx.TabIndex = 5;
+            this.listbx_processBlacklist.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listbx_processBlacklist.FormattingEnabled = true;
+            this.listbx_processBlacklist.Location = new System.Drawing.Point(0, 35);
+            this.listbx_processBlacklist.Name = "listbx_processBlacklist";
+            this.listbx_processBlacklist.Size = new System.Drawing.Size(698, 273);
+            this.listbx_processBlacklist.Sorted = true;
+            this.listbx_processBlacklist.TabIndex = 5;
             // 
             // btn_addPrc
             // 
-            this.btn_addPrc.Location = new System.Drawing.Point(309, 21);
+            this.btn_addPrc.Location = new System.Drawing.Point(309, 5);
             this.btn_addPrc.Name = "btn_addPrc";
             this.btn_addPrc.Size = new System.Drawing.Size(75, 23);
             this.btn_addPrc.TabIndex = 4;
@@ -1299,7 +1313,7 @@
             // metroLabel6
             // 
             this.metroLabel6.AutoSize = true;
-            this.metroLabel6.Location = new System.Drawing.Point(0, 22);
+            this.metroLabel6.Location = new System.Drawing.Point(0, 6);
             this.metroLabel6.Name = "metroLabel6";
             this.metroLabel6.Size = new System.Drawing.Size(93, 19);
             this.metroLabel6.TabIndex = 3;
@@ -1307,7 +1321,7 @@
             // 
             // process_txtbx
             // 
-            this.process_txtbx.Location = new System.Drawing.Point(94, 21);
+            this.process_txtbx.Location = new System.Drawing.Point(94, 5);
             this.process_txtbx.Name = "process_txtbx";
             this.process_txtbx.Size = new System.Drawing.Size(209, 23);
             this.process_txtbx.TabIndex = 2;
@@ -1392,15 +1406,26 @@
             this.fileSystemWatcher.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Deleted);
             this.fileSystemWatcher.Renamed += new System.IO.RenamedEventHandler(this.fileSystemWatcher_Renamed);
             // 
-            // listbx_FileWatcher
+            // checkbx_blacklistEnabled
             // 
-            this.listbx_FileWatcher.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listbx_FileWatcher.FormattingEnabled = true;
-            this.listbx_FileWatcher.Location = new System.Drawing.Point(3, 44);
-            this.listbx_FileWatcher.Name = "listbx_FileWatcher";
-            this.listbx_FileWatcher.Size = new System.Drawing.Size(674, 260);
-            this.listbx_FileWatcher.TabIndex = 36;
-            this.listbx_FileWatcher.DoubleClick += new System.EventHandler(this.listbx_FileWatcher_DoubleClick);
+            this.checkbx_blacklistEnabled.AutoSize = true;
+            this.checkbx_blacklistEnabled.Checked = true;
+            this.checkbx_blacklistEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkbx_blacklistEnabled.Location = new System.Drawing.Point(587, 8);
+            this.checkbx_blacklistEnabled.Name = "checkbx_blacklistEnabled";
+            this.checkbx_blacklistEnabled.Size = new System.Drawing.Size(80, 17);
+            this.checkbx_blacklistEnabled.TabIndex = 42;
+            this.checkbx_blacklistEnabled.Text = "On";
+            this.checkbx_blacklistEnabled.UseVisualStyleBackColor = true;
+            // 
+            // metroLabel14
+            // 
+            this.metroLabel14.AutoSize = true;
+            this.metroLabel14.Location = new System.Drawing.Point(469, 6);
+            this.metroLabel14.Name = "metroLabel14";
+            this.metroLabel14.Size = new System.Drawing.Size(112, 19);
+            this.metroLabel14.TabIndex = 41;
+            this.metroLabel14.Text = "Black list enabled:";
             // 
             // Form1
             // 
@@ -1427,6 +1452,7 @@
             this.metroTabPage1.PerformLayout();
             this.metroPanel1.ResumeLayout(false);
             this.metroPanel1.PerformLayout();
+            this.metroTabPage4.ResumeLayout(false);
             this.metroTabPage6.ResumeLayout(false);
             this.metroTabPage6.PerformLayout();
             this.metroTabPage7.ResumeLayout(false);
@@ -1446,7 +1472,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage2.PerformLayout();
-            this.metroTabPage4.ResumeLayout(false);
             this.metroTabPage5.ResumeLayout(false);
             this.metroTabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
@@ -1522,7 +1547,7 @@
         private System.Windows.Forms.RichTextBox symbols_txtbx;
         private MetroFramework.Controls.MetroLabel watermark_top;
         private MetroFramework.Controls.MetroTabPage metroTabPage5;
-        private System.Windows.Forms.ListBox processBlacklist_listbx;
+        private System.Windows.Forms.ListBox listbx_processBlacklist;
         private MetroFramework.Controls.MetroButton btn_addPrc;
         private MetroFramework.Controls.MetroLabel metroLabel6;
         private MetroFramework.Controls.MetroTextBox process_txtbx;
@@ -1579,6 +1604,8 @@
         private MetroFramework.Controls.MetroButton btn_file_start;
         private System.IO.FileSystemWatcher fileSystemWatcher;
         private System.Windows.Forms.ListBox listbx_FileWatcher;
+        private MetroFramework.Controls.MetroToggle checkbx_blacklistEnabled;
+        private MetroFramework.Controls.MetroLabel metroLabel14;
     }
 }
 

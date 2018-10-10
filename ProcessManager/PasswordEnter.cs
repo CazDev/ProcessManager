@@ -12,9 +12,26 @@ namespace ProcessManager
 {
     public partial class PasswordEnter : Form
     {
-        public PasswordEnter()
+        private void SetColors(BackColorTheme theme)
+        {
+            if(theme == BackColorTheme.DARK)
+            {
+                this.BackColor = Color.FromArgb(15,15,15);
+                textBox1.BackColor = BackColor;
+                textBox2.BackColor = BackColor;
+                textBox1.ForeColor = Color.FromArgb(255,255,255);
+                textBox2.ForeColor = Color.FromArgb(255, 255, 255);
+                button1.BackColor = textBox1.BackColor;
+                button1.ForeColor = Color.FromArgb(255, 255, 255);
+                label1.ForeColor = Color.FromArgb(255, 255, 255); 
+                label2.ForeColor = Color.FromArgb(255, 255, 255);
+            }
+            //dont need else 
+        }
+        public PasswordEnter(BackColorTheme theme)
         {
             InitializeComponent();
+            SetColors(theme);
         }
 
         private void button1_Click(object sender, EventArgs e)

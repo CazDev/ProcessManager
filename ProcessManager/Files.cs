@@ -41,7 +41,7 @@ namespace ProcessManager
                     }
                 }
             }
-            catch { MessageBox.Show("GetMD5Hash method error"); }
+            catch {  }
             return "";
         }
     }
