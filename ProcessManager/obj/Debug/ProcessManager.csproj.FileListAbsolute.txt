@@ -69,5 +69,4 @@ B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.csproj.CopyComplete
 B:\C#\ProcessManager\ProcessManager\obj\Debug\Process Manager.exe
 B:\C#\ProcessManager\ProcessManager\obj\Debug\Process Manager.pdb
 B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.ManageFile.resources
-B:\C#\ProcessManager\ProcessManager\bin\Debug\Microsoft.VisualStudio.DebuggerVisualizers.dll
 B:\C#\ProcessManager\ProcessManager\obj\Debug\ProcessManager.InfoDialog.resources

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -1270,7 +1271,7 @@ namespace ProcessManager
                 string process_string = process_txtbx.Text;
                 for (int i = 0; i < listbx_processBlacklist.Items.Count; i++)
                 {
-                    if(process_string == listbx_processBlacklist.Items[i].ToString())
+                    if (process_string == listbx_processBlacklist.Items[i].ToString())
                     {
                         alreadyExists = true;
                         break;
@@ -1371,14 +1372,14 @@ namespace ProcessManager
             {
                 inj = new DllInjector(pathToDll_txtbx.Text);
                 inj.Inject(process.ProcessName, pathToDll_txtbx.Text);
-                ShowInfoDialog("Dll injected","");
+                ShowInfoDialog("Dll injected", "");
             }
         }
         private void injectDll_private_btm_Click(object sender, EventArgs e)
         {
             string err = "";
             Inject.DoInject(Process.GetProcessById(process.Id), pathToDll_txtbx.Text, out err);
-            ShowInfoDialog("Dll injected","");
+            ShowInfoDialog("Dll injected", "");
         }
         private void unselect_btm_Click(object sender, EventArgs e)
         {
@@ -1492,7 +1493,7 @@ namespace ProcessManager
                 }
                 catch
                 {
-                    if(MessageBox.Show("Config was loaded incorrectly. Do you want to write it again?", "" ,MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (MessageBox.Show("Config was loaded incorrectly. Do you want to write it again?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         File.Delete(pathToCfg + "\\other.txt");
                     }
@@ -1541,7 +1542,7 @@ namespace ProcessManager
                     string enteredMD5 = MD5HashString(passworld);
                     if (!(md5 == enteredMD5))
                     {
-                        ShowInfoDialog("Nice try","");
+                        ShowInfoDialog("Nice try", "");
                         Environment.Exit(1);
                     }
                 }
@@ -1664,7 +1665,7 @@ namespace ProcessManager
                     ShowInfoDialog("Sucessfully added to autostart", "");
                 }
                 else
-                    ShowInfoDialog("Failed to add to autostart","");
+                    ShowInfoDialog("Failed to add to autostart", "");
             }
             else
             {
@@ -1974,7 +1975,7 @@ namespace ProcessManager
         {
             if (FileSystemWatcherEnabled)
             {
-                listbx_FileWatcher.Items.Add("Deleted\t"+ e.FullPath);
+                listbx_FileWatcher.Items.Add("Deleted\t" + e.FullPath);
                 listbx_FileWatcher.SelectedIndex = listbx_FileWatcher.Items.Count - 1;
             }
         }
@@ -1993,5 +1994,47 @@ namespace ProcessManager
             mf.Show();
         }
         #endregion
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            Thread thread = new Thread(CheckForUpdates);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void CheckForUpdates()
+        {
+            progressBar_Update.Invoke(new MethodInvoker(delegate
+            {
+                progressBar_Update.Maximum = 4;
+                progressBar_Update.Value = 0;
+                WebClient wc = new WebClient();
+                wc.Headers["User-Agent"] = "Mozilla/5.0";
+                string fileName = "";
+                progressBar_Update.Value = 1;
+                for (int i = 1; ; i++)
+                {
+                    if (!File.Exists($"ProcessManager_Updated {i}.exe"))
+                    {
+                        fileName = $"ProcessManager_Updated {i}.exe";
+                        break;
+                    }
+                }
+                progressBar_Update.Value = 2;
+                wc.DownloadFile("https://github.com/tavvi1337/ProcessManager/raw/master/Process%20Manager.exe", fileName);
+                progressBar_Update.Value = 3;
+                if (Files.GetMD5Hash(fileName) == Files.GetMD5Hash(Assembly.GetExecutingAssembly().Location))
+                {
+                    ShowInfoDialog("You already use latest verion", "");
+                    File.Delete(fileName);
+                }
+                else
+                {
+                    ShowInfoDialog($"New version saved to {Assembly.GetExecutingAssembly().Location}\\{fileName}", "");
+                }
+                progressBar_Update.Value = 4;
+                progressBar_Update.Value = 0;
+            }));
+        }
     }
 }

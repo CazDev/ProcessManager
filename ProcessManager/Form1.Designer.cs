@@ -135,6 +135,8 @@
             this.pid_lbl = new MetroFramework.Controls.MetroLabel();
             this.name_lbl = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage5 = new MetroFramework.Controls.MetroTabPage();
+            this.checkbx_blacklistEnabled = new MetroFramework.Controls.MetroToggle();
+            this.metroLabel14 = new MetroFramework.Controls.MetroLabel();
             this.btn_delPrc = new MetroFramework.Controls.MetroButton();
             this.listbx_processBlacklist = new System.Windows.Forms.ListBox();
             this.btn_addPrc = new MetroFramework.Controls.MetroButton();
@@ -152,8 +154,8 @@
             this.icon = new System.Windows.Forms.NotifyIcon(this.components);
             this.SafeModeChecker = new System.Windows.Forms.Timer(this.components);
             this.fileSystemWatcher = new System.IO.FileSystemWatcher();
-            this.checkbx_blacklistEnabled = new MetroFramework.Controls.MetroToggle();
-            this.metroLabel14 = new MetroFramework.Controls.MetroLabel();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
+            this.progressBar_Update = new MetroFramework.Controls.MetroProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -196,15 +198,15 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
+            this.metroTabControl1.Controls.Add(this.metroTabPage5);
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Controls.Add(this.metroTabPage6);
             this.metroTabControl1.Controls.Add(this.metroTabPage7);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
-            this.metroTabControl1.Controls.Add(this.metroTabPage5);
             this.metroTabControl1.Location = new System.Drawing.Point(2, 23);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 6;
+            this.metroTabControl1.SelectedIndex = 4;
             this.metroTabControl1.Size = new System.Drawing.Size(706, 350);
             this.metroTabControl1.TabIndex = 13;
             // 
@@ -684,6 +686,8 @@
             // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.progressBar_Update);
+            this.metroTabPage3.Controls.Add(this.metroButton1);
             this.metroTabPage3.Controls.Add(this.metroLabel5);
             this.metroTabPage3.Controls.Add(this.metroPanel2);
             this.metroTabPage3.Controls.Add(this.btn_setpassword);
@@ -1282,6 +1286,27 @@
             this.metroTabPage5.Text = " Blacklist";
             this.metroTabPage5.VerticalScrollbarBarColor = true;
             // 
+            // checkbx_blacklistEnabled
+            // 
+            this.checkbx_blacklistEnabled.AutoSize = true;
+            this.checkbx_blacklistEnabled.Checked = true;
+            this.checkbx_blacklistEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkbx_blacklistEnabled.Location = new System.Drawing.Point(587, 8);
+            this.checkbx_blacklistEnabled.Name = "checkbx_blacklistEnabled";
+            this.checkbx_blacklistEnabled.Size = new System.Drawing.Size(80, 17);
+            this.checkbx_blacklistEnabled.TabIndex = 42;
+            this.checkbx_blacklistEnabled.Text = "On";
+            this.checkbx_blacklistEnabled.UseVisualStyleBackColor = true;
+            // 
+            // metroLabel14
+            // 
+            this.metroLabel14.AutoSize = true;
+            this.metroLabel14.Location = new System.Drawing.Point(469, 6);
+            this.metroLabel14.Name = "metroLabel14";
+            this.metroLabel14.Size = new System.Drawing.Size(112, 19);
+            this.metroLabel14.TabIndex = 41;
+            this.metroLabel14.Text = "Black list enabled:";
+            // 
             // btn_delPrc
             // 
             this.btn_delPrc.Location = new System.Drawing.Point(390, 5);
@@ -1406,26 +1431,21 @@
             this.fileSystemWatcher.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Deleted);
             this.fileSystemWatcher.Renamed += new System.IO.RenamedEventHandler(this.fileSystemWatcher_Renamed);
             // 
-            // checkbx_blacklistEnabled
+            // metroButton1
             // 
-            this.checkbx_blacklistEnabled.AutoSize = true;
-            this.checkbx_blacklistEnabled.Checked = true;
-            this.checkbx_blacklistEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkbx_blacklistEnabled.Location = new System.Drawing.Point(587, 8);
-            this.checkbx_blacklistEnabled.Name = "checkbx_blacklistEnabled";
-            this.checkbx_blacklistEnabled.Size = new System.Drawing.Size(80, 17);
-            this.checkbx_blacklistEnabled.TabIndex = 42;
-            this.checkbx_blacklistEnabled.Text = "On";
-            this.checkbx_blacklistEnabled.UseVisualStyleBackColor = true;
+            this.metroButton1.Location = new System.Drawing.Point(142, 22);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(89, 23);
+            this.metroButton1.TabIndex = 50;
+            this.metroButton1.Text = "Update check";
+            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
             // 
-            // metroLabel14
+            // progressBar_Update
             // 
-            this.metroLabel14.AutoSize = true;
-            this.metroLabel14.Location = new System.Drawing.Point(469, 6);
-            this.metroLabel14.Name = "metroLabel14";
-            this.metroLabel14.Size = new System.Drawing.Size(112, 19);
-            this.metroLabel14.TabIndex = 41;
-            this.metroLabel14.Text = "Black list enabled:";
+            this.progressBar_Update.Location = new System.Drawing.Point(142, 46);
+            this.progressBar_Update.Name = "progressBar_Update";
+            this.progressBar_Update.Size = new System.Drawing.Size(89, 10);
+            this.progressBar_Update.TabIndex = 51;
             // 
             // Form1
             // 
@@ -1606,6 +1626,8 @@
         private System.Windows.Forms.ListBox listbx_FileWatcher;
         private MetroFramework.Controls.MetroToggle checkbx_blacklistEnabled;
         private MetroFramework.Controls.MetroLabel metroLabel14;
+        private MetroFramework.Controls.MetroButton metroButton1;
+        private MetroFramework.Controls.MetroProgressBar progressBar_Update;
     }
 }
 
