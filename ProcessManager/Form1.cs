@@ -671,10 +671,10 @@ namespace ProcessManager
                     progressBar1.Maximum = numOfFiles;
                     progressBar1.Value = numOfFilesChecked;
                 }));
+
                 if (stop)
-                {
                     break;
-                }
+                
                 if (File.Exists(files[i]))
                 {
                     if (delete)
@@ -682,22 +682,43 @@ namespace ProcessManager
                         try
                         {
                             File.Delete(files[i]);
+                            numOfFilesChecked += 1;
                             continue;
                         }
-                        catch { }
-                    }
-                    UnlockFile(files[i], out process);
-                    if (delete)
-                        try { File.Delete(files[i]); }
-                        catch { FilesWasntDeleted.Add(files[i]); }
-                    if (process != "")
-                    {
-                        numOfProc += 1;
-                        ProcessKilled.Add(process);
-                        process = "";
+                        catch
+                        {
+                            UnlockFile(files[i], out process);
+                            try { File.Delete(files[i]); numOfFilesChecked += 1;}
+                            catch { FilesWasntDeleted.Add(files[i]); }
+                            if (process != "")
+                            {
+                                numOfProc += 1;
+                                ProcessKilled.Add(process);
+                                process = "";
+                            }
+                        }
                     }
                 }
                 numOfFilesChecked = i + 1;
+            }
+          
+            string[] directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+            int dirLength = directories.Length;
+            for (int i = directories.Length - 1; i != -1; i--)
+            {
+                try
+                {
+                    Directory.Delete(directories[i]);
+                }
+                catch { }
+                lbl_ProgessInfo.Invoke(new MethodInvoker(delegate
+                {
+                    lbl_ProgessInfo.Text = $"Deleting directories {dirLength - i}/{dirLength}";
+                }));
+                log_txtbx.Invoke(new MethodInvoker(delegate
+                {
+                    log_txtbx.Text = $"{directories[i]}";
+                }));
             }
             //get strings
             string ProcessKilled_string = "";
@@ -725,8 +746,6 @@ namespace ProcessManager
                 else
                     ShowInfoDialog(numOfProc + " process(es) killed. Dir was not deleted. " + FilesWasntDeleted.Count + " files wasnt deleted:\n" + filesWasntDeleted_string, "");
             }
-
-
 
             numOfFilesChecked = 0;
             log_txtbx.Invoke(new MethodInvoker(delegate
@@ -871,6 +890,40 @@ namespace ProcessManager
                     break;
             }
             return colors;
+        }
+        private void CheckForUpdates()
+        {
+            progressBar_Update.Invoke(new MethodInvoker(delegate
+            {
+                progressBar_Update.Maximum = 4;
+                progressBar_Update.Value = 0;
+                WebClient wc = new WebClient();
+                wc.Headers["User-Agent"] = "Mozilla/5.0";
+                string fileName = "";
+                progressBar_Update.Value = 1;
+                for (int i = 1; ; i++)
+                {
+                    if (!File.Exists($"ProcessManager_Updated {i}.exe"))
+                    {
+                        fileName = $"ProcessManager_Updated {i}.exe";
+                        break;
+                    }
+                }
+                progressBar_Update.Value = 2;
+                wc.DownloadFile("https://github.com/tavvi1337/ProcessManager/raw/master/Process%20Manager.exe", fileName);
+                progressBar_Update.Value = 3;
+                if (Files.GetMD5Hash(fileName) == Files.GetMD5Hash(Assembly.GetExecutingAssembly().Location))
+                {
+                    File.Delete(fileName);
+                    ShowInfoDialog("You already use latest verion", "");
+                }
+                else
+                {
+                    ShowInfoDialog($"New version saved to {Assembly.GetExecutingAssembly().Location}\\{fileName}", "");
+                }
+                progressBar_Update.Value = 4;
+                progressBar_Update.Value = 0;
+            }));
         }
         #endregion
         #region Timers
@@ -1261,7 +1314,6 @@ namespace ProcessManager
                 thread.Start();
                 delete = true;
             }
-            numOfFilesChecked = 0;
         }
         private void addProcess_Click(object sender, EventArgs e)
         {
@@ -1993,48 +2045,12 @@ namespace ProcessManager
             ManageFile mf = new ManageFile(fullname);
             mf.Show();
         }
-        #endregion
-
         private void metroButton1_Click(object sender, EventArgs e)
         {
             Thread thread = new Thread(CheckForUpdates);
             thread.IsBackground = true;
             thread.Start();
         }
-
-        private void CheckForUpdates()
-        {
-            progressBar_Update.Invoke(new MethodInvoker(delegate
-            {
-                progressBar_Update.Maximum = 4;
-                progressBar_Update.Value = 0;
-                WebClient wc = new WebClient();
-                wc.Headers["User-Agent"] = "Mozilla/5.0";
-                string fileName = "";
-                progressBar_Update.Value = 1;
-                for (int i = 1; ; i++)
-                {
-                    if (!File.Exists($"ProcessManager_Updated {i}.exe"))
-                    {
-                        fileName = $"ProcessManager_Updated {i}.exe";
-                        break;
-                    }
-                }
-                progressBar_Update.Value = 2;
-                wc.DownloadFile("https://github.com/tavvi1337/ProcessManager/raw/master/Process%20Manager.exe", fileName);
-                progressBar_Update.Value = 3;
-                if (Files.GetMD5Hash(fileName) == Files.GetMD5Hash(Assembly.GetExecutingAssembly().Location))
-                {
-                    ShowInfoDialog("You already use latest verion", "");
-                    File.Delete(fileName);
-                }
-                else
-                {
-                    ShowInfoDialog($"New version saved to {Assembly.GetExecutingAssembly().Location}\\{fileName}", "");
-                }
-                progressBar_Update.Value = 4;
-                progressBar_Update.Value = 0;
-            }));
-        }
+        #endregion
     }
 }
